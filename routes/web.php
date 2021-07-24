@@ -16,7 +16,11 @@ use Laravel\Socialite\Facades\Socialite;
  */
 
 Route::get('/auth/redirect', function () {
-    return Socialite::driver('google')->redirect();
+    $scopes = [
+        'https://www.googleapis.com/auth/classroom.courses.readonly',
+        'https://www.googleapis.com/auth/classroom.rosters.readonly',
+    ];
+    return Socialite::driver('google')->scopes($scopes)->redirect();
 })->name('oauth');
 
 Route::get('/auth/callback', [RegisteredUserController::class, 'handleGoogleCallback']);

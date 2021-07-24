@@ -59,8 +59,11 @@ class RegisteredUserController extends Controller
     public function handleGoogleCallback()
     {
         try {
-            //create a user using socialite driver google
             $user = Socialite::driver('google')->user();
+
+            if (session()->has('authToken')) {
+                $user = Socialite::driver('google')->userFromToken(session()->get('authToken'));
+            }
 
             $findUser = User::where('google_id', $user->id)->first();
 
@@ -84,6 +87,10 @@ class RegisteredUserController extends Controller
                 event(new Registered($newUser));
 
                 Auth::login($newUser);
+
+                session(['authToken' => $user->token]);
+                session(['authSecret' => $user->refreshToken]);
+                session(['authExpiresIn' => $user->expiresIn]);
 
                 return redirect(RouteServiceProvider::HOME);
             }
