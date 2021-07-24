@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use Exception;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
+use Laravel\Socialite\Facades\Socialite;
 
 class RegisteredUserController extends Controller
 {
@@ -37,6 +38,9 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'google_id' => 'nullable',
+            'avatar' => 'nullable',
+            'avatar' => 'nullable',
         ]);
 
         $user = User::create([
@@ -50,5 +54,41 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return redirect(RouteServiceProvider::HOME);
+    }
+
+    public function handleGoogleCallback()
+    {
+        try {
+            //create a user using socialite driver google
+            $user = Socialite::driver('google')->user();
+
+            $findUser = User::where('google_id', $user->id)->first();
+
+            if ($findUser) {
+                Auth::login($findUser);
+                return redirect(RouteServiceProvider::HOME);
+            } else {
+                if (explode('@', $user->email)[1] !== 'tup.edu.ph') {
+                    return redirect()->to('/');
+                }
+
+                $newUser = User::create([
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'google_id' => $user->id,
+                    'avatar' => $user->avatar,
+                    'avatar_original' => $user->avatar_original,
+                    'password' => encrypt(''),
+                ]);
+
+                event(new Registered($newUser));
+
+                Auth::login($newUser);
+
+                return redirect(RouteServiceProvider::HOME);
+            }
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 }
