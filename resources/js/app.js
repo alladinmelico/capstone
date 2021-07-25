@@ -1,3 +1,23 @@
 require('./bootstrap');
 
-require('alpinejs');
+// Import modules...
+import { createApp, h } from 'vue';
+import { createInertiaApp } from '@inertiajs/inertia-vue3';
+import { InertiaProgress } from '@inertiajs/progress';
+
+const el = document.getElementById('app');
+// const app = createApp({})
+
+createInertiaApp({
+    resolve: (name) => require(`./Pages/${name}`),
+    setup({ el, app, props, plugin }) {
+        createApp({ render: () => h(app, props) })
+            .mixin({ methods: { route } })
+            .use(plugin)
+            .mount(el);
+    },
+});
+
+InertiaProgress.init({ color: '#4B5563' });
+
+// app.component('class-list', require('./components/ClassList.vue').default)

@@ -21,7 +21,7 @@ class RegisteredUserController extends Controller
      */
     public function create()
     {
-        return view('auth.register');
+        return Inertia::render('Auth/Register');
     }
 
     /**
@@ -71,10 +71,6 @@ class RegisteredUserController extends Controller
                 Auth::login($findUser);
                 return redirect(RouteServiceProvider::HOME);
             } else {
-                if (explode('@', $user->email)[1] !== 'tup.edu.ph') {
-                    return redirect()->to('/');
-                }
-
                 $newUser = User::create([
                     'name' => $user->name,
                     'email' => $user->email,

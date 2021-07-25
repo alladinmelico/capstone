@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('google_id');
             $table->string('avatar');
             $table->string('avatar_original');
+            $table->boolean('verifiedTeacher')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });
