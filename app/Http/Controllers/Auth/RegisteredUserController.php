@@ -58,40 +58,36 @@ class RegisteredUserController extends Controller
 
     public function handleGoogleCallback()
     {
-        try {
-            $user = Socialite::driver('google')->user();
+        $user = Socialite::driver('google')->user();
 
-            if (session()->has('authToken')) {
-                $user = Socialite::driver('google')->userFromToken(session()->get('authToken'));
-            }
+        if (session()->has('authToken')) {
+            $user = Socialite::driver('google')->userFromToken(session()->get('authToken'));
+        }
 
-            $findUser = User::where('google_id', $user->id)->first();
+        $findUser = User::where('google_id', $user->id)->first();
 
-            if ($findUser) {
-                Auth::login($findUser);
-                return redirect(RouteServiceProvider::HOME);
-            } else {
-                $newUser = User::create([
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'google_id' => $user->id,
-                    'avatar' => $user->avatar,
-                    'avatar_original' => $user->avatar_original,
-                    'password' => encrypt(''),
-                ]);
+        if ($findUser) {
+            Auth::login($findUser);
+            return redirect(RouteServiceProvider::HOME);
+        } else {
+            $newUser = User::create([
+                'name' => $user->name,
+                'email' => $user->email,
+                'google_id' => $user->id,
+                'avatar' => $user->avatar,
+                'avatar_original' => $user->avatar_original,
+                'password' => encrypt(''),
+            ]);
 
-                event(new Registered($newUser));
+            event(new Registered($newUser));
 
-                Auth::login($newUser);
+            Auth::login($newUser);
 
-                session(['authToken' => $user->token]);
-                session(['authSecret' => $user->refreshToken]);
-                session(['authExpiresIn' => $user->expiresIn]);
+            session(['authToken' => $user->token]);
+            session(['authSecret' => $user->refreshToken]);
+            session(['authExpiresIn' => $user->expiresIn]);
 
-                return redirect(RouteServiceProvider::HOME);
-            }
-        } catch (Exception $e) {
-            return $e->getMessage();
+            return redirect(RouteServiceProvider::HOME);
         }
     }
 }
