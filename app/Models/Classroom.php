@@ -19,4 +19,15 @@ class Classroom extends Model
     {
         return $this->belongsToMany(User::class, 'classroom_users')->withTimestamps();
     }
+
+    public function subject()
+    {
+        return $this->hasMany(Subject::class);
+    }
+
+    public function schedule()
+    {
+        return $this->hasOne(Schedule::class);
+    }
+
 }

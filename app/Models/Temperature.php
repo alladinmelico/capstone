@@ -13,4 +13,9 @@ class Temperature extends Model
         'temperature',
         'user_id',
     ];
+
+    public function user()
+    {
+        return $this->hasMany(User::class);
+    }
 }

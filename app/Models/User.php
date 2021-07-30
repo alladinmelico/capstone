@@ -46,8 +46,19 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public const ADMIN = 1;
+    public const FACULTY = 2;
+    public const STUDENT = 3;
+    public const GUEST = 4;
+    public const ROLES = [ADMIN, FACULTY, STUDENT, GUEST];
+
     public function classrooms()
     {
         return $this->belongsToMany(Classroom::class, 'classroom_users')->withTimestamps();
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
     }
 }
