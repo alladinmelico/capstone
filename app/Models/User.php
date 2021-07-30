@@ -43,4 +43,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function classrooms()
+    {
+        return $this->belongsToMany(Classroom::class, 'classroom_users')->withTimestamps();
+    }
 }

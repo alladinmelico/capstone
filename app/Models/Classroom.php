@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Classroom extends Model
 {
     use HasFactory;
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'classroom_users')->withTimestamps();
+    }
 }

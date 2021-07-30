@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Temperature;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TemperatureFactory extends Factory
@@ -22,7 +23,8 @@ class TemperatureFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'temperature' => $this->faker->randomFloat(null, 36, 38),
+            'user_id' => User::inRandomOrder()->first()->id,
         ];
     }
 }

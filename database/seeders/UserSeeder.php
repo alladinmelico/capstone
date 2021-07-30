@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Schedule;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
-class ScheduleSeeder extends Seeder
+class UserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,6 +14,8 @@ class ScheduleSeeder extends Seeder
      */
     public function run()
     {
-        Schedule::factory()->times(30)->create();
+        User::factory()
+            ->times(20)
+            ->create();
     }
 }

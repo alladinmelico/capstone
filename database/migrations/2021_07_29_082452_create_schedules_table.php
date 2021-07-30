@@ -15,6 +15,12 @@ class CreateSchedulesTable extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
+            $table->time('start_at');
+            $table->time('end_at');
+            $table->string('day');
+            $table->timestamp('valid_until');
+            $table->string('note');
+            $table->foreignId('facility_id')->constrained();
             $table->timestamps();
         });
     }
