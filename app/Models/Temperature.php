@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Temperature extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'temperature',
+        'user_id',
+    ];
 }

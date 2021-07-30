@@ -9,6 +9,12 @@ class Classroom extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'google_classroom_id',
+        'subject_id',
+        'schedule_id',
+    ];
+
     public function users()
     {
         return $this->belongsToMany(User::class, 'classroom_users')->withTimestamps();

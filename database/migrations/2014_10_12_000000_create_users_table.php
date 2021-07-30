@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('google_id')->nullable();
             $table->string('avatar')->nullable();
             $table->string('avatar_original')->nullable();
-            $table->boolean('verifiedTeacher')->default(false);
+            $table->boolean('verified_teacher')->default(false);
             $table->tinyInteger('role_id')->default(3);
             $table->rememberToken();
             $table->timestamps();
