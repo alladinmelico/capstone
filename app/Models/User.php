@@ -3,12 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
+    use SoftDeletes;
+
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
@@ -50,7 +53,7 @@ class User extends Authenticatable
     public const FACULTY = 2;
     public const STUDENT = 3;
     public const GUEST = 4;
-    public const ROLES = [ADMIN, FACULTY, STUDENT, GUEST];
+    public const ROLES = [User::ADMIN, User::FACULTY, User::STUDENT, User::GUEST];
 
     public function classrooms()
     {

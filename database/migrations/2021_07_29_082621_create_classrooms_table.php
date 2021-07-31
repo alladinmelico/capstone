@@ -18,6 +18,7 @@ class CreateClassroomsTable extends Migration
             $table->string('google_classroom_id')->nullable();
             $table->foreignId('subject_id')->constrained();
             $table->foreignId('schedule_id')->constrained();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

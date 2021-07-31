@@ -26,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->boolean('verified_teacher')->default(false);
             $table->tinyInteger('role_id')->default(3);
             $table->rememberToken();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

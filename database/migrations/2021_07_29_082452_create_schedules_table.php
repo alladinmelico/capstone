@@ -21,6 +21,7 @@ class CreateSchedulesTable extends Migration
             $table->timestamp('valid_until');
             $table->string('note');
             $table->foreignId('facility_id')->constrained();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

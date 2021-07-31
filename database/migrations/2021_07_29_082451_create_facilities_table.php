@@ -18,6 +18,7 @@ class CreateFacilitiesTable extends Migration
             $table->string('name');
             $table->string('code')->unique();
             $table->tinyInteger('building_id');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

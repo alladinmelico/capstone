@@ -17,6 +17,7 @@ class CreateTemperaturesTable extends Migration
             $table->id();
             $table->float('temperature');
             $table->foreignId('user_id')->constrained();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
