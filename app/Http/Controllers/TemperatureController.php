@@ -14,7 +14,9 @@ class TemperatureController extends Controller
      */
     public function index()
     {
-        //
+        return inertia('Temperature/Index', [
+            'items' => Temperature::all(),
+        ]);
     }
 
     /**

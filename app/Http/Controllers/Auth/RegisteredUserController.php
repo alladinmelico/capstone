@@ -58,13 +58,17 @@ class RegisteredUserController extends Controller
 
     public function handleGoogleCallback()
     {
-        $user = Socialite::driver('google')->user();
+        $user = Socialite::driver('google')->stateless()->user();
 
-        if (session()->has('authToken')) {
-            $user = Socialite::driver('google')->userFromToken(session()->get('authToken'));
-        }
+        // if (session()->has('authToken')) {
+        //     $user = Socialite::driver('google')->userFromToken(session()->get('authToken'));
+        // }
 
         $findUser = User::where('google_id', $user->id)->first();
+
+        session(['authToken' => $user->token]);
+        session(['authSecret' => $user->refreshToken]);
+        session(['authExpiresIn' => $user->expiresIn]);
 
         if ($findUser) {
             Auth::login($findUser);
@@ -82,12 +86,7 @@ class RegisteredUserController extends Controller
             event(new Registered($newUser));
 
             Auth::login($newUser);
-
-            session(['authToken' => $user->token]);
-            session(['authSecret' => $user->refreshToken]);
-            session(['authExpiresIn' => $user->expiresIn]);
-
-            return redirect(RouteServiceProvider::HOME);
+            return redirect()->route('profile-registration');
         }
     }
 }

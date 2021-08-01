@@ -18,6 +18,8 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('school_id')->nullable();
             $table->string('email')->unique();
+            $table->integer('year')->default(1);
+            $table->string('section')->default('A');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('google_id')->nullable();

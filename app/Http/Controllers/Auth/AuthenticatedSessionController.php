@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\Course;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,6 +24,35 @@ class AuthenticatedSessionController extends Controller
             'canResetPassword' => Route::has('password.request'),
             'status' => session('status'),
         ]);
+    }
+
+    /**
+     * Display the login view.
+     *
+     * @return \Inertia\Response
+     */
+    public function profile()
+    {
+        return inertia('Auth/Profile', [
+            'user' => Auth::user(),
+            'courses' => Course::select('id', 'name', 'code')->get(),
+        ]);
+    }
+
+    public function storeProfile(Request $request)
+    {
+        $validated = $request->validate([
+            'school_id' => 'required|string|unique:users|regex:/(TUPT-)\d\d-\d\d\d\d/i',
+            'course_id' => 'required|numeric|exists:courses,id',
+            'year' => 'required|numeric|between:1,4',
+            'section' => 'required|alpha|min:1',
+        ]);
+
+        $user = Auth::user();
+
+        $user->update($validated);
+
+        return redirect(RouteServiceProvider::HOME);
     }
 
     /**

@@ -31,6 +31,8 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
             'course_id' => Course::inRandomOrder()->first()->id,
             'school_id' => $this->faker->randomNumber(),
+            'year' => $this->faker->randomElement([1, 2, 3, 4]),
+            'section' => $this->faker->randomElement(['A', 'B', 'C', 'D']),
             'role_id' => $this->faker->randomElement(User::ROLES),
         ];
     }

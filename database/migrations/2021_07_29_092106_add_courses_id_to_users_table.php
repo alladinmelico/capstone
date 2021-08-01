@@ -14,7 +14,7 @@ class AddCoursesIdToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('course_id')->constrained()->nullable();
+            $table->foreignId('course_id')->nullable();
         });
     }
 

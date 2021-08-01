@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\TemperatureController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -35,10 +37,22 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return inertia('Dashboard', [
-        'token' => session()->get('authToken'),
-    ]);
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware('auth')->group(function () {
+
+    Route::middleware('hasProfile')->group(function () {
+        Route::get('/dashboard', function () {
+            return inertia('Dashboard', [
+                'token' => session()->get('authToken'),
+            ]);
+        })->name('dashboard');
+        Route::resource('temperature', TemperatureController::class);
+    });
+
+    Route::get('/profile-registration', [AuthenticatedSessionController::class, 'profile'])
+        ->name('profile-registration');
+
+    Route::post('/profile-registration', [AuthenticatedSessionController::class, 'storeProfile'])
+        ->name('store-profile');
+});
 
 require __DIR__ . '/auth.php';
