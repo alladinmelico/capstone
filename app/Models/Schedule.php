@@ -20,4 +20,8 @@ class Schedule extends Model
         'note',
         'facility_id',
     ];
+
+    public function facility(){
+        return $this->belongsTo(Facility::class);
+    }
 }

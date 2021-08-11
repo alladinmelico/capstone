@@ -17,7 +17,7 @@ class TemperatureController extends Controller
      */
     public function index()
     {
-        return TemperatureResource::collection(Temperature::all());
+        return TemperatureResource::collection(Temperature::simplePaginate());
     }
 
     /**

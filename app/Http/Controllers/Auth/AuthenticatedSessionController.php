@@ -42,7 +42,7 @@ class AuthenticatedSessionController extends Controller
     public function storeProfile(Request $request)
     {
         $validated = $request->validate([
-            'school_id' => 'required|string|unique:users|regex:/(TUPT-)\d\d-\d\d\d\d/i',
+            'school_id' => 'required|string|unique:users|max:12|regex:/(TUPT-)\d\d-\d\d\d\d/i',
             'course_id' => 'required|numeric|exists:courses,id',
             'year' => 'required|numeric|between:1,4',
             'section' => 'required|alpha|min:1',

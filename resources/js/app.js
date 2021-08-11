@@ -6,7 +6,6 @@ import { createInertiaApp } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
 
 const el = document.getElementById('app');
-// const app = createApp({})
 
 createInertiaApp({
     resolve: (name) => require(`./Pages/${name}`),
@@ -20,4 +19,3 @@ createInertiaApp({
 
 InertiaProgress.init({ color: '#4B5563' });
 
-// app.component('class-list', require('./components/ClassList.vue').default)
