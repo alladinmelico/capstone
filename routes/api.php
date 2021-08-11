@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Api\TemperatureController;
 use App\Http\Controllers\Api\ScheduleController;
+use App\Http\Controllers\Api\TemperatureController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

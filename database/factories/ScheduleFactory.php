@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Facility;
 use App\Models\Schedule;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ScheduleFactory extends Factory
@@ -29,6 +30,7 @@ class ScheduleFactory extends Factory
             'valid_until' => $this->faker->dateTime(),
             'note' => $this->faker->sentence(),
             'facility_id' => Facility::inRandomOrder()->first()->id,
+            'user_id' => User::inRandomOrder()->first()->id,
         ];
     }
 }

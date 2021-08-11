@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Http\Resources\ScheduleResource;
 use App\Models\Schedule;
 use App\Models\User;
-
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ScheduleController extends Controller
 {
@@ -35,7 +36,17 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+
+        $validator = Validator::make($data, $this->rules());
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $data['valid_until'] = Carbon::parse($data['valid_until']);
+
+        return new ScheduleResource(Schedule::create($data));
     }
 
     /**
@@ -44,9 +55,9 @@ class ScheduleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Schedule $schedule)
     {
-        //
+        return new ScheduleResource($schedule);
     }
 
     /**
@@ -56,9 +67,19 @@ class ScheduleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Schedule $schedule)
     {
-        //
+        $data = $request->all();
+
+        $validator = Validator::make($data, $this->rules());
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $data['valid_until'] = Carbon::parse($data['valid_until']);
+
+        return new ScheduleResource($schedule->update($data));
     }
 
     /**
@@ -67,8 +88,21 @@ class ScheduleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Schedule $schedule)
     {
-        //
+        return response()->json($schedule->delete());
+    }
+
+    protected function rules(): array
+    {
+        return [
+            'start_at' => 'required',
+            'end_at' => 'required',
+            'day' => 'required|string|in:monday,tuesday,wednesday,thursday,friday,saturday,sunday',
+            'valid_until' => 'required|date',
+            'note' => 'nullable',
+            'facility_id' => 'required|numeric|exists:facilities,id',
+            'user_id' => 'required|numeric|exists:users,id',
+        ];
     }
 }
