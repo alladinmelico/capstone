@@ -14,7 +14,7 @@ class CourseController extends Controller
      */
     public function index()
     {
-        //
+        return inertia('Course/Index', ['items' => Course::all()]);
     }
 
     /**

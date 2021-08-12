@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\TemperatureController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -46,6 +47,10 @@ Route::middleware('auth')->group(function () {
             ]);
         })->name('dashboard');
         Route::resource('temperature', TemperatureController::class);
+        Route::group(['middleware' => 'admin', 'prefix' => 'admin', 'as' => 'admin.'], function () {
+            Route::resource('course', CourseController::class)->except('index', 'show');
+        });
+        Route::resource('course', CourseController::class)->only('index', 'show');
     });
 
     Route::get('/profile-registration', [AuthenticatedSessionController::class, 'profile'])

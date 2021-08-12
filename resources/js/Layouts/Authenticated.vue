@@ -18,6 +18,13 @@
                                 <breeze-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </breeze-nav-link>
+                                <breeze-nav-link :href="route('course.index')" :active="route().current('course.index')">
+                                    Course
+                                </breeze-nav-link>
+                                <breeze-nav-link v-if="isAdmin"
+                                    :href="route('temperature.index')" :active="route().current('temperature.index')">
+                                    Temperature
+                                </breeze-nav-link>
                             </div>
                         </div>
 
@@ -119,6 +126,7 @@
         data() {
             return {
                 showingNavigationDropdown: false,
+                isAdmin: process.env.MIX_ADMINS.includes(this.$page.props.auth.user.email)
             }
         },
     }
