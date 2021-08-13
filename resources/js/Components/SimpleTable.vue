@@ -53,9 +53,9 @@
         </div>
       </div>
     </div>
-    <center v-else>
+    <p v-else class="text-center">
       There are no items yet in this table. Click "Create New" to create a new item.
-    </center>
+    </p>
 
     <DeleteConfirmationModal
       v-if="deleteEndpoint"

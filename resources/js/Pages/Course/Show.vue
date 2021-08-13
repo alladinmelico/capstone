@@ -2,20 +2,17 @@
 	<breeze-authenticated-layout>
 		<template #header>
 			<h2 class="font-semibold text-xl text-gray-800 leading-tight">
-				Courses
+				{{ item.name }}
 			</h2>
+
+            <div class="flex justify-around mt-4">
+                <p> <strong>Code: </strong> {{ item.code }}</p>
+                <p> <strong>Department: </strong> {{ item.department }}</p>
+            </div>
 		</template>
 
 		<div class="py-12">
 			<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-				<SimpleTable
-					title="Courses"
-					resource="admin/course"
-					model="Course"
-					:items="items"
-					:headers="headers"
-					:column-keys="columnKeys"
-				/>
 			</div>
 		</div>
 	</breeze-authenticated-layout>
@@ -23,23 +20,19 @@
 
 <script>
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated'
-import SimpleTable from '@/Components/SimpleTable'
 
 export default {
 	components: {
 		BreezeAuthenticatedLayout,
-		SimpleTable,
 	},
 	props: {
-		items: {
-			type: Array,
-			default: [],
+		item: {
+			type: Object,
+			default: {},
 		},
 	},
 	data() {
 		return {
-			headers: ['Course Name', 'Code', 'Department', 'Actions'],
-			columnKeys: ['name', 'code', 'department'],
 		}
 	},
 }

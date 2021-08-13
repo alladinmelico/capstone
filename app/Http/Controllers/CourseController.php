@@ -24,7 +24,7 @@ class CourseController extends Controller
      */
     public function create()
     {
-        //
+        return inertia('Course/Form');
     }
 
     /**
@@ -35,7 +35,9 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate($this->rules());
+        Course::create($validated);
+        return redirect()->route('course.index');
     }
 
     /**
@@ -46,7 +48,7 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
-        //
+        return inertia('Course/Show', ['item' => $course]);
     }
 
     /**
@@ -57,7 +59,7 @@ class CourseController extends Controller
      */
     public function edit(Course $course)
     {
-        //
+        return inertia('Course/Form', ['item' => $course]);
     }
 
     /**
@@ -69,7 +71,9 @@ class CourseController extends Controller
      */
     public function update(Request $request, Course $course)
     {
-        //
+        $validated = $request->validate($this->rules());
+        $course->update($validated);
+        return redirect()->route('course.show', ['course' => $course->id]);
     }
 
     /**
@@ -80,6 +84,16 @@ class CourseController extends Controller
      */
     public function destroy(Course $course)
     {
-        //
+        $course->delete();
+        return redirect()->back();
+    }
+
+    protected function rules(): array
+    {
+        return [
+            'name' => 'required|string',
+            'code' => 'required|string',
+            'department_id' => 'required|numeric',
+        ];
     }
 }

@@ -10,9 +10,13 @@
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
           <div class="p-6 bg-white border-b border-gray-200">
-              <ul v-for="item in items" :key="item.id">
-                  <li>{{item.temperature}}</li>
-              </ul>
+              <SimpleTable
+					title="Temperatures"
+					model="Temperature"
+					:items="items"
+					:headers="headers"
+					:column-keys="columnKeys"
+				/>
           </div>
         </div>
       </div>
@@ -22,10 +26,12 @@
 
 <script>
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated'
+import SimpleTable from '@/Components/SimpleTable'
 
 export default {
   components: {
     BreezeAuthenticatedLayout,
+    SimpleTable
   },
   props: {
     items: {
@@ -33,5 +39,11 @@ export default {
         default: []
     },
   },
+  data() {
+        return {
+            headers: ['Temperature', 'User', 'Date Read'],
+            columnKeys: ['temperature', 'user_name', 'created_at'],
+        }
+    },
 }
 </script>
