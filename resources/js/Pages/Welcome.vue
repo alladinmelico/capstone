@@ -17,7 +17,8 @@
                 <img src="/ssc-system-banner.jpg" alt="logo">
             </div>
             <h2 class="text-2xl mt-4">Abstract</h2>
-            <p class="p-4 mt-4 mx-auto text-justify divide-solid divide-y-4 divide-primary-dark">The unexpected global spread of the COVID-19 pandemic has halted millions of people's lives,
+            <p class="p-4 mt-4 mx-auto text-justify divide-solid divide-y-4 divide-primary-dark">
+                The unexpected global spread of the COVID-19 pandemic has halted millions of people's lives,
                  including their educational opportunities. Educational institutions implemented online classes to address the situation.
                  Most courses require laboratory and hands-on activities to deliver quality discussion and enhance
                  the skills of the students. Recently, a memorandum was released about the reimplementation of face-to-face classes
