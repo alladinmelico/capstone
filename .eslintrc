@@ -1,0 +1,16 @@
+{
+  "extends": [
+    "standard",
+    "plugin:vue/vue3-recommended"
+  ],
+  "rules": {
+    "comma-dangle": ["error", "always-multiline"],
+    "handle-callback-err": 0,
+    "vue/max-attributes-per-line": 0,
+    "vue/singleline-html-element-content-newline": 0,
+    "vue/component-definition-name-casing": 0,
+    "vue/html-indent": ["error", 2],
+    "space-unary-ops": 0,
+    "operator-linebreak": 0
+  }
+}

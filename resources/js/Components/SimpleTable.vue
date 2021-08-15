@@ -1,11 +1,11 @@
 <template>
-  <div class="max-w-5xl mx-auto mb-12">
+  <div class="max-w-full mx-auto mb-12">
     <div class="flex justify-between pb-10">
       <h3 class="text-3xl font-semibold text-center text-gray-900">
         {{ title }}
       </h3>
       <InertiaLink :href="`/${resource}/create`">
-        <button type="button" class="block px-3 py-2 text-sm leading-4 text-white transition bg-blue-800 border rounded-md hover:bg-blue-900 focus:outline-none focus:ring-none">
+        <button type="button" class="block px-3 py-2 text-sm leading-4 text-white transition bg-secondary border rounded-md hover:bg-secondary-dark focus:outline-none focus:ring-none">
           Create New
         </button>
       </InertiaLink>
@@ -37,11 +37,14 @@
                         v-text="item[columnKey]"
                       />
                       <td v-if="resource" class="flex justify-center px-6 py-4 text-sm text-gray-500">
+                        <InertiaLink :href="`/${resource.split('/').pop()}/${item.id}`" class="mr-4 text-green-600 underline">
+                          <EyeIcon class="h-5 w-5 text-green-400"/>
+                        </InertiaLink>
                         <InertiaLink :href="`/${resource}/${item.id}/edit`" class="mr-4 text-blue-600 underline">
-                          Edit
+                          <PencilIcon class="h-5 w-5 text-blue-400"/>
                         </InertiaLink>
                         <a class="text-red-600 underline cursor-pointer" @click="confirmDelete(item)">
-                          Deactivate
+                          <TrashIcon class="h-5 w-5 text-red-400"/>
                         </a>
                       </td>
                     </tr>
@@ -70,10 +73,15 @@
 <script>
 import ConfirmsDelete from '@/Mixins/ConfirmsDelete'
 import DeleteConfirmationModal from '@/Components/DeleteConfirmationModal'
+import { EyeIcon, PencilIcon, TrashIcon } from '@heroicons/vue/outline'
+
 
 export default {
   components: {
     DeleteConfirmationModal,
+    EyeIcon,
+    PencilIcon,
+    TrashIcon
   },
 
   mixins: [ConfirmsDelete],

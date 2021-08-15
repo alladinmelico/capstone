@@ -31,6 +31,8 @@ class ScheduleRequest extends FormRequest
             'note' => 'nullable',
             'facility_id' => 'required|numeric|exists:facilities,id',
             'user_id' => 'required|numeric|exists:users,id',
+            'google_classroom_id' => 'nullable|string',
+            'subject_id' => 'nullable|numeric|exists:subjects,id',
         ];
     }
 }

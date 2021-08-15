@@ -2,7 +2,10 @@
 	<breeze-authenticated-layout>
 		<template #header>
 			<h2 class="font-semibold text-xl text-gray-800 leading-tight">
-				{{ item.name }}
+				<InertiaLink href="/course" class="underline">
+                    Course
+                </InertiaLink>
+                <chevron-double-right-icon class="inline-block h-5 w-5 text-primary mx-2" /> {{ item.name }}
 			</h2>
 
             <div class="flex justify-around mt-4">
@@ -20,10 +23,12 @@
 
 <script>
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated'
+import { ChevronDoubleRightIcon } from '@heroicons/vue/solid'
 
 export default {
 	components: {
 		BreezeAuthenticatedLayout,
+        ChevronDoubleRightIcon,
 	},
 	props: {
 		item: {

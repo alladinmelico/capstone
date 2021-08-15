@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ScheduleRequest;
+use App\Models\Classroom;
+use App\Models\Facility;
 use App\Models\Schedule;
+use App\Models\Subject;
+use App\Models\User;
+use App\Notifications\ScheduleCreated;
 use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
@@ -14,7 +20,7 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        //
+        return inertia('Schedule/Index', ['items' => Schedule::all()]);
     }
 
     /**
@@ -24,7 +30,12 @@ class ScheduleController extends Controller
      */
     public function create()
     {
-        //
+        return inertia('Schedule/Form', [
+            'facilities' => Facility::select('id', 'name')->get(),
+            'subjects' => Subject::select('id', 'name')->get(),
+            'existing_classrooms' => Classroom::select('google_classroom_id')->get(),
+            'token' => session()->get('authToken'),
+        ]);
     }
 
     /**
@@ -33,9 +44,20 @@ class ScheduleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ScheduleRequest $request)
     {
-        //
+        $validated = $request->validated();
+        $schedule = Schedule::create($validated);
+        if (!empty($validated['google_classroom_id'])) {
+            $schedule->classrooms()->create([
+                'google_classroom_id' => $validated['google_classroom_id'],
+                'subject_id' => $validated['subject_id'],
+                'schedule_id' => $schedule->id,
+            ]);
+        }
+        $user = User::find($validated['user_id']);
+        $user->notify(new ScheduleCreated($schedule));
+        return redirect()->route('schedule.index');
     }
 
     /**
@@ -46,7 +68,7 @@ class ScheduleController extends Controller
      */
     public function show(Schedule $schedule)
     {
-        //
+        return inertia('Schedule/Show', ['item' => $schedule]);
     }
 
     /**
@@ -57,7 +79,14 @@ class ScheduleController extends Controller
      */
     public function edit(Schedule $schedule)
     {
-        //
+        return inertia('Schedule/Form', [
+            'item' => $schedule,
+            'facilities' => Facility::select('id', 'name')->get(),
+            'subjects' => Subject::select('id', 'name')->get(),
+            'existing_classrooms' => Classroom::select('google_classroom_id')->get(),
+            'schedule_classroom' => Classroom::where('schedule_id', $schedule->id)->select('google_classroom_id', 'subject_id')->first(),
+            'token' => session()->get('authToken'),
+        ]);
     }
 
     /**
@@ -67,9 +96,23 @@ class ScheduleController extends Controller
      * @param  \App\Models\Schedule  $schedule
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Schedule $schedule)
+    public function update(ScheduleRequest $request, Schedule $schedule)
     {
-        //
+        $validated = $request->validated();
+        $schedule->update($validated);
+        $classroom = Classroom::where('schedule_id', $schedule->id)->first();
+        if (empty($classroom)) {
+            $schedule->classrooms()->create([
+                'google_classroom_id' => $validated['google_classroom_id'],
+                'subject_id' => $validated['subject_id'],
+                'schedule_id' => $schedule->id,
+            ]);
+        } else {
+            $classroom->google_classroom_id = $validated['google_classroom_id'];
+            $classroom->subject_id = $validated['subject_id'];
+            $classroom->save();
+        }
+        return redirect()->route('schedule.show', ['schedule' => $schedule->id]);
     }
 
     /**
@@ -80,6 +123,16 @@ class ScheduleController extends Controller
      */
     public function destroy(Schedule $schedule)
     {
-        //
+        $schedule->delete();
+        return redirect()->back();
+    }
+
+    protected function rules(): array
+    {
+        return [
+            'start_at' => 'required|string',
+            'end_at' => 'required|string',
+            'day' => 'required|numeric',
+        ];
     }
 }

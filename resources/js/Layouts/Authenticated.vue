@@ -16,19 +16,29 @@
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <breeze-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
+                                   <home-icon class="h-5 w-5 mr-2" :class="route().current('dashboard') ? 'text-secondary': 'text-gray-300'"/>
                                     Dashboard
                                 </breeze-nav-link>
+                                <breeze-nav-link :href="route('schedule.index')" :active="route().current('schedule.index')">
+                                    <calendar-icon class="h-5 w-5 mr-2" :class="route().current('schedule.index') ? 'text-secondary': 'text-gray-300'"/>
+                                    Schedule
+                                </breeze-nav-link>
                                 <breeze-nav-link :href="route('course.index')" :active="route().current('course.index')">
+                                    <academic-cap-icon class="h-5 w-5 mr-2" :class="route().current('course.index') ? 'text-secondary': 'text-gray-300'"/>
                                     Course
                                 </breeze-nav-link>
                                 <breeze-nav-link v-if="isAdmin"
                                     :href="route('temperature.index')" :active="route().current('temperature.index')">
+                                    <fire-icon class="h-5 w-5 mr-2" :class="route().current('temperature.index') ? 'text-secondary': 'text-gray-300'"/>
                                     Temperature
                                 </breeze-nav-link>
                             </div>
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
+                            <div>
+                                <notification-dropdown />
+                            </div>
                             <!-- Settings Dropdown -->
                             <div class="ml-3 relative">
                                 <breeze-dropdown align="right" width="48">
@@ -36,13 +46,12 @@
                                         <span class="inline-flex rounded-md">
                                             <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                                                 <div class="flex items-center">
-                                                     <img :src="$page.props.auth.user.avatar" class="mr-2 rounded-full h-11" :alt="$page.props.auth.user.name">
                                                      {{ $page.props.auth.user.name }}
+                                                    <svg class="ml-1 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                    </svg>
+                                                     <img :src="$page.props.auth.user.avatar" class="ml-2 rounded-lg h-11" :alt="$page.props.auth.user.name">
                                                 </div>
-
-                                                <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                                </svg>
                                             </button>
                                         </span>
                                     </template>
@@ -74,6 +83,16 @@
                         <breeze-responsive-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard
                         </breeze-responsive-nav-link>
+                        <breeze-responsive-nav-link :href="route('schedule.index')" :active="route().current('schedule.index')">
+                            Schedule
+                        </breeze-responsive-nav-link>
+                        <breeze-responsive-nav-link :href="route('course.index')" :active="route().current('course.index')">
+                            Course
+                        </breeze-responsive-nav-link>
+                        <breeze-responsive-nav-link v-if="isAdmin"
+                            :href="route('temperature.index')" :active="route().current('temperature.index')">
+                            Temperature
+                        </breeze-responsive-nav-link>
                     </div>
 
                     <!-- Responsive Settings Options -->
@@ -103,6 +122,8 @@
             <main>
                 <slot />
             </main>
+
+            <page-footer />
         </div>
     </div>
 </template>
@@ -113,7 +134,9 @@
     import BreezeDropdownLink from '@/Components/DropdownLink'
     import BreezeNavLink from '@/Components/NavLink'
     import BreezeResponsiveNavLink from '@/Components/ResponsiveNavLink'
-
+    import NotificationDropdown from '@/Components/Notifications/Dropdown'
+    import PageFooter from '@/Layouts/Partials/Footer'
+    import { HomeIcon, FireIcon, AcademicCapIcon, CalendarIcon } from '@heroicons/vue/solid'
     export default {
         components: {
             BreezeApplicationLogo,
@@ -121,6 +144,12 @@
             BreezeDropdownLink,
             BreezeNavLink,
             BreezeResponsiveNavLink,
+            NotificationDropdown,
+            PageFooter,
+            HomeIcon,
+            FireIcon,
+            AcademicCapIcon,
+            CalendarIcon
         },
 
         data() {

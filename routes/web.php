@@ -2,7 +2,10 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\TemperatureController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -51,6 +54,10 @@ Route::middleware('auth')->group(function () {
             Route::resource('course', CourseController::class)->except('index', 'show');
         });
         Route::resource('course', CourseController::class)->only('index', 'show');
+        Route::resource('schedule', ScheduleController::class);
+        Route::resource('classroom', ClassroomController::class);
+        Route::get('notifications/{notification}', [NotificationController::class, 'show']);
+        Route::delete('notifications/{notification}', [NotificationController::class, 'destroy']);
     });
 
     Route::get('/profile-registration', [AuthenticatedSessionController::class, 'profile'])

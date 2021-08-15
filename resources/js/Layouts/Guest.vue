@@ -4,10 +4,15 @@
             <slot />
         </div>
     </div>
+    <page-footer />
 </template>
 
 <script>
+    import PageFooter from '@/Layouts/Partials/Footer'
 
     export default {
+        components: {
+            PageFooter,
+        },
     }
 </script>

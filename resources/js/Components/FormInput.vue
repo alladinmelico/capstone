@@ -1,6 +1,6 @@
 <template>
   <div>
-    <magis-label :for="computedName" :value="computedLabel" :required="required" />
+    <custom-label :for="computedName" :value="computedLabel" :required="required" />
     <slot name="default" :computed-name="computedName">
       <jet-input
         :id="computedName"
@@ -10,6 +10,8 @@
         :autocomplete="computedName"
         :required="required"
         :autofocus="autofocus"
+        :min="min"
+        :max="max"
       />
     </slot>
     <input-error :error="computedError" />
@@ -20,11 +22,11 @@
 <script>
 import JetInput from '@/Components/Input'
 import InputError from '@/Components/Error'
-import MagisLabel from '@/Components/Label'
+import CustomLabel from '@/Components/Label'
 import FormInput from '@/Mixins/FormInput'
 
 export default {
-  components: { JetInput, MagisLabel, InputError },
+  components: { JetInput, CustomLabel, InputError },
 
   mixins: [FormInput],
 
@@ -32,6 +34,14 @@ export default {
     type: {
       type: String,
       default: 'text',
+    },
+    min: {
+        type: [String, Number],
+        default: ''
+    },
+    max: {
+        type: [String, Number],
+        default: ''
     },
     autofocus: {
       type: Boolean,
