@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CourseCreated;
 use App\Models\Course;
 use Illuminate\Http\Request;
 
@@ -36,7 +37,8 @@ class CourseController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate($this->rules());
-        Course::create($validated);
+        $course = Course::create($validated);
+        broadcast(new CourseCreated($course))->toOthers();
         return redirect()->route('course.index');
     }
 

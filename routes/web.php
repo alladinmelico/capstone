@@ -7,6 +7,8 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\TemperatureController;
+use App\Models\Schedule;
+use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -47,6 +49,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/dashboard', function () {
             return inertia('Dashboard', [
                 'token' => session()->get('authToken'),
+                'number_of_schedules' => Schedule::all()->count(),
+                'number_of_users' => User::all()->count(),
             ]);
         })->name('dashboard');
         Route::resource('temperature', TemperatureController::class);

@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\CourseCreated;
 use App\Events\ScheduleCreated;
+use App\Listeners\SendCourseNotification;
 use App\Listeners\SendScheduleNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -22,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         ScheduleCreated::class => [
             SendScheduleNotification::class,
+        ],
+        CourseCreated::class => [
+            SendCourseNotification::class,
         ],
     ];
 

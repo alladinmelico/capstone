@@ -12,7 +12,7 @@
             </template>
         </div>
 
-        <div class="mx-auto sm:px-6 lg:px-8 max-w-3xl my-8">
+        <div class="mx-auto sm:px-6 lg:px-8 max-w-5xl my-8">
             <div class="p-4 rounded-lg w-1/2 bg-white mx-auto shadow-lg">
                 <img src="/ssc-system-banner.jpg" alt="logo">
             </div>
@@ -45,7 +45,7 @@
                   to produce insights or analytics.
             </p>
             <h2 class="text-2xl mt-4"> <UsersIcon class="h-10 w-10 text-gray-300 mr-2 inline-block"/>Our Team</h2>
-            <div class="mt-4 mb-8 grid grid-cols-1 sm:grid-cols-2 gap-8 gap-y-8 text-center">
+            <div class="mt-4 mb-8 grid grid-cols-1 sm:grid-cols-2 gap-8 gap-y-8 text-center max-w-2xl mx-auto">
                 <div class="relative p-8">
                     <img src="/espenida.jpg" alt="espenida" class="rounded-lg border-2 border-gray-300">
                     <div class="-mt-8 px-1 rounded-lg shadow-sm shadow-xl py-3 text-white bg-secondary-dark rounded-lg w-3/4 z-10 absolute transform translate-x-1/2 right-1/2">

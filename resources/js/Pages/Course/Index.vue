@@ -42,5 +42,20 @@ export default {
 			columnKeys: ['name', 'code', 'department'],
 		}
 	},
+    mounted() {
+         Echo.private('course')
+            .listen('CourseCreated', e => {
+                this.items.push(e.course)
+            })
+    },
+    methods: {
+        fetchData () {
+            Echo.private('course')
+                .listen('CourseCreated', e => {
+                    console.log(e)
+                    this.items.shift(e.course)
+                })
+        }
+    }
 }
 </script>
