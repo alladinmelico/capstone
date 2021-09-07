@@ -9,6 +9,14 @@
       <template #form>
         <FormInput v-model="form.name" class="col-span-6 sm:col-span-4" :error="form.errors.name" label="Course" required />
         <FormInput v-model="form.code" class="col-span-6 sm:col-span-4" :error="form.errors.code" label="Code" required />
+        <FormSelect
+            v-model="form.department_id"
+            :options="departmentList"
+            class="col-span-6 sm:col-span-4"
+            :error="form.errors.department_id"
+            label="Department"
+            required
+        />
       </template>
 
       <template #actions>
@@ -34,6 +42,7 @@ import JetButton from '@/Components/Button'
 import JetSecondaryButton from '@/Components/SecondaryButton'
 import FormInput from '@/Components/FormInput'
 import FormTextarea from '@/Components/FormTextarea'
+import FormSelect from '@/Components/FormSelect'
 
 export default {
   components: {
@@ -43,12 +52,17 @@ export default {
     FormInput,
     FormTextarea,
     BreezeAuthenticatedLayout,
+    FormSelect,
   },
 
   props: {
     item: {
       type: Object,
       required: false,
+    },
+    departments: {
+      type: Array,
+      required: true,
     },
   },
 
@@ -69,6 +83,11 @@ export default {
     isEditing () {
       return !! this.item?.id
     },
+    departmentList () {
+        return Object.entries(this.departments).map(obj => {
+            return { id: obj[0], name: obj[1]}
+        })
+    }
   },
 
   methods: {

@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\CourseCreated;
 use App\Models\Course;
+use App\Models\Schedule;
+use App\Notifications\ScheduleCreated;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 
 class CourseController extends Controller
 {
@@ -25,7 +28,7 @@ class CourseController extends Controller
      */
     public function create()
     {
-        return inertia('Course/Form');
+        return inertia('Course/Form', ['departments' => Config::get('constants.departments')]);
     }
 
     /**
@@ -38,7 +41,9 @@ class CourseController extends Controller
     {
         $validated = $request->validate($this->rules());
         $course = Course::create($validated);
-        broadcast(new CourseCreated($course))->toOthers();
+        // broadcast(new CourseCreated($course))->toOthers();
+        $user = Auth::user();
+        $user->notify(new ScheduleCreated(Schedule::find(22)));
         return redirect()->route('course.index');
     }
 
@@ -61,7 +66,7 @@ class CourseController extends Controller
      */
     public function edit(Course $course)
     {
-        return inertia('Course/Form', ['item' => $course]);
+        return inertia('Course/Form', ['item' => $course, 'departments' => Config::get('constants.departments')]);
     }
 
     /**

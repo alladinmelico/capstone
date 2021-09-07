@@ -16,7 +16,7 @@
     </template>
 
     <template #content>
-      <jet-dropdown-link v-for="(n, index) in notifications" :key="n.id" :href="`/notifications/${n.id}`" class="flex items-center justify-center" :class="{ 'bg-blue-50': ! n.read_at }">
+      <jet-dropdown-link v-for="(n, index) in notifications" :key="n.id" :href="`/notifications/${n.id}`" class="flex items-center justify-between" :class="{ 'bg-blue-50': ! n.read_at }">
         {{ n.data.message }}
         <button type="button" class="px-2 py-1" @click.stop.prevent="remove(index)">
           <XIcon class="h-3 w-3 text-secondary-light"/>
@@ -57,7 +57,7 @@ export default {
                 id: 1,
                 read_at: '',
                 data: {
-                    message: 'foobar'
+                    message: 'foobar lorem fdsaoifsdaofndasofjaofjdsaofidsfjaosdifhjasdiofhawsdiofhasdiof'
                 }
             },
             {
@@ -90,6 +90,8 @@ export default {
             read_at: null,
             data: { message: notification.message },
           })
+
+            console.log(' added' , notification)
         }
       })
   },

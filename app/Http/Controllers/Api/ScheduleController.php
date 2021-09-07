@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ScheduleResource;
 use App\Models\Schedule;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -19,12 +18,13 @@ class ScheduleController extends Controller
      */
     public function index(Request $request)
     {
-        $schedules = User::with('classrooms.schedule')
-            ->where('id', $request->user)
-            ->get()
-            ->pluck('classrooms')
-            ->flatten()
-            ->pluck('schedule');
+        // $schedules = User::with('classrooms.schedule')
+        //     ->where('id', $request->user)
+        //     ->get()
+        //     ->pluck('classrooms')
+        //     ->flatten()
+        //     ->pluck('schedule');
+        $schedules = Schedule::all();
         return ScheduleResource::collection($schedules);
     }
 

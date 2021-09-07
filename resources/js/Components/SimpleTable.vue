@@ -36,7 +36,7 @@
                         class="px-6 py-4 text-sm font-medium text-center text-gray-900 whitespace-nowrap"
                         v-text="item[columnKey]"
                       />
-                      <td v-if="resource" class="flex justify-center px-6 py-4 text-sm text-gray-500">
+                      <td v-if="resource && !item.deleted_at" class="flex justify-center px-6 py-4 text-sm text-gray-500">
                         <InertiaLink :href="`/${resource.split('/').pop()}/${item.id}`" class="mr-4 text-green-600 underline">
                           <EyeIcon class="h-5 w-5 text-green-400"/>
                         </InertiaLink>
@@ -45,6 +45,11 @@
                         </InertiaLink>
                         <a class="text-red-600 underline cursor-pointer" @click="confirmDelete(item)">
                           <TrashIcon class="h-5 w-5 text-red-400"/>
+                        </a>
+                      </td>
+                      <td v-else-if="item.deleted_at" class="flex justify-end px-6 py-4 text-sm text-gray-500">
+                        <a class="text-red-600 underline cursor-pointer" @click="restore(item)" title="Restore">
+                          <BackspaceIcon class="h-5 w-5 text-green-400"/>
                         </a>
                       </td>
                     </tr>
@@ -73,7 +78,7 @@
 <script>
 import ConfirmsDelete from '@/Mixins/ConfirmsDelete'
 import DeleteConfirmationModal from '@/Components/DeleteConfirmationModal'
-import { EyeIcon, PencilIcon, TrashIcon } from '@heroicons/vue/outline'
+import { EyeIcon, PencilIcon, TrashIcon, BackspaceIcon } from '@heroicons/vue/outline'
 
 
 export default {
@@ -81,7 +86,8 @@ export default {
     DeleteConfirmationModal,
     EyeIcon,
     PencilIcon,
-    TrashIcon
+    TrashIcon,
+    BackspaceIcon
   },
 
   mixins: [ConfirmsDelete],

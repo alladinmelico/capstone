@@ -1,10 +1,12 @@
 <template>
 	<breeze-authenticated-layout>
-        <template #header>
+		<template #header>
 			<h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                <InertiaLink href="/schedule" class="underline">Schedule</InertiaLink>
-				<chevron-double-right-icon class="inline-block h-5 w-5 text-primary mx-2" />
-                {{ item ? 'Update Schedule' : 'Create New Schedule' }}
+				<InertiaLink href="/schedule" class="underline">Schedule</InertiaLink>
+				<chevron-double-right-icon
+					class="inline-block h-5 w-5 text-primary mx-2"
+				/>
+				{{ item ? 'Update Schedule' : 'Create New Schedule' }}
 			</h2>
 		</template>
 		<div class="py-10 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -14,7 +16,7 @@
 				<template #form>
 					<FormInput
 						v-model="form.start_at"
-                        :max="form.end_at"
+						:max="form.end_at"
 						type="time"
 						class="col-span-3"
 						:error="form.errors.start_at"
@@ -23,7 +25,7 @@
 					/>
 					<FormInput
 						v-model="form.end_at"
-                        :min="form.start_at"
+						:min="form.start_at"
 						type="time"
 						class="col-span-3"
 						:error="form.errors.end_at"
@@ -40,13 +42,13 @@
 					/>
 					<FormDatepicker
 						v-model="form.valid_until"
-                        type="date"
+						type="date"
 						class="col-span-3"
 						:error="form.errors.valid_until"
 						label="Valid Schedule after:"
 						required
 					/>
-                    <FormSelect
+					<FormSelect
 						v-model="form.facility_id"
 						:options="facilities"
 						class="col-span-3"
@@ -54,28 +56,40 @@
 						label="Facility"
 						required
 					/>
-                    <FormSelect
+					<FormSelect
 						v-model="form.subject_id"
 						:options="subjects"
 						class="col-span-3"
 						:error="form.errors.subject_id"
 						label="Subject"
 					/>
-                    <div class="mt-4 col-span-6 border-t-2 border-gray-100 pt-4">
-                        <custom-label value="Google Classroom"/>
-                    </div>
-                    <div class="col-span-6 grid grid-cols-3 gap-4">
-                       <div
-                            v-for="classroom in classes"
-                            :key="classroom.id"
-                            class="p-2 hover:border-primary hover:ring hover:ring-primary-light hover:ring-opacity-50 rounded-md shadow-md"
-                            :class="(form.google_classroom_id == classroom.id) ? 'border-secondary-dark ring ring-secondary shadow-lg': 'border-gray-300' "
-                            @click="form.google_classroom_id = classroom.id"
-                        >
-                           <p>{{ classroom.name }}</p>
-                           <p class="text-xs font-italic mt-2 text-gray-500">{{ classroom.descriptionHeading }}</p>
-                        </div>
-                    </div>
+					<div class="mt-4 col-span-6 border-t-2 border-gray-100 pt-4">
+						<custom-label value="Google Classroom" />
+					</div>
+					<div class="col-span-6 grid grid-cols-3 gap-4">
+						<div
+							v-for="classroom in classes"
+							:key="classroom.id"
+							class="
+								p-2
+								hover:border-primary
+								hover:ring hover:ring-primary-light hover:ring-opacity-50
+								rounded-md
+								shadow-md
+							"
+							:class="
+								form.google_classroom_id == classroom.id
+									? 'border-secondary-dark ring ring-secondary shadow-lg'
+									: 'border-gray-300'
+							"
+							@click="form.google_classroom_id = classroom.id"
+						>
+							<p>{{ classroom.name }}</p>
+							<p class="text-xs font-italic mt-2 text-gray-500">
+								{{ classroom.descriptionHeading }}
+							</p>
+						</div>
+					</div>
 					<InputTextArea
 						v-model="form.note"
 						class="col-span-6"
@@ -126,50 +140,49 @@ export default {
 		BreezeAuthenticatedLayout,
 		FormDatepicker,
 		FormSelect,
-        InputTextArea,
-        CustomLabel,
-        ChevronDoubleRightIcon
+		InputTextArea,
+		CustomLabel,
+		ChevronDoubleRightIcon,
 	},
-
 
 	props: {
 		item: {
 			type: Object,
 			required: false,
 		},
-        facilities: {
-            type: Array,
-            required: true
-        },
-        subjects: {
-            type: Array,
-            required: true
-        },
-        existing_classrooms: {
-            type: Array,
-            required: true,
-            default: []
-        },
-        schedule_classroom: {
-            type: Object,
-            default: {
-                google_classroom_id: '',
-                subject_id: ''
-            }
-        },
-        token: {
-            type: String,
-            default: ''
-        }
+		facilities: {
+			type: Array,
+			required: true,
+		},
+		subjects: {
+			type: Array,
+			required: true,
+		},
+		existing_classrooms: {
+			type: Array,
+			required: true,
+			default: [],
+		},
+		schedule_classroom: {
+			type: Object,
+			default: {
+				google_classroom_id: '',
+				subject_id: '',
+			},
+		},
+		token: {
+			type: String,
+			default: '',
+		},
 	},
-mounted() {
+	mounted() {
 		this.getClasses()
 	},
 	data() {
 		const item = this.item
-        if(item){
-            item.valid_until = new Date(item.valid_until)
-        }
+		if (item) {
+			item.valid_until = new Date(item.valid_until)
+		}
 		return {
 			form: this.$inertia.form({
 				_method: item ? 'PUT' : 'POST',
@@ -179,8 +192,14 @@ mounted() {
 				valid_until: new Date(),
 				note: '',
 				facility_id: null,
-				google_classroom_id: this.schedule_classroom && this.schedule_classroom.google_classroom_id ? this.schedule_classroom.google_classroom_id:'',
-				subject_id: this.schedule_classroom && this.schedule_classroom.subject_id ? this.schedule_classroom.subject_id:null,
+				google_classroom_id:
+					this.schedule_classroom && this.schedule_classroom.google_classroom_id
+						? this.schedule_classroom.google_classroom_id
+						: '',
+				subject_id:
+					this.schedule_classroom && this.schedule_classroom.subject_id
+						? this.schedule_classroom.subject_id
+						: null,
 				user_id: this.$page.props.auth.user.id,
 				...item,
 			}),
@@ -210,7 +229,7 @@ mounted() {
 					name: 'Saturday',
 				},
 			],
-            classes: []
+			classes: [],
 		}
 	},
 
@@ -218,19 +237,21 @@ mounted() {
 		isEditing() {
 			return !!this.item?.id
 		},
-        gClassrooms() {
-            console.log(this.classes)
-            return
-        }
+		gClassrooms() {
+			console.log(this.classes)
+			return
+		},
 	},
 
 	methods: {
 		save() {
-            this.form.valid_until = dayjs(this.form.valid_until).format('YYYY-MM-D hh:mm:ss')
+			this.form.valid_until = dayjs(this.form.valid_until).format(
+				'YYYY-MM-D hh:mm:ss'
+			)
 			const url = this.isEditing ? `/schedule/${this.item.id}` : '/schedule'
 			this.form.post(url)
 		},
-        async getClasses() {
+		async getClasses() {
 			const axios = window.axios
 			const response = await axios
 				.get('https://classroom.googleapis.com/v1/courses', {
@@ -240,8 +261,8 @@ mounted() {
 				})
 				.catch(function (error) {
 					if (error.response.status === 401) {
-                        axios.post('/logout')
-                        window.location.reload()
+						axios.post('/logout')
+						window.location.reload()
 					}
 				})
 			this.classes = response.data.courses

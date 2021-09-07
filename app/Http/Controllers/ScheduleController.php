@@ -20,7 +20,7 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        return inertia('Schedule/Index', ['items' => Schedule::all()]);
+        return inertia('Schedule/Index', ['items' => Schedule::withTrashed()->get()]);
     }
 
     /**
@@ -124,6 +124,12 @@ class ScheduleController extends Controller
     public function destroy(Schedule $schedule)
     {
         $schedule->delete();
+        return redirect()->back();
+    }
+
+    public function restore(Schedule $schedule)
+    {
+        $schedule->restore();
         return redirect()->back();
     }
 

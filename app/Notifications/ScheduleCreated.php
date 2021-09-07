@@ -3,12 +3,11 @@
 namespace App\Notifications;
 
 use App\Models\Schedule;
+use App\Traits\Notifications\BroadcastsNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Traits\Notifications\BroadcastsNotification;
-
 
 class ScheduleCreated extends Notification implements ShouldQueue
 {
@@ -28,14 +27,17 @@ class ScheduleCreated extends Notification implements ShouldQueue
     }
 
     /**
-     * Get the notification's delivery channels.
+     * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param  mixed $notifiable
      * @return array
      */
-    public function via($notifiable)
+    public function toArray($notifiable)
     {
-        return ['mail'];
+        return [
+            'message' => 'A new schedule created.',
+            'url' => '',
+        ];
     }
 
     /**
@@ -47,22 +49,8 @@ class ScheduleCreated extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            'id' => $this->schedule->id,
-        ];
+            ->line('The introduction to the notification.')
+            ->line('Thank you for using our application!');
     }
 
     protected function message(): string
