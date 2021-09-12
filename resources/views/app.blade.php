@@ -16,6 +16,7 @@
         <!-- Scripts -->
         @routes
         <script src="{{ mix('js/app.js') }}" defer></script>
+        <script src="https://js.pusher.com/beams/1.0/push-notifications-cdn.js"></script>
     </head>
     <body class="font-sans antialiased">
         @inertia

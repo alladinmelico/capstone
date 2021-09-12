@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\ScheduleController;
 use App\Http\Controllers\Api\TemperatureController;
 use Illuminate\Http\Request;
@@ -23,6 +24,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::middleware('api')->group(function () {
     Route::apiResource('temperature', TemperatureController::class);
     Route::apiResource('schedule', ScheduleController::class);
+    Route::apiResource('course', CourseController::class);
 });
 Route::middleware('auth:sanctum')->group(function () {
 

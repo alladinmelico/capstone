@@ -35310,7 +35310,7 @@ __webpack_require__.r(__webpack_exports__);
         id: 1,
         read_at: '',
         data: {
-          message: 'foobar'
+          message: 'foobar lorem fdsaoifsdaofndasofjaofjdsaofidsfjaosdifhjasdiofhawsdiofhasdiof'
         }
       }, {
         id: 1,
@@ -35350,6 +35350,8 @@ __webpack_require__.r(__webpack_exports__);
             message: notification.message
           }
         });
+
+        console.log(' added', notification);
       }
     });
   },
@@ -35501,7 +35503,8 @@ __webpack_require__.r(__webpack_exports__);
     DeleteConfirmationModal: _Components_DeleteConfirmationModal__WEBPACK_IMPORTED_MODULE_1__.default,
     EyeIcon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_2__.EyeIcon,
     PencilIcon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_2__.PencilIcon,
-    TrashIcon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_2__.TrashIcon
+    TrashIcon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_2__.TrashIcon,
+    BackspaceIcon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_2__.BackspaceIcon
   },
   mixins: [_Mixins_ConfirmsDelete__WEBPACK_IMPORTED_MODULE_0__.default],
   props: {
@@ -36272,11 +36275,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Components_SecondaryButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/Components/SecondaryButton */ "./resources/js/Components/SecondaryButton.vue");
 /* harmony import */ var _Components_FormInput__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/Components/FormInput */ "./resources/js/Components/FormInput.vue");
 /* harmony import */ var _Components_FormTextarea__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/Components/FormTextarea */ "./resources/js/Components/FormTextarea.vue");
+/* harmony import */ var _Components_FormSelect__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/Components/FormSelect */ "./resources/js/Components/FormSelect.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -36291,12 +36296,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     JetSecondaryButton: _Components_SecondaryButton__WEBPACK_IMPORTED_MODULE_3__.default,
     FormInput: _Components_FormInput__WEBPACK_IMPORTED_MODULE_4__.default,
     FormTextarea: _Components_FormTextarea__WEBPACK_IMPORTED_MODULE_5__.default,
-    BreezeAuthenticatedLayout: _Layouts_Authenticated__WEBPACK_IMPORTED_MODULE_0__.default
+    BreezeAuthenticatedLayout: _Layouts_Authenticated__WEBPACK_IMPORTED_MODULE_0__.default,
+    FormSelect: _Components_FormSelect__WEBPACK_IMPORTED_MODULE_6__.default
   },
   props: {
     item: {
       type: Object,
       required: false
+    },
+    departments: {
+      type: Array,
+      required: true
     }
   },
   data: function data() {
@@ -36315,6 +36325,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this$item;
 
       return !!((_this$item = this.item) !== null && _this$item !== void 0 && _this$item.id);
+    },
+    departmentList: function departmentList() {
+      return Object.entries(this.departments).map(function (obj) {
+        return {
+          id: obj[0],
+          name: obj[1]
+        };
+      });
     }
   },
   methods: {
@@ -37788,7 +37806,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_jet_dropdown_link, {
           key: n.id,
           href: "/notifications/".concat(n.id),
-          "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["flex items-center justify-center", {
+          "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["flex items-center justify-between", {
             'bg-blue-50': !n.read_at
           }])
         }, {
@@ -38112,6 +38130,11 @@ var _hoisted_16 = {
 var _hoisted_17 = ["onClick"];
 var _hoisted_18 = {
   key: 1,
+  "class": "flex justify-end px-6 py-4 text-sm text-gray-500"
+};
+var _hoisted_19 = ["onClick"];
+var _hoisted_20 = {
+  key: 1,
   "class": "text-center"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -38122,6 +38145,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_PencilIcon = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("PencilIcon");
 
   var _component_TrashIcon = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("TrashIcon");
+
+  var _component_BackspaceIcon = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("BackspaceIcon");
 
   var _component_DeleteConfirmationModal = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("DeleteConfirmationModal");
 
@@ -38163,7 +38188,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       , _hoisted_15);
     }), 128
     /* KEYED_FRAGMENT */
-    )), $props.resource ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("td", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_InertiaLink, {
+    )), $props.resource && !item.deleted_at ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("td", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_InertiaLink, {
       href: "/".concat($props.resource.split('/').pop(), "/").concat(item.id),
       "class": "mr-4 text-green-600 underline"
     }, {
@@ -38200,10 +38225,20 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "class": "h-5 w-5 text-red-400"
     })], 8
     /* PROPS */
-    , _hoisted_17)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
+    , _hoisted_17)])) : item.deleted_at ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("td", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+      "class": "text-red-600 underline cursor-pointer",
+      onClick: function onClick($event) {
+        return _ctx.restore(item);
+      },
+      title: "Restore"
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BackspaceIcon, {
+      "class": "h-5 w-5 text-green-400"
+    })], 8
+    /* PROPS */
+    , _hoisted_19)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
   }), 128
   /* KEYED_FRAGMENT */
-  ))])])])])])])])])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_18, " There are no items yet in this table. Click \"Create New\" to create a new item. ")), $options.deleteEndpoint ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_DeleteConfirmationModal, {
+  ))])])])])])])])])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_20, " There are no items yet in this table. Click \"Create New\" to create a new item. ")), $options.deleteEndpoint ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_DeleteConfirmationModal, {
     key: 2,
     model: $props.model,
     show: !!_ctx.deleting,
@@ -39905,6 +39940,8 @@ var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNod
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_FormInput = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("FormInput");
 
+  var _component_FormSelect = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("FormSelect");
+
   var _component_JetSecondaryButton = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("JetSecondaryButton");
 
   var _component_InertiaLink = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("InertiaLink");
@@ -39949,7 +39986,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             required: ""
           }, null, 8
           /* PROPS */
-          , ["modelValue", "error"])];
+          , ["modelValue", "error"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FormSelect, {
+            modelValue: $data.form.department_id,
+            "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
+              return $data.form.department_id = $event;
+            }),
+            options: $options.departmentList,
+            "class": "col-span-6 sm:col-span-4",
+            error: $data.form.errors.department_id,
+            label: "Department",
+            required: ""
+          }, null, 8
+          /* PROPS */
+          , ["modelValue", "options", "error"])];
         }),
         actions: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_InertiaLink, {
@@ -40378,7 +40427,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.classes, function (classroom) {
             return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
               key: classroom.id,
-              "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["p-2 hover:border-primary hover:ring hover:ring-primary-light hover:ring-opacity-50 rounded-md shadow-md", $data.form.google_classroom_id == classroom.id ? 'border-secondary-dark ring ring-secondary shadow-lg' : 'border-gray-300']),
+              "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["\n\t\t\t\t\t\t\t\tp-2\n\t\t\t\t\t\t\t\thover:border-primary\n\t\t\t\t\t\t\t\thover:ring hover:ring-primary-light hover:ring-opacity-50\n\t\t\t\t\t\t\t\trounded-md\n\t\t\t\t\t\t\t\tshadow-md\n\t\t\t\t\t\t\t", $data.form.google_classroom_id == classroom.id ? 'border-secondary-dark ring ring-secondary shadow-lg' : 'border-gray-300']),
               onClick: function onClick($event) {
                 return $data.form.google_classroom_id = classroom.id;
               }
