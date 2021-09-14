@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CourseResource;
-use App\Models\Course;
+use App\Http\Resources\ClassroomResource;
+use App\Models\Classroom;
 use Illuminate\Http\Request;
 
-class CourseController extends Controller
+class ClassroomController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,8 @@ class CourseController extends Controller
      */
     public function index()
     {
-        return CourseResource::collection(Course::all());
+        return ClassroomResource::collection(Classroom::all());
+
     }
 
     /**
@@ -33,22 +34,22 @@ class CourseController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Course  $course
+     * @param  \App\Models\Classroom  $classroom
      * @return \Illuminate\Http\Response
      */
-    public function show(Course $course)
+    public function show(Classroom $classroom)
     {
-        return new CourseResource($course);
+        return new ClassroomResource($classroom);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Course  $course
+     * @param  \App\Models\Classroom  $classroom
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Course $course)
+    public function update(Request $request, Classroom $classroom)
     {
         //
     }
@@ -56,10 +57,10 @@ class CourseController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Course  $course
+     * @param  \App\Models\Classroom  $classroom
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Course $course)
+    public function destroy(Classroom $classroom)
     {
         //
     }
