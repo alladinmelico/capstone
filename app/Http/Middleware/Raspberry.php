@@ -4,9 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class IsAdmin
+class Raspberry
 {
     /**
      * Handle an incoming request.
@@ -17,10 +16,10 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::user() && str_contains(config('constants.admins'), Auth::user()->email)) {
+        if (!empty($request->id) && str_contains(config('constants.raspberries'), $request->id) && config('constants.allow_new_rfid')) {
             return $next($request);
         }
 
-        return redirect('/');
+        return response()->json(['message' => 'Hardware not allowed'], 419);
     }
 }

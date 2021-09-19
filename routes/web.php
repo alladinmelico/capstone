@@ -5,8 +5,10 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\RfidController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\TemperatureController;
+use App\Http\Controllers\UserController;
 use App\Models\Schedule;
 use App\Models\User;
 use Illuminate\Foundation\Application;
@@ -55,9 +57,13 @@ Route::middleware('auth')->group(function () {
         })->name('dashboard');
         Route::resource('temperature', TemperatureController::class);
         Route::group(['middleware' => 'admin', 'prefix' => 'admin', 'as' => 'admin.'], function () {
+            Route::resource('user', UserController::class)->except('show');
             Route::resource('course', CourseController::class)->except('index', 'show');
+            Route::resource('rfid', RfidController::class)->except('show');
         });
+        Route::resource('user', UserController::class)->only('show');
         Route::resource('course', CourseController::class)->only('index', 'show');
+        Route::resource('rfid', RfidController::class)->only('show');
         Route::put('schedule/{schedule}/restore', [ScheduleController::class, 'restore']);
         Route::resource('schedule', ScheduleController::class);
         Route::resource('classroom', ClassroomController::class);

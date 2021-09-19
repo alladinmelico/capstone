@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->integer('year')->default(1);
             $table->string('section')->default('A');
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->string('google_id')->nullable();
             $table->string('avatar')->nullable();
             $table->string('avatar_original')->nullable();

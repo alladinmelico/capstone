@@ -33,6 +33,16 @@
                                         <fire-icon class="h-5 w-5 mr-2" :class="route().current('temperature.index') ? 'text-secondary': 'text-gray-300'"/>
                                         Temperature
                                     </breeze-nav-link>
+                                    <breeze-nav-link v-if="isAdmin"
+                                        :href="route('admin.rfid.index')" :active="route().current('admin.rfid.index')">
+                                        <credit-card-icon class="h-5 w-5 mr-2" :class="route().current('admin.rfid.index') ? 'text-secondary': 'text-gray-300'"/>
+                                        RFID
+                                    </breeze-nav-link>
+                                    <breeze-nav-link v-if="isAdmin"
+                                        :href="route('admin.user.index')" :active="route().current('admin.user.index')">
+                                        <users-icon class="h-5 w-5 mr-2" :class="route().current('admin.user.index') ? 'text-secondary': 'text-gray-300'"/>
+                                        Users
+                                    </breeze-nav-link>
                                 </div>
                             </div>
 
@@ -138,7 +148,7 @@
     import BreezeResponsiveNavLink from '@/Components/ResponsiveNavLink'
     import NotificationDropdown from '@/Components/Notifications/Dropdown'
     import PageFooter from '@/Layouts/Partials/Footer'
-    import { HomeIcon, FireIcon, AcademicCapIcon, CalendarIcon } from '@heroicons/vue/solid'
+    import { HomeIcon, FireIcon, AcademicCapIcon, CalendarIcon, CreditCardIcon, UsersIcon } from '@heroicons/vue/outline'
     export default {
         components: {
             BreezeApplicationLogo,
@@ -151,7 +161,9 @@
             HomeIcon,
             FireIcon,
             AcademicCapIcon,
-            CalendarIcon
+            CalendarIcon,
+            CreditCardIcon,
+            UsersIcon
         },
 
         data() {

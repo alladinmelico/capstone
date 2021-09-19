@@ -68,4 +68,14 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Course::class);
     }
+
+    public function temperatures()
+    {
+        return $this->hasMany(Temperature::class);
+    }
+
+    public function rfid()
+    {
+        return $this->hasOne(Rfid::class);
+    }
 }

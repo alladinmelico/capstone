@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\Role;
+use App\Models\Rfid;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class RoleFactory extends Factory
+class RfidFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Role::class;
+    protected $model = Rfid::class;
 
     /**
      * Define the model's default state.

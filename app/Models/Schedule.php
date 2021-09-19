@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -21,6 +22,16 @@ class Schedule extends Model
         'facility_id',
         'user_id',
     ];
+
+    public function getStartAtAttribute($value)
+    {
+        return Carbon::parse($value)->format('H:i:s');
+    }
+
+    public function getEndAtAttribute($value)
+    {
+        return Carbon::parse($value)->format('H:i:s');
+    }
 
     public function facility()
     {

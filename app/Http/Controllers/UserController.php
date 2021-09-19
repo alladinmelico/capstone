@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Guest;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class GuestController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class GuestController extends Controller
      */
     public function index()
     {
-        //
+        return inertia('User/Index', ['items' => User::orderBy('updated_at', 'desc')->get()]);
     }
 
     /**
@@ -24,7 +24,7 @@ class GuestController extends Controller
      */
     public function create()
     {
-        //
+        return inertia('User/Form');
     }
 
     /**
@@ -41,33 +41,33 @@ class GuestController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Guest  $guest
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(Guest $guest)
+    public function show(User $user)
     {
-        //
+        return inertia('User/Show', ['item' => $user]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Guest  $guest
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(Guest $guest)
+    public function edit(User $user)
     {
-        //
+        return inertia('User/Form', ['item' => $user]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Guest  $guest
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Guest $guest)
+    public function update(Request $request, User $user)
     {
         //
     }
@@ -75,10 +75,10 @@ class GuestController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Guest  $guest
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Guest $guest)
+    public function destroy(User $user)
     {
         //
     }

@@ -253,6 +253,7 @@ export default {
 		},
 		async getClasses() {
 			const axios = window.axios
+            console.log(this.token)
 			const response = await axios
 				.get('https://classroom.googleapis.com/v1/courses', {
 					params: {

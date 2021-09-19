@@ -10,6 +10,8 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Validator;
 use Laravel\Socialite\Facades\Socialite;
 
 class RegisteredUserController extends Controller
@@ -89,4 +91,53 @@ class RegisteredUserController extends Controller
             return redirect()->route('profile-registration');
         }
     }
+
+    public function handleGoogleSignIn(Request $request)
+    {
+        $findUser = User::where('google_id', $request->google_id)->first();
+
+        if (empty($findUser)) {
+            $data = $request->all();
+
+            $validator = Validator::make($data, [
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users,email',
+                'google_id' => 'required|max:255',
+                'avatar' => 'required|url',
+                'avatar_original' => 'required|url',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), 422);
+            }
+
+            $newUser = User::create($data);
+
+            event(new Registered($newUser));
+
+            return response()->json(['data' => [
+                'id' => $newUser->id,
+                'token' => $newUser->createToken('SSCsystem')->plainTextToken,
+            ]], 201);
+        }
+
+        return response()->json(['data' => [
+            'id' => $findUser->id,
+            'token' => $findUser->createToken('SSCsystem')->plainTextToken,
+        ]], 200);
+    }
+
+    public function handleCode(Request $request)
+    {
+        $response = Http::post('https://oauth2.googleapis.com/token', [
+            'client_id' => config('constants.google_client_id'),
+            'client_secret' => config('constants.google_secret'),
+            'code' => $request->code,
+            'redirect_uri' => config('constants.google_redirect'),
+            'grant_type' => 'authorization_code',
+        ]);
+
+        return $response->json();
+    }
+
 }

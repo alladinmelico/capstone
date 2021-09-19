@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'hasProfile' => \App\Http\Middleware\EnsureUserHasProfile::class,
         'admin' => \App\Http\Middleware\IsAdmin::class,
+        'raspberry' => \App\Http\Middleware\Raspberry::class,
     ];
 }

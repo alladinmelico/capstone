@@ -3,9 +3,11 @@
 use App\Http\Controllers\Api\ClassroomController;
 use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\FacilityController;
+use App\Http\Controllers\Api\RfidController;
 use App\Http\Controllers\Api\ScheduleController;
 use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\TemperatureController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,14 +26,21 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('api')->group(function () {
-    Route::apiResource('temperature', TemperatureController::class);
+Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('schedule', ScheduleController::class);
     Route::apiResource('course', CourseController::class);
     Route::apiResource('classroom', ClassroomController::class);
     Route::apiResource('facility', FacilityController::class);
     Route::apiResource('subject', SubjectController::class);
 });
-Route::middleware('auth:sanctum')->group(function () {
 
+Route::middleware('raspberry')->group(function () {
+    Route::apiResource('temperature', TemperatureController::class);
+    Route::post('rfid', [RfidController::class, 'store']);
+    Route::get('rfid/{rfid:value}', [RfidController::class, 'show']);
+});
+
+Route::middleware('api')->group(function () {
+    Route::post('/auth', [RegisteredUserController::class, 'handleGoogleSignIn']);
+    Route::post('/auth-code', [RegisteredUserController::class, 'handleCode']);
 });

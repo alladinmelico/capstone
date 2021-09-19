@@ -2,9 +2,8 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
 use Carbon\Carbon;
-
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class ScheduleResource extends JsonResource
 {
@@ -16,8 +15,19 @@ class ScheduleResource extends JsonResource
      */
     public function toArray($request)
     {
-        $now = Carbon::now();
+        $now = Carbon::now()->setTimezone(config('app.timezone'));
         $validUntil = Carbon::parse($this->valid_until);
+        $time = $now->format('H:i:s');
+
+        $isValid = true;
+
+        if (($now->greaterThanOrEqualTo($validUntil)) ||
+            ($this->day !== strtolower($now->englishDayOfWeek)) ||
+            (time() >= strtotime($this->end_at)) ||
+            (time() <= strtotime($this->start_at))) {
+            $isValid = false;
+        }
+
         return [
             'id' => $this->id,
             'start_at' => $this->start_at,
@@ -28,7 +38,7 @@ class ScheduleResource extends JsonResource
             'note' => $this->note,
             'facility_id' => $this->facility_id,
             'facility_name' => $this->facility->name,
-            'is_valid_now' => $now->lessThan($validUntil),
+            'is_valid_now' => $isValid,
         ];
     }
 }
