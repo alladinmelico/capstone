@@ -7,6 +7,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RfidController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\SectionController;
 use App\Http\Controllers\TemperatureController;
 use App\Http\Controllers\UserController;
 use App\Models\Schedule;
@@ -60,6 +61,7 @@ Route::middleware('auth')->group(function () {
             Route::resource('user', UserController::class)->except('show');
             Route::resource('course', CourseController::class)->except('index', 'show');
             Route::resource('rfid', RfidController::class)->except('show');
+            Route::resource('section', SectionController::class)->except('show');
         });
         Route::resource('user', UserController::class)->only('show');
         Route::resource('course', CourseController::class)->only('index', 'show');

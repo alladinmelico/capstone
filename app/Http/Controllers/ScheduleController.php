@@ -30,7 +30,10 @@ class ScheduleController extends Controller
      */
     public function create()
     {
+        $user = auth()->user();
+
         return inertia('Schedule/Form', [
+            'section' => $user->role_id === User::STUDENT ? $user->course->code . '-' . $user->year . strtoupper($user->section) : '',
             'facilities' => Facility::select('id', 'name')->get(),
             'subjects' => Subject::select('id', 'name')->get(),
             'existing_classrooms' => Classroom::select('google_classroom_id')->get(),
@@ -50,6 +53,10 @@ class ScheduleController extends Controller
         $schedule = Schedule::create($validated);
         if (!empty($validated['google_classroom_id'])) {
             $schedule->classrooms()->create([
+                'name' => $validated['name'],
+                'description_heading' => $validated['description_heading'],
+                'description' => $validated['description'],
+                'section' => $validated['section'],
                 'google_classroom_id' => $validated['google_classroom_id'],
                 'subject_id' => $validated['subject_id'],
                 'schedule_id' => $schedule->id,

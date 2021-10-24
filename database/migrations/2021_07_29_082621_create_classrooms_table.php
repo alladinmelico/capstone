@@ -16,6 +16,11 @@ class CreateClassroomsTable extends Migration
         Schema::create('classrooms', function (Blueprint $table) {
             $table->id();
             $table->string('google_classroom_id')->nullable();
+            $table->string('name')->nullable();
+            $table->string('description_heading')->nullable();
+            $table->string('description')->nullable();
+            $table->string('section')->nullable();
+            $table->string('invite_code')->unique()->nullable();
             $table->foreignId('subject_id')->constrained();
             $table->foreignId('schedule_id')->constrained();
             $table->softDeletes();

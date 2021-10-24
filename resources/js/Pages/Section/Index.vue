@@ -2,16 +2,16 @@
 	<breeze-authenticated-layout>
 		<template #header>
 			<h2 class="font-semibold text-xl text-gray-800 leading-tight">
-				Users
+				Sections
 			</h2>
 		</template>
 
 		<div class="py-12">
 			<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 				<SimpleTable
-					title="Users"
-					resource="admin/user"
-					model="User"
+					title="Section"
+					resource="section"
+					model="Section"
 					:items="items"
 					:headers="headers"
 					:column-keys="columnKeys"
@@ -38,15 +38,20 @@ export default {
 	},
 	data() {
 		return {
-			headers: ['ID', 'Name', 'Email','Year','Section', 'Actions'],
-			columnKeys: ['school_id', 'name', 'email', 'year', 'section'],
+			headers: [
+				'ID',
+				'Name',
+				'President',
+				'Faculty',
+				'Actions',
+			],
+			columnKeys: [
+				'id',
+				'name',
+				'president_id',
+				'faculty_id',
+			],
 		}
 	},
-    mounted() {
-        //  Echo.private('user')
-        //     .listen('UserCreated', e => {
-        //         this.items.push(e.course)
-        //     })
-    },
 }
 </script>

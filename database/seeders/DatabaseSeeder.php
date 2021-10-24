@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             ScheduleSeeder::class,
             ClassroomSeeder::class,
             TemperatureSeeder::class,
+            SectionSeeder::class,
         ]);
     }
 }

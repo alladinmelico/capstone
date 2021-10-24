@@ -17,6 +17,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
     error: {
       type: [String, Array],
       default: '',

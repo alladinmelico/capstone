@@ -4,6 +4,7 @@
     :value="modelValue"
     @input="$emit('update:modelValue', $event.target.value)"
   >
+    <option :value="null" disabled>-- Select --</option>
     <option v-for="o in options" :key="o[valueKey]" :value="o[valueKey]">{{ o[labelKey] }}</option>
   </select>
 </template>

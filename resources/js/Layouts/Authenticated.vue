@@ -24,25 +24,62 @@
                                         <calendar-icon class="h-5 w-5 mr-2" :class="route().current('schedule.index') ? 'text-secondary': 'text-gray-300'"/>
                                         Schedule
                                     </breeze-nav-link>
-                                    <breeze-nav-link :href="route('course.index')" :active="route().current('course.index')">
-                                        <academic-cap-icon class="h-5 w-5 mr-2" :class="route().current('course.index') ? 'text-secondary': 'text-gray-300'"/>
-                                        Course
-                                    </breeze-nav-link>
-                                    <breeze-nav-link v-if="isAdmin"
-                                        :href="route('temperature.index')" :active="route().current('temperature.index')">
-                                        <fire-icon class="h-5 w-5 mr-2" :class="route().current('temperature.index') ? 'text-secondary': 'text-gray-300'"/>
-                                        Temperature
-                                    </breeze-nav-link>
-                                    <breeze-nav-link v-if="isAdmin"
-                                        :href="route('admin.rfid.index')" :active="route().current('admin.rfid.index')">
-                                        <credit-card-icon class="h-5 w-5 mr-2" :class="route().current('admin.rfid.index') ? 'text-secondary': 'text-gray-300'"/>
-                                        RFID
-                                    </breeze-nav-link>
-                                    <breeze-nav-link v-if="isAdmin"
-                                        :href="route('admin.user.index')" :active="route().current('admin.user.index')">
-                                        <users-icon class="h-5 w-5 mr-2" :class="route().current('admin.user.index') ? 'text-secondary': 'text-gray-300'"/>
-                                        Users
-                                    </breeze-nav-link>
+                                    <breeze-dropdown v-if="isAdmin" class="my-auto">
+                                        <template #trigger>
+                                            <span class="cursor-pointer mt-2 inline-flex items-center border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
+                                                <academic-cap-icon class="h-5 w-5 mr-2" :class="route().current('course.index') ? 'text-secondary': 'text-gray-300'"/>
+                                                Classrooms & Courses
+                                                <chevron-down-icon class="h-5 w-5 ml-2 text-gray-300"/>
+                                            </span>
+                                        </template>
+
+                                        <template #content>
+                                            <breeze-dropdown-link class="flex hover:text-primary-dark" :href="route('classroom.index')" :active="route().current('classroom.index')">
+                                                My Classrooms
+                                            </breeze-dropdown-link>
+                                            <breeze-dropdown-link class="hover:text-primary-dark" :href="route('course.index')" :active="route().current('course.index')">
+                                                All Courses
+                                            </breeze-dropdown-link>
+                                        </template>
+                                    </breeze-dropdown>
+                                    <breeze-dropdown v-if="isAdmin" class="my-auto">
+                                        <template #trigger>
+                                            <span class="cursor-pointer mt-2 inline-flex items-center border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
+                                                <chip-icon class="h-5 w-5 mr-2" :class="(route().current('temperature.index') || route().current('admin.rfid.index')) ? 'text-secondary': 'text-gray-300'"/>
+                                                Raspberry Pi
+                                                <chevron-down-icon class="h-5 w-5 ml-2 text-gray-300"/>
+                                            </span>
+                                        </template>
+
+                                        <template #content>
+                                            <breeze-dropdown-link class="flex hover:text-primary-dark" :href="route('temperature.index')" :active="route().current('temperature.index')">
+                                                <fire-icon class="h-5 w-5 mr-2 " :class="route().current('temperature.index') ? 'text-secondary': 'text-gray-300'"/>
+                                                Temperature
+                                            </breeze-dropdown-link>
+                                            <breeze-dropdown-link class="flex hover:text-primary-dark" :href="route('admin.rfid.index')" :active="route().current('admin.rfid.index')">
+                                                <credit-card-icon class="h-5 w-5 mr-2" :class="route().current('admin.rfid.index') ? 'text-secondary': 'text-gray-300'"/>
+                                                RFID
+                                            </breeze-dropdown-link>
+                                        </template>
+                                    </breeze-dropdown>
+                                    <breeze-dropdown v-if="isAdmin" class="my-auto">
+                                        <template #trigger>
+                                            <span class="cursor-pointer mt-2 inline-flex items-center border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
+                                                <users-icon class="h-5 w-5 mr-2" :class="route().current('admin.user.index') ? 'text-secondary': 'text-gray-300'"/>
+                                                Users
+                                                <chevron-down-icon class="h-5 w-5 ml-2 text-gray-300"/>
+                                            </span>
+                                        </template>
+
+                                        <template #content>
+                                            <breeze-dropdown-link  :href="route('admin.user.index')" :active="route().current('admin.user.index')">
+                                                All Users
+                                            </breeze-dropdown-link>
+                                            <breeze-dropdown-link  :href="route('admin.section.index')" :active="route().current('admin.section.index')">
+                                                Section
+                                            </breeze-dropdown-link>
+                                        </template>
+                                    </breeze-dropdown>
                                 </div>
                             </div>
 
@@ -68,6 +105,9 @@
                                         </template>
 
                                         <template #content>
+                                            <breeze-dropdown-link :href="route('user.show', $page.props.auth.user.id)">
+                                                Profile
+                                            </breeze-dropdown-link>
                                             <breeze-dropdown-link :href="route('logout')" method="post" as="button">
                                                 Log Out
                                             </breeze-dropdown-link>
@@ -131,7 +171,7 @@
             </div>
 
             <!-- Page Content -->
-            <main>
+            <main class="flex-1">
                 <slot />
             </main>
 
@@ -146,9 +186,9 @@
     import BreezeDropdownLink from '@/Components/DropdownLink'
     import BreezeNavLink from '@/Components/NavLink'
     import BreezeResponsiveNavLink from '@/Components/ResponsiveNavLink'
-    import NotificationDropdown from '@/Components/Notifications/Dropdown'
+    // import NotificationDropdown from '@/Components/Notifications/Dropdown'
     import PageFooter from '@/Layouts/Partials/Footer'
-    import { HomeIcon, FireIcon, AcademicCapIcon, CalendarIcon, CreditCardIcon, UsersIcon } from '@heroicons/vue/outline'
+    import { HomeIcon, FireIcon, AcademicCapIcon, CalendarIcon, CreditCardIcon, UsersIcon, ChevronDownIcon, ChipIcon } from '@heroicons/vue/outline'
     export default {
         components: {
             BreezeApplicationLogo,
@@ -156,14 +196,15 @@
             BreezeDropdownLink,
             BreezeNavLink,
             BreezeResponsiveNavLink,
-            NotificationDropdown,
             PageFooter,
             HomeIcon,
             FireIcon,
             AcademicCapIcon,
             CalendarIcon,
             CreditCardIcon,
-            UsersIcon
+            UsersIcon,
+            ChevronDownIcon,
+            ChipIcon
         },
 
         data() {

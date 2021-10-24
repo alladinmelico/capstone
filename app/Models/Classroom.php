@@ -14,6 +14,11 @@ class Classroom extends Model
 
     protected $fillable = [
         'google_classroom_id',
+        'name',
+        'description_heading',
+        'description',
+        'section',
+        'invite_code',
         'subject_id',
         'schedule_id',
     ];
@@ -25,7 +30,7 @@ class Classroom extends Model
 
     public function subject()
     {
-        return $this->hasMany(Subject::class);
+        return $this->belongsTo(Subject::class);
     }
 
     public function schedule()

@@ -2,7 +2,7 @@
 	<breeze-authenticated-layout>
 		<div class="py-10 mx-auto max-w-7xl sm:px-6 lg:px-8">
 			<JetFormSection @submitted="save">
-				<template #title> classroom </template>
+				<template #title> Classroom </template>
 
 				<template #description> Update the classroom here. </template>
 

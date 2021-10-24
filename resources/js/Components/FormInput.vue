@@ -12,6 +12,7 @@
         :autofocus="autofocus"
         :min="min"
         :max="max"
+        :disabled="disabled"
       />
     </slot>
     <input-error :error="computedError" />

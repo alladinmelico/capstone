@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Classroom;
+use App\Models\Facility;
+use App\Models\Subject;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ClassroomController extends Controller
@@ -14,7 +17,7 @@ class ClassroomController extends Controller
      */
     public function index()
     {
-        //
+        return inertia('Classroom/Index', ['items' => Classroom::with('subject')->withTrashed()->get()]);
     }
 
     /**
@@ -24,7 +27,15 @@ class ClassroomController extends Controller
      */
     public function create()
     {
-        //
+        $user = auth()->user();
+
+        return inertia('Classroom/Form', [
+            'section' => $user->role_id === User::STUDENT ? $user->course->code . '-' . $user->year . strtoupper($user->section) : '',
+            'facilities' => Facility::select('id', 'name')->get(),
+            'subjects' => Subject::select('id', 'name')->get(),
+            'existing_classrooms' => Classroom::select('google_classroom_id')->get(),
+            'token' => session()->get('authToken'),
+        ]);
     }
 
     /**

@@ -24,6 +24,10 @@ class ScheduleRequest extends FormRequest
     public function rules()
     {
         return [
+            'name' => 'nullable|string',
+            'description_heading' => 'nullable|string',
+            'description' => 'nullable|string',
+            'section' => 'nullable|string',
             'start_at' => 'required',
             'end_at' => 'required',
             'day' => 'required|string|in:monday,tuesday,wednesday,thursday,friday,saturday,sunday',

@@ -33,7 +33,7 @@
                       <td
                         v-for="columnKey in columnKeys"
                         :key="columnKey"
-                        class="px-6 py-4 text-sm font-medium text-center text-gray-900 whitespace-nowrap"
+                        class="px-6 py-4 text-sm font-medium text-center text-gray-900 whitespace-nowrap truncate "
                         v-text="item[columnKey]"
                       />
                       <td v-if="resource && !item.deleted_at" class="flex justify-center px-6 py-4 text-sm text-gray-500">

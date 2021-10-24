@@ -78,4 +78,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Rfid::class);
     }
+
+    public function sections()
+    {
+        return $this->belongsToMany(Section::class)->using(SectionUser::class);
+    }
 }

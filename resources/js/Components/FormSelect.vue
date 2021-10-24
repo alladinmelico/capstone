@@ -1,7 +1,7 @@
 <template>
   <form-input v-bind="{ label, name, required, error }">
     <template #default="{ computedName }">
-      <input-select :id="computedName" :label="computedName" v-model="localValue" v-bind="{ options, required, valueKey, labelKey }" />
+      <input-select :id="computedName" :label="computedName" v-model="localValue" v-bind="{ options, required, disabled, valueKey, labelKey }" />
     </template>
   </form-input>
 </template>
