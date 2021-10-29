@@ -42,6 +42,8 @@ class AuthenticatedSessionController extends Controller
     public function storeProfile(Request $request)
     {
         $validated = $request->validate([
+            'name' => 'sometimes|string|min:3',
+            'email' => 'sometimes|email|ends_with:@tup.edu.ph',
             'school_id' => 'required|string|unique:users|max:12|regex:/(TUPT-)\d\d-\d\d\d\d/i',
             'course_id' => 'required|numeric|exists:courses,id',
             'year' => 'required|numeric|between:1,4',
@@ -49,7 +51,7 @@ class AuthenticatedSessionController extends Controller
         ]);
 
         $user = Auth::user();
-
+        $user->changes_verified = false;
         $user->update($validated);
 
         return redirect(RouteServiceProvider::HOME);

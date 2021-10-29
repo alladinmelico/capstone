@@ -26,6 +26,8 @@ class CreateUsersTable extends Migration
             $table->string('avatar')->nullable();
             $table->string('avatar_original')->nullable();
             $table->boolean('verified_teacher')->default(false);
+            $table->boolean('changes_verified')->default(true);
+            $table->foreignId('verified_by')->nullable()->constrained('users');
             $table->tinyInteger('role_id')->default(3);
             $table->rememberToken();
             $table->softDeletes();

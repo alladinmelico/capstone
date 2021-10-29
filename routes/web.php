@@ -62,6 +62,8 @@ Route::middleware('auth')->group(function () {
             Route::resource('course', CourseController::class)->except('index', 'show');
             Route::resource('rfid', RfidController::class)->except('show');
             Route::resource('section', SectionController::class)->except('show');
+            Route::get('user-requests', [UserController::class, 'userRequests'])->name('user-requests');
+            Route::post('user-approve/{user}', [UserController::class, 'userApprove'])->name('user-approve');
         });
         Route::resource('user', UserController::class)->only('show');
         Route::resource('course', CourseController::class)->only('index', 'show');

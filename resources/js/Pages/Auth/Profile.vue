@@ -1,5 +1,5 @@
 <template>
-    <div class="grid sm:grid-cols-2 gap-4">
+    <div class="grid sm:grid-cols-2 gap-4 w-full">
         <div v-if="showForm && user.id === $page.props.auth.user.id">
 
             <breeze-validation-errors class="mb-4" />
@@ -62,7 +62,7 @@
                 </div>
             </form>
         </div>
-        <div v-else>
+        <div v-else class="mb-8">
             <secondary-button v-if="user.id === $page.props.auth.user.id" class="mb-2 hover:text-primary-dark" @click="showForm = true">
                 <pencil-icon class="mr-2 h-5 w-6"/> Edit
             </secondary-button>
@@ -77,7 +77,7 @@
                 </tr>
                 <tr class="border-b-1 border-primary">
                     <td class="font-bold">School ID: </td>
-                    <td>{{ user.school_id.toUpperCase() }}</td>
+                    <td>{{ user.school_id ? user.school_id.toUpperCase() : '' }}</td>
                 </tr>
                 <tr class="border-b-1 border-primary">
                     <td class="font-bold">Course: </td>
@@ -85,17 +85,19 @@
                 </tr>
                 <tr class="border-b-1 border-primary">
                     <td class="font-bold">Year and Section: </td>
-                    <td>{{ `${user.year} - ${user.section.toUpperCase()}` }}</td>
+                    <td>{{ `${user.year ?? ''} - ${user.section ? user.section.toUpperCase() : ''}` }}</td>
                 </tr>
             </table>
         </div>
-        <div class="min-w-min max-w-xs mx-auto max-h-96	">
-            <div class="ring-4 ring-gray-200 rounded-lg bg-gradient-to-t from-secondary-dark to-secondary p-2 d-flex flex-row justify-around h-full text-center text-xs text-white min-w-min">
-                <div class="mx-auto w-8 h-2 my-3 rounded-full bg-secondary-dark"></div>
-                <p>Republic of the Philippines</p>
-                <p>Technological University of the Philippines</p>
-                <p>Taguig Campus</p>
-                <small>Km 14 East Service Road, Western Bicutan Taguig City 1630</small>
+        <div class="min-w-min max-w-xs mx-auto min-h-full max-h-96">
+            <div class="ring-4 ring-gray-200 rounded-lg bg-gradient-to-t from-secondary-dark to-secondary p-2 flex flex-col justify-around h-96 text-center text-xs text-white min-w-min">
+                <div>
+                    <div class="mx-auto w-8 h-2 my-3 rounded-full bg-secondary-dark"></div>
+                    <p>Republic of the Philippines</p>
+                    <p>Technological University of the Philippines</p>
+                    <p>Taguig Campus</p>
+                    <small>Km 14 East Service Road, Western Bicutan Taguig City 1630</small>
+                </div>
                 <div class="grid grid-cols-2">
                     <breeze-application-logo class="w-20 h-20 text-gray-500 mx-auto my-auto" />
                     <img :src="user.avatar_original ?? 'https://ui-avatars.com/api/?name='+user.name" class="rounded-lg w-auto mx-auto my-auto mt-4" :alt="user.name">
@@ -104,7 +106,7 @@
                     <p class="text-lg font-bold mt-4" v-text="form.name ?? user.name"/>
                     <p class="text-sm" v-text="form.email ?? user.email"/>
                 </div>
-                <p class="font-bold	text-lg">{{ form.school_id.toUpperCase() }}</p>
+                <p class="font-bold	text-lg">{{ form.school_id ? form.school_id.toUpperCase() : '' }}</p>
                 <p class="font-sm font-bold">{{ sectionCode }}</p>
             </div>
         </div>
@@ -202,7 +204,8 @@
                 return selectedCourse ? selectedCourse.code : ''
             },
             courseName(){
-                return this.courses.find(course => course.id == this.user.course_id).name
+                const course = this.courses.find(course => course.id == this.user.course_id)
+                return course ? course.name : ''
             }
         },
 

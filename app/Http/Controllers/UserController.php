@@ -84,4 +84,18 @@ class UserController extends Controller
     {
         //
     }
+
+    public function userRequests()
+    {
+        return inertia('User/Requests', ['items' => User::where('changes_verified', false)->orderBy('updated_at', 'desc')->get()]);
+    }
+
+    public function userApprove(Request $request, User $user)
+    {
+        $user->changes_verified = true;
+        $user->verified_by = auth()->user()->id;
+        $user->save();
+
+        return redirect()->back();
+    }
 }

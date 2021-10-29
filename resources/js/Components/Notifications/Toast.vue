@@ -2,16 +2,17 @@
   <portal to="notification">
     <transition name="slide-fade">
       <inertia-link v-if="notification" :href="`/notifications/${notification.id}`" class="fixed text-sm top-20 right-4">
-        <div class="p-3 bg-white border border-gray-300 rounded-lg shadow-lg">
-          <div class="flex flex-row">
-            <div class="px-2">
-              <font-awesome-icon :icon="['fas', 'bell']" class="text-gray-600" />
+        <div class="flex w-full max-w-lg mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800 ">
+            <div class="flex items-center justify-center w-12" :class="getColor">
+                <bell-icon class="w-6 h-6 text-white" />
             </div>
-            <div class="ml-2 mr-6">
-              <span class="font-semibold text-gray-600">{{ notification.type }}</span>
-              <span class="block text-gray-500">{{ notification.message }}</span>
+
+            <div class="px-4 py-2 -mx-3">
+                <div class="mx-3">
+                    <span class="font-semibold text-green-500 dark:text-green-400">{{ typeStartCased }}</span>
+                    <p class="text-sm text-gray-600 dark:text-gray-200">{{ notification.message }}</p>
+                </div>
             </div>
-          </div>
         </div>
       </inertia-link>
     </transition>
@@ -20,12 +21,11 @@
 
 <script>
 import _ from 'lodash'
+import {BellIcon} from '@heroicons/vue/outline'
 
 export default {
-  filters: {
-    startCase (value) {
-      return _.startCase(value)
-    },
+  components: {
+    BellIcon
   },
 
   props: {
@@ -36,6 +36,26 @@ export default {
       },
     },
   },
+
+  computed: {
+    typeStartCased() {
+        return _.startCase(this.notification.type)
+    },
+    getColor() {
+        switch (this.notification.type) {
+            case 'success':
+                return 'bg-green-400'
+            case 'notice':
+                return 'bg-blue-400'
+            case 'warning':
+                return 'bg-yellow-400'
+            case 'danger':
+                return 'bg-red-400'
+            default:
+                return 'bg-gray-400';
+        }
+    }
+  }
 }
 </script>
 

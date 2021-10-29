@@ -36,7 +36,12 @@
                         class="px-6 py-4 text-sm font-medium text-center text-gray-900 whitespace-nowrap truncate "
                         v-text="item[columnKey]"
                       />
-                      <td v-if="resource && !item.deleted_at" class="flex justify-center px-6 py-4 text-sm text-gray-500">
+                      <td v-if="approvalAction" class="mx-auto px-6 py-4 text-sm text-gray-500">
+                        <a class="text-green-400 underline cursor-pointer mx-auto" @click="approve(item)" title="Aprove">
+                          Approve
+                        </a>
+                      </td>
+                      <td v-else-if="resource && !item.deleted_at" class="flex justify-center px-6 py-4 text-sm text-gray-500">
                         <InertiaLink :href="`/${resource.split('/').pop()}/${item.id}`" class="mr-4 text-green-600 underline">
                           <EyeIcon class="h-5 w-5 text-green-400"/>
                         </InertiaLink>
@@ -72,22 +77,31 @@
       :endpoint="deleteEndpoint"
       @close="deleting = null"
     />
+    <Toast :notification="notification" />
   </div>
 </template>
 
 <script>
 import ConfirmsDelete from '@/Mixins/ConfirmsDelete'
 import DeleteConfirmationModal from '@/Components/DeleteConfirmationModal'
+import Toast from '@/Components/Notifications/Toast'
 import { EyeIcon, PencilIcon, TrashIcon, BackspaceIcon } from '@heroicons/vue/outline'
-
+import { useForm } from '@inertiajs/inertia-vue3'
 
 export default {
   components: {
     DeleteConfirmationModal,
+    Toast,
     EyeIcon,
     PencilIcon,
     TrashIcon,
-    BackspaceIcon
+    BackspaceIcon,
+  },
+
+  setup () {
+    const form = useForm({})
+
+    return { form }
   },
 
   mixins: [ConfirmsDelete],
@@ -117,6 +131,16 @@ export default {
       type: String,
       default: '',
     },
+    approvalAction: {
+        type: Boolean,
+        default: false
+    }
+  },
+
+  data() {
+    return {
+        notification: null
+    }
   },
 
   computed: {
@@ -128,5 +152,22 @@ export default {
       return `/${this.resource}/${this.deleting.id}`
     },
   },
+
+  methods: {
+    approve (item) {
+        this.form.post(`/admin/user-approve/${item.id}`, {
+            preserveScroll: true,
+            onSuccess: () => {
+                this.notification = {
+                    type: 'success',
+                    message: `${item.name}'s profile changes approved.`
+                }
+                setTimeout(() => {
+                    this.notification = null
+                }, 3000)
+            }
+        })
+    }
+  }
 }
 </script>

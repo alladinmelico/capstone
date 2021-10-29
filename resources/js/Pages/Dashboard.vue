@@ -8,14 +8,14 @@
 
 		<div class="py-12">
 			<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-				<div class="grid grid-cols-3 gap-4">
-					<div class="p-2 rounded-lg bg-blue-50 shadow-lg">
-						<h2 class="text-2xl">Total Number of Schedules</h2>
-                        <p class="text-5xl mt-4">{{ number_of_schedules }}</p>
+				<div class="grid grid-cols-6 gap-4">
+					<div class="p-4 rounded-md bg-indigo-50 border border-indigo-300">
+                        <p class="text-5xl mb-4 text-indigo-900 font-bold">{{ number_of_schedules }}</p>
+						<h2 class="text-lg text-indigo-700">Total Number of Schedules</h2>
 					</div>
-					<div class="p-2 rounded-lg bg-blue-50 shadow-lg">
-						<h2 class="text-2xl">Total Number of Schedules Users</h2>
-                        <p class="text-5xl mt-4">{{ number_of_users }}</p>
+					<div class="p-4 rounded-md bg-pink-50 border border-pink-300">
+                        <p class="text-5xl mb-4 text-pink-900 font-bold">{{ number_of_users }}</p>
+						<h2 class="text-lg text-pink-700">Total Number of Schedules Users</h2>
 					</div>
 				</div>
 			</div>
