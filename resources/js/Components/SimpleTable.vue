@@ -4,7 +4,15 @@
       <h3 class="text-3xl font-semibold text-center text-gray-900">
         {{ title }}
       </h3>
-      <InertiaLink :href="`/${resource}/create`">
+      <div v-if="createModal">
+        <button
+          type="button"
+          class="block px-3 py-2 text-sm leading-4 text-white transition bg-secondary border rounded-md hover:bg-secondary-dark focus:outline-none focus:ring-none"
+          @click="$emit('openModal', $event.target.value)">
+          Create New
+        </button>
+      </div>
+      <InertiaLink v-else :href="`/${resource}/create`">
         <button type="button" class="block px-3 py-2 text-sm leading-4 text-white transition bg-secondary border rounded-md hover:bg-secondary-dark focus:outline-none focus:ring-none">
           Create New
         </button>
@@ -34,8 +42,12 @@
                         v-for="columnKey in columnKeys"
                         :key="columnKey"
                         class="px-6 py-4 text-sm font-medium text-center text-gray-900 whitespace-nowrap truncate "
-                        v-text="item[columnKey]"
-                      />
+                      >
+                        <img v-if="columnKey.toLowerCase() === 'avatar'" :src="item[columnKey]" :alt="item[columnKey]" class="max-w-xs h-auto rounded-lg">
+                        <p v-else>
+                          {{ item[columnKey] }}
+                        </p>
+                      </td>
                       <td v-if="approvalAction" class="mx-auto px-6 py-4 text-sm text-gray-500">
                         <a class="text-green-400 underline cursor-pointer mx-auto" @click="approve(item)" title="Aprove">
                           Approve
@@ -55,6 +67,11 @@
                       <td v-else-if="item.deleted_at" class="flex justify-end px-6 py-4 text-sm text-gray-500">
                         <a class="text-red-600 underline cursor-pointer" @click="restore(item)" title="Restore">
                           <BackspaceIcon class="h-5 w-5 text-green-400"/>
+                        </a>
+                      </td>
+                      <td v-else-if="removeOnly" class="flex justify-end px-6 py-4 text-sm text-gray-500">
+                        <a class="text-red-600 underline cursor-pointer" @click="$emit('removeItem', item.id)">
+                          <TrashIcon class="h-5 w-5 text-red-400"/>
                         </a>
                       </td>
                     </tr>
@@ -106,6 +123,8 @@ export default {
 
   mixins: [ConfirmsDelete],
 
+  emits: ['openModal', 'removeItem'],
+
   props: {
     items: {
       type: Array,
@@ -132,6 +151,14 @@ export default {
       default: '',
     },
     approvalAction: {
+        type: Boolean,
+        default: false
+    },
+    createModal: {
+        type: Boolean,
+        default: false
+    },
+    removeOnly: {
         type: Boolean,
         default: false
     }

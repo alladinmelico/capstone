@@ -36,6 +36,7 @@ class ScheduleController extends Controller
             'section' => $user->role_id === User::STUDENT ? $user->course->code . '-' . $user->year . strtoupper($user->section) : '',
             'facilities' => Facility::select('id', 'name')->get(),
             'subjects' => Subject::select('id', 'name')->get(),
+            'users' => User::select('id', 'avatar', 'name', 'school_id', 'email')->get(),
             'existing_classrooms' => Classroom::select('google_classroom_id')->get(),
             'token' => session()->get('authToken'),
         ]);

@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\RfidController;
 use App\Http\Controllers\Api\ScheduleController;
 use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\TemperatureController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('classroom', ClassroomController::class);
     Route::apiResource('facility', FacilityController::class);
     Route::apiResource('subject', SubjectController::class);
+    Route::apiResource('user', UserController::class);
 });
 
 Route::middleware('raspberry')->group(function () {

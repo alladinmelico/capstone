@@ -13,6 +13,7 @@
         :min="min"
         :max="max"
         :disabled="disabled"
+        :class="disabled ? 'text-gray-700' : ''"
       />
     </slot>
     <input-error :error="computedError" />

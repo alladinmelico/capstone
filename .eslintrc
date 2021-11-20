@@ -11,6 +11,7 @@
     "vue/component-definition-name-casing": 0,
     "vue/html-indent": ["error", 2],
     "space-unary-ops": 0,
-    "operator-linebreak": 0
+    "operator-linebreak": 0,
+    "indent": ["error", 2]
   }
 }
