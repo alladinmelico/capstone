@@ -69,6 +69,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('course', CourseController::class)->only('index', 'show');
         Route::resource('rfid', RfidController::class)->only('show');
         Route::put('schedule/{schedule}/restore', [ScheduleController::class, 'restore']);
+        Route::get('schedule/{schedule}/qr-code', [ScheduleController::class, 'qrCode'])->name('schedule.qr-code');
         Route::resource('schedule', ScheduleController::class);
         Route::resource('classroom', ClassroomController::class);
         Route::get('notifications/{notification}', [NotificationController::class, 'show']);

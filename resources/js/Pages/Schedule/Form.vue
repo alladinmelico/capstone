@@ -10,63 +10,39 @@
       </h2>
     </template>
     <div class="py-10 mx-auto max-w-7xl sm:px-6 lg:px-8 shadow-none">
-      <div class="flex justify-center items-center mb-8">
-        <div
-          v-for="(step, index) in steps"
-          :key="index"
-          class="flex justify-center items-center"
-        >
-          <div
-            class="rounded-lg shadow-md cursor-pointer p-4 bg-gray-50"
-            :class="{
-              'p-6 bg-secondary': index === activeStep,
-              'bg-secondary': step.isDone,
-            }"
-            @click="activeStep = step.isDone ? index : activeStep"
-          >
-            <component
-              :is="step.icon"
-              class="inline h-5 w-5 mr-2"
-              :class="
-                index === activeStep || step.isDone
-                  ? 'fill-current text-white'
-                  : 'text-gray-400'
-              "
-            />
-            <p
-              class="inline"
-              :class="
-                index === activeStep || step.isDone
-                  ? 'text-white'
-                  : 'text-gray-400'
-              "
-            >
-              {{ step.name }}
-            </p>
-          </div>
-          <span
-            v-if="index !== 4"
-            class="h-1 w-14"
-            :class="step.isDone ? 'bg-secondary' : 'bg-gray-300'"
-          />
-        </div>
-      </div>
+      <steps :steps="steps" :active-step="activeStep" @changed="changeActive" />
       <JetFormSection @submitted="save">
         <template #form>
           <div
             v-if="activeStep === 0"
-            class="col-span-6 grid grid-cols-6 gap-4  mb-8"
+            class="col-span-6 grid grid-cols-6 gap-4 mb-8"
           >
             <div class="col-span-6 flex justify-around">
-                <div v-for="(type, index) in purposes"
-                    :key="index"
-                    class="relative p-2 w-32 h-32 rounded-lg text-center cursor-pointer shadow-md"
-                    :class="{ 'bg-secondary text-white shadow-lg' : purpose === index }"
-                    @click="purpose = index"
-                >
-                    <img :src="`/storage/${ type.image }.svg`" :alt="type.name" class="-mt-8">
-                    <p class="absolute bottom-0 inset-x-0 mb-2">{{ type.name }}</p>
-                </div>
+              <div
+                v-for="(type, index) in purposes"
+                :key="index"
+                class="
+                  relative
+                  p-2
+                  w-32
+                  h-32
+                  rounded-lg
+                  text-center
+                  cursor-pointer
+                  shadow-md
+                "
+                :class="{
+                  'bg-secondary text-white shadow-lg': purpose === index,
+                }"
+                @click="purpose = index"
+              >
+                <img
+                  :src="`/storage/${type.image}.svg`"
+                  :alt="type.name"
+                  class="-mt-8"
+                />
+                <p class="absolute bottom-0 inset-x-0 mb-2">{{ type.name }}</p>
+              </div>
             </div>
             <label class="col-span-3 flex items-center">
               <breeze-checkbox
@@ -119,15 +95,31 @@
             class="col-span-6 grid grid-cols-6 gap-4"
           >
             <div class="col-span-6 flex justify-around">
-                <div v-for="(type, index) in facilityTypes"
-                    :key="index"
-                    class="relative p-2 w-32 h-32 rounded-lg text-center cursor-pointer shadow-md"
-                    :class="{ 'bg-secondary text-white shadow-lg' : facilityType === index }"
-                    @click="facilityType = index"
-                >
-                    <img :src="`/storage/${ type.image }.svg`" :alt="type.name" class="-mt-8">
-                    <p class="absolute bottom-0 inset-x-0 mb-2">{{ type.name }}</p>
-                </div>
+              <div
+                v-for="type in facilityTypes"
+                :key="type.id"
+                class="
+                  relative
+                  p-2
+                  w-32
+                  h-32
+                  rounded-lg
+                  text-center
+                  cursor-pointer
+                  shadow-md
+                "
+                :class="{
+                  'bg-secondary text-white shadow-lg': facilityType === type.id,
+                }"
+                @click="facilityType = type.id"
+              >
+                <img
+                  :src="`/storage/${type.image}.svg`"
+                  :alt="type.name"
+                  class="-mt-8"
+                />
+                <p class="absolute bottom-0 inset-x-0 mb-2">{{ type.name }}</p>
+              </div>
             </div>
             <FormInput
               v-model="form.start_at"
@@ -141,6 +133,7 @@
             <FormInput
               v-model="form.end_at"
               :min="form.start_at"
+              :max="maxTime"
               type="time"
               class="col-span-3"
               :error="form.errors.end_at"
@@ -191,9 +184,15 @@
             class="col-span-6 grid grid-cols-6 gap-4"
           >
             <div class="col-span-6 align-items-end">
-                <switch-component v-model:checked="peopleInvolved" label="People Involved" />
+              <switch-component
+                v-model:checked="peopleInvolved"
+                label="People Involved"
+              />
             </div>
-            <div v-if="peopleInvolved" class="col-span-6 grid grid-cols-6 gap-4">
+            <div
+              v-if="peopleInvolved"
+              class="col-span-6 grid grid-cols-6 gap-4"
+            >
               <FormSelect
                 v-model="form.classroom_id"
                 :options="classes"
@@ -208,45 +207,66 @@
                 disabled
               />
               <div class="col-span-6 mt-8">
-                  <SimpleTable
-                    title="List of People Involved"
-                    :items="involvedPeople"
-                    :headers="involvedPeopleHeaders"
-                    :column-keys="involvedPeopleColumnKeys"
-                    create-modal
-                    remove-only
-                    @openModal="isAddingPeople = true"
-                    @removeItem="removePerson"
-                  />
-                  <SimpleModal
-                      :show="isAddingPeople"
-                      @close="isAddingPeople = false"
-                  >
-                    <template #title>
-                        Invite
-                    </template>
-                    <template #content>
-                        <div class="w-full">
-                            <FormInput
-                                v-model="searchUser"
-                                class="col-span-3"
-                                label="TUP Email"
-                                type="text"
-                            />
-                            <ul v-if="filteredUsers.length > 0" class="h-full overflow-scroll m-4 mx-auto w-full">
-                                <li v-for="user in filteredUsers" :key="user.id" @click="searchUser = user.email" class="cursor-pointer my-2">
-                                {{ user.name }} <span class="text-sm p-1 rounded-lg ml-2 bg-gray-200 text-secondary-dark">{{ user.email }}</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </template>
-                    <template #footer>
-                        <div>
-                            <jet-secondary-button class="mr-4" @click="isAddingPeople = false">Cancel</jet-secondary-button>
-                            <jet-button @click="addToPeople">Add</jet-button>
-                        </div>
-                    </template>
-                  </SimpleModal>
+                <SimpleTable
+                  title="List of People Involved"
+                  :items="form.users"
+                  :headers="involvedPeopleHeaders"
+                  :column-keys="involvedPeopleColumnKeys"
+                  create-modal
+                  remove-only
+                  @openModal="isAddingPeople = true"
+                  @removeItem="removePerson"
+                />
+                <SimpleModal
+                  :show="isAddingPeople"
+                  @close="isAddingPeople = false"
+                >
+                  <template #title> Invite </template>
+                  <template #content>
+                    <div class="w-full">
+                      <FormInput
+                        v-model="searchUser"
+                        class="col-span-3"
+                        label="TUP Email"
+                        type="text"
+                      />
+                      <ul
+                        v-if="filteredUsers.length > 0"
+                        class="h-full overflow-scroll m-4 mx-auto w-full"
+                      >
+                        <li
+                          v-for="user in filteredUsers"
+                          :key="user.id"
+                          @click="searchUser = user.email"
+                          class="cursor-pointer my-2"
+                        >
+                          {{ user.name }}
+                          <span
+                            class="
+                              text-sm
+                              p-1
+                              rounded-lg
+                              ml-2
+                              bg-gray-200
+                              text-secondary-dark
+                            "
+                            >{{ user.email }}</span
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                  </template>
+                  <template #footer>
+                    <div>
+                      <jet-secondary-button
+                        class="mr-4"
+                        @click="isAddingPeople = false"
+                        >Cancel</jet-secondary-button
+                      >
+                      <jet-button @click="addToPeople">Add</jet-button>
+                    </div>
+                  </template>
+                </SimpleModal>
               </div>
             </div>
           </div>
@@ -266,36 +286,55 @@
               :error="form.errors.attachment"
               label="Attachment"
             >
-            <div class="col-span-3 flex justify-content-center items-center">
-              <div class="w-64 h-28 rounded-lg border-2 border-secondary flex justify-center items-center text-center">
-                {{ form.attachment ? form.attachment.name : 'No attachment uploaded' }}
+              <div class="col-span-3 flex justify-content-center items-center">
+                <div
+                  class="
+                    w-64
+                    h-28
+                    rounded-lg
+                    border-2 border-secondary
+                    flex
+                    justify-center
+                    items-center
+                    text-center
+                  "
+                >
+                  {{
+                    form.attachment
+                      ? form.attachment.name
+                      : 'No attachment uploaded'
+                  }}
+                </div>
+                <div
+                  class="
+                    inline
+                    cursor-pointer
+                    relative
+                    overflow-hidden
+                    w-7
+                    h-7
+                    ml-4
+                  "
+                >
+                  <input
+                    id="attachment"
+                    class="block absolute opacity-0 pin-r pin-t w-full"
+                    type="file"
+                    @change="previewFiles"
+                    ref="fileAttachment"
+                  />
+                  <document-add-icon class="w-7 h-7 text-secondary" />
+                </div>
               </div>
-              <div class="inline cursor-pointer relative overflow-hidden w-7 h-7 ml-4">
-                <input
-                  id="attachment"
-                  class="block absolute opacity-0 pin-r pin-t w-full"
-                  type="file"
-                  @change="previewFiles"
-                  ref="fileAttachment"
-                />
-                <document-add-icon class="w-7 h-7 text-secondary"/>
-              </div>
-            </div>
             </FormInput>
           </div>
-           <div
-            v-else-if="activeStep === 4"
-            class="col-span-6 flex flex-col justify-center items-center"
-           >
-            <div class="rounded-lg border-2 border-secondary p-4">
-                <img :src="'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=http://localhost:8000/schedule/'+ schedule_id" alt="" srcset="">
-            </div>
-           </div>
         </template>
 
         <template #actions>
           <InertiaLink href="/schedule" class="mr-2">
-            <JetSecondaryButton class="capitalize text-lg"> Cancel </JetSecondaryButton>
+            <JetSecondaryButton class="capitalize text-lg">
+              Cancel
+            </JetSecondaryButton>
           </InertiaLink>
 
           <JetButton
@@ -327,16 +366,10 @@ import CustomLabel from '@/Components/Label'
 import SimpleTable from '@/Components/SimpleTable'
 import SimpleModal from '@/Components/SimpleModal'
 import { ChevronDoubleRightIcon } from '@heroicons/vue/solid'
-import {
-  LightBulbIcon,
-  LibraryIcon,
-  UsersIcon,
-  PaperClipIcon,
-  CheckIcon,
-  DocumentAddIcon
-} from '@heroicons/vue/outline'
-import { Inertia } from '@inertiajs/inertia'
+import { DocumentAddIcon } from '@heroicons/vue/outline'
+import Steps from './Components/Steps.vue'
 const dayjs = require('dayjs')
+const axios = window.axios
 
 export default {
   components: {
@@ -355,22 +388,14 @@ export default {
     SimpleTable,
     SimpleModal,
     ChevronDoubleRightIcon,
-    LightBulbIcon,
-    LibraryIcon,
-    UsersIcon,
-    PaperClipIcon,
-    CheckIcon,
     DocumentAddIcon,
+    Steps,
   },
 
   props: {
     item: {
       type: Object,
       required: false,
-    },
-    facilities: {
-      type: Array,
-      required: true,
     },
     subjects: {
       type: Array,
@@ -398,8 +423,8 @@ export default {
     },
     users: {
       type: Array,
-      default: []
-    }
+      default: [],
+    },
   },
   mounted() {
     this.getClasses()
@@ -433,6 +458,7 @@ export default {
             ? this.schedule_classroom.subject_id
             : null,
         user_id: this.$page.props.auth.user.id,
+        users: [],
         ...item,
       }),
       days: [
@@ -492,53 +518,47 @@ export default {
         },
       ],
       facilityCapacity: 10,
-      facilityType: 0,
+      facilityType: 1,
       facilityTypes: [
         {
-            name: 'Classroom',
-            image: 'professor'
+          id: 1,
+          name: 'Classroom',
+          image: 'professor',
         },
         {
-            name: 'Working',
-            image: 'working'
+          id: 2,
+          name: 'Working',
+          image: 'working',
         },
         {
-            name: 'Others',
-            image: 'more'
-        }
+          id: 3,
+          name: 'Others',
+          image: 'more',
+        },
       ],
       purpose: 0,
       purposes: [
         {
-            name: 'Create a schedule for a whole class',
-            image: 'learning'
+          name: 'Create a schedule for a whole class',
+          image: 'learning',
         },
         {
-            name: 'Course Subject Related',
-            image: 'education'
+          name: 'Course Subject Related',
+          image: 'education',
         },
         {
-            name: 'Personal Visit',
-            image: 'location'
-        }
+          name: 'Personal Visit',
+          image: 'location',
+        },
       ],
       peopleInvolved: false,
       isAddingPeople: false,
-      involvedPeople: [],
-      involvedPeopleHeaders: [
-          'Photo',
-          'TUPT ID',
-          'Name',
-          'Actions',
-      ],
-      involvedPeopleColumnKeys: [
-          'avatar',
-          'school_id',
-          'name',
-      ],
+      involvedPeopleHeaders: ['Photo', 'TUPT ID', 'Name', 'Actions'],
+      involvedPeopleColumnKeys: ['avatar', 'school_id', 'name'],
       searchUser: '',
       filteredUsers: [],
-      schedule_id: null
+      schedule_id: null,
+      facilities: [],
     }
   },
 
@@ -552,9 +572,27 @@ export default {
     selectedClassroom() {
       return this.classes.find((cl) => this.form.google_classroom_id == cl.id)
     },
-    section() {
-      return this.$page.props.auth.user.name
+    maxTime() {
+      const format = 'HH:mm'
+      const startTime = dayjs()
+        .set('hour', this.form.start_at.split(':')[0])
+        .set('minute', this.form.start_at.split(':')[1])
+      const endTime = dayjs()
+        .set('hour', this.form.end_at.split(':')[0])
+        .set('minute', this.form.end_at.split(':')[1])
+      const max = dayjs().set('hour', 22).set('minute', 0)
+
+      if (endTime.isAfter(max) || startTime.add(8, 'hour').isAfter(max))
+        return max.format(format)
+      console.log(endTime.diff(startTime, 'hour'))
+      if (endTime.diff(startTime, 'hour') > 8) {
+        return startTime.add(8, 'hour').format(format)
+      }
     },
+  },
+
+  mounted() {
+    this.getFacilities()
   },
 
   methods: {
@@ -568,15 +606,32 @@ export default {
         'YYYY-MM-D hh:mm:ss'
       )
       const url = this.isEditing ? `/schedule/${this.item.id}` : '/schedule'
-      this.form.post(url, {
-        onSuccess: (response) => {
+      this.form
+        .transform((data) => ({
+          ...data,
+          users: data.users.map((user) => user.id),
+        }))
+        .post(url, {
+          onSuccess: (response) => {
+            this.steps[this.activeStep].isDone = true
             this.activeStep++
-            console.log(response)
-        }
-      })
+          },
+        })
+    },
+    async getFacilities() {
+      this.facilities = []
+      const response = await axios
+        .get('/api/facility', {
+          params: {
+            type: this.facilityType,
+          },
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+      this.facilities = response.data.data
     },
     async getClasses() {
-      const axios = window.axios
       this.classes = []
       const response = await axios
         .get('https://classroom.googleapis.com/v1/courses', {
@@ -591,19 +646,21 @@ export default {
           }
         })
       this.classes = response.data.courses
-      console.log(this.classes)
     },
     previewFiles() {
-        this.form.attachment = this.$refs.fileAttachment.files[0]
+      this.form.attachment = this.$refs.fileAttachment.files[0]
     },
-    addToPeople(){
-        this.involvedPeople.push(this.filteredUsers[0])
-        this.isAddingPeople = false
-        this.searchUser = ''
+    addToPeople() {
+      this.form.users.push(this.filteredUsers[0])
+      this.isAddingPeople = false
+      this.searchUser = ''
     },
-    removePerson(id){
-        this.involvedPeople = this.involvedPeople.filter(person => person.id !== id)
-    }
+    removePerson(id) {
+      this.form.users = this.form.users.filter((person) => person.id !== id)
+    },
+    changeActive(value) {
+      this.activeStep = value
+    },
   },
 
   watch: {
@@ -620,13 +677,17 @@ export default {
         this.form.section = ''
       }
     },
-    searchUser(value){
+    searchUser(value) {
       this.filteredUsers = []
-      if(value.length > 1){
-        this.filteredUsers = this.users.filter(user => user.email.includes(value.toLowerCase()))
+      if (value.length > 1) {
+        this.filteredUsers = this.users.filter((user) =>
+          user.email.includes(value.toLowerCase())
+        )
       }
-      console.log(this.filteredUsers)
-    }
+    },
+    facilityType() {
+      this.getFacilities()
+    },
   },
 }
 </script>

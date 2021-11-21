@@ -52,20 +52,27 @@ class ScheduleController extends Controller
     {
         $validated = $request->validated();
         $schedule = Schedule::create($validated);
-        if (!empty($validated['google_classroom_id'])) {
-            $schedule->classrooms()->create([
-                'name' => $validated['name'],
-                'description_heading' => $validated['description_heading'],
-                'description' => $validated['description'],
-                'section' => $validated['section'],
-                'google_classroom_id' => $validated['google_classroom_id'],
-                'subject_id' => $validated['subject_id'],
-                'schedule_id' => $schedule->id,
-            ]);
+
+        $validated['schedule_id'] = $schedule->id;
+
+        // email invite code
+        $classroom = Classroom::where('google_classroom_id', $validated['google_classroom_id'])->first();
+
+        if (empty($classroom)) {
+            $validated['invite_code'] = uniqid();
+            $classroom = $schedule->classrooms()->create($validated);
+        } else {
+            $classroom->update($validated);
         }
+
+        if (!empty($validated['users'])) {
+            $classroom->users()->sync($validated['users']);
+        }
+
         $user = User::find($validated['user_id']);
         $user->notify(new ScheduleCreated($schedule));
-        return redirect()->route('schedule.index');
+
+        return redirect()->route('schedule.qr-code', ['schedule' => $schedule->id]);
     }
 
     /**
@@ -148,5 +155,10 @@ class ScheduleController extends Controller
             'end_at' => 'required|string',
             'day' => 'required|numeric',
         ];
+    }
+
+    public function qrCode(Schedule $schedule)
+    {
+        return inertia('Schedule/ShowCode', ['url' => route('schedule.qr-code', ['schedule' => $schedule->id])]);
     }
 }

@@ -16,5 +16,11 @@ class Facility extends Model
         'name',
         'code',
         'capacity',
+        'type',
     ];
+
+    public function getTypeAttribute($value)
+    {
+        return Config::get('constants.facilities.types.' . $value);
+    }
 }

@@ -11,6 +11,13 @@ return [
         2 => 'Building 2',
         3 => 'Building 3',
     ],
+    'facilities' => [
+        'types' => [
+            1 => 'Classroom',
+            2 => 'Office',
+            3 => 'Others',
+        ],
+    ],
     'allow_new_rfid' => env('ALLOW_NEW_RFID'),
     'admins' => env('ADMINS'),
     'raspberries' => env('RASP_IDS'),

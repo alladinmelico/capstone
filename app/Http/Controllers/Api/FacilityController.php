@@ -14,9 +14,11 @@ class FacilityController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return FacilityResource::collection(Facility::all());
+        return FacilityResource::collection(
+            Facility::where('type', $request->type)->get()
+        );
     }
 
     /**

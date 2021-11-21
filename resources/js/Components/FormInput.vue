@@ -1,6 +1,10 @@
 <template>
   <div>
-    <custom-label :for="computedName" :value="computedLabel" :required="required" />
+    <custom-label
+      :for="computedName"
+      :value="computedLabel"
+      :required="required"
+    />
     <slot name="default" :computed-name="computedName">
       <jet-input
         :id="computedName"
@@ -38,16 +42,20 @@ export default {
       default: 'text',
     },
     min: {
-        type: [String, Number],
-        default: ''
+      type: [String, Number],
+      default: '',
     },
     max: {
-        type: [String, Number],
-        default: ''
+      type: [String, Number],
+      default: '',
     },
     autofocus: {
       type: Boolean,
       default: false,
+    },
+    helper: {
+      type: String,
+      default: '',
     },
   },
 }
