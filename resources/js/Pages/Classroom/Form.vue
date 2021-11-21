@@ -82,7 +82,7 @@ import JetSecondaryButton from '@/Components/SecondaryButton'
 import FormDatepicker from '@/Components/FormDatepicker'
 import FormInput from '@/Components/FormInput'
 import FormSelect from '@/Components/FormSelect'
-import InputTextArea from '@/Components/FormTextArea'
+import InputTextArea from '@/Components/FormTextarea'
 const dayjs = require('dayjs')
 
 export default {
