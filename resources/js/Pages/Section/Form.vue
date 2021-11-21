@@ -137,7 +137,6 @@ import JetButton from '@/Components/Button'
 import JetSecondaryButton from '@/Components/SecondaryButton'
 import FormDatepicker from '@/Components/FormDatepicker'
 import FormInput from '@/Components/FormInput'
-import FormTextarea from '@/Components/FormTextarea'
 import FormSelect from '@/Components/FormSelect'
 import InputTextArea from '@/Components/FormTextArea'
 import BreezeCheckbox from '@/Components/Checkbox'
@@ -151,7 +150,6 @@ export default {
 		JetButton,
 		JetSecondaryButton,
 		FormInput,
-		FormTextarea,
 		BreezeAuthenticatedLayout,
 		FormDatepicker,
 		FormSelect,
