@@ -6,12 +6,12 @@
 
 		<div class="py-12">
 			<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-				<vuetable
+				<!-- <vuetable
 					ref="vuetable"
 					:fields="columnKeys"
 					:api-mode="false"
 					:data="items"
-				></vuetable>
+				></vuetable> -->
 			</div>
 		</div>
 	</breeze-authenticated-layout>
@@ -20,13 +20,11 @@
 <script>
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated'
 import SimpleTable from '@/Components/SimpleTable'
-import Vuetable from 'vuetable-2'
 
 export default {
 	components: {
 		BreezeAuthenticatedLayout,
 		SimpleTable,
-		Vuetable,
 	},
 	props: {
 		items: {
