@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import FormInput from '@/Components/FormInput'
-import FormInputMixin from '@/Mixins/FormInput'
+import FormInput from './FormInput.vue'
+import FormInputMixin from '../Mixins/FormInput.js'
 
 export default {
     components: {

@@ -358,7 +358,7 @@ import JetSecondaryButton from '@/Components/SecondaryButton'
 import FormDatepicker from '@/Components/FormDatepicker'
 import FormInput from '@/Components/FormInput'
 import FormSelect from '@/Components/FormSelect'
-import InputTextArea from '@/Components/FormTextarea'
+import InputTextArea from '@/Components/FormTextArea'
 import BreezeCheckbox from '@/Components/Checkbox'
 import SwitchComponent from '@/Components/Switch'
 import CustomLabel from '@/Components/Label'
@@ -376,7 +376,6 @@ export default {
     JetButton,
     JetSecondaryButton,
     FormInput,
-    FormTextarea,
     BreezeAuthenticatedLayout,
     FormDatepicker,
     FormSelect,

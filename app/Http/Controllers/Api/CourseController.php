@@ -14,9 +14,12 @@ class CourseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return CourseResource::collection(Course::all());
+        return CourseResource::collection(Course::where('name', 'like', '%'. $request->search . '%')
+            ->orWhere('code', 'like', '%'. $request->search . '%')
+            ->paginate($request->limit)
+        );
     }
 
     /**

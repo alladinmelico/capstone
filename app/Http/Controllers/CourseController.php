@@ -16,9 +16,12 @@ class CourseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return inertia('Course/Index', ['items' => Course::all()]);
+        return inertia('Course/Index', ['items' => Course::where('name', 'like', '%'. $request->search . '%')
+            ->orWhere('code', 'like', '%'. $request->search . '%')
+            ->paginate(10)]
+        );
     }
 
     /**
