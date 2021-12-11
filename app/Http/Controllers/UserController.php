@@ -15,7 +15,13 @@ class UserController extends Controller
      */
     public function index()
     {
-        return inertia('User/Index', ['items' => User::orderBy('updated_at', 'desc')->get()]);
+        return inertia('User/Index', ['items' => User::where('name', 'like', '%'. request()->search . '%')
+            ->orWhere('email', 'like', '%'. request()->search . '%')
+            ->orWhere('school_id', 'like', '%'. request()->search . '%')
+            ->orderBy('updated_at', 'desc')
+            ->withTrashed()
+            ->paginate(10)]
+        );
     }
 
     /**

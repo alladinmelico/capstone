@@ -93,6 +93,11 @@ class ScheduleController extends Controller
         return response()->json($schedule->delete());
     }
 
+    public function restore(Schedule $schedule)
+    {
+        return response()->json($schedule->update(['deleted_at' => '']));
+    }
+
     protected function rules(): array
     {
         return [

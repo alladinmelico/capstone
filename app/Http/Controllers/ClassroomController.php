@@ -17,7 +17,13 @@ class ClassroomController extends Controller
      */
     public function index()
     {
-        return inertia('Classroom/Index', ['items' => Classroom::with('subject')->withTrashed()->get()]);
+        return inertia('Classroom/Index', ['items' => Classroom::where('name', 'like', '%'. request()->search . '%')
+            ->orWhere('description_heading', 'like', '%'. request()->search . '%')
+            ->orWhere('section', 'like', '%'. request()->search . '%')
+            ->with('subject')
+            ->withTrashed()
+            ->paginate(10)]
+        );
     }
 
     /**

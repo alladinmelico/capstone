@@ -18,9 +18,14 @@ class ScheduleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return inertia('Schedule/Index', ['items' => Schedule::withTrashed()->get()]);
+        return inertia('Schedule/Index', ['items' => Schedule::where('note', 'like', '%'. $request->search . '%')
+            ->orWhere('day', 'like', '%'. $request->search . '%')
+            ->with('user', 'facility')
+            ->withTrashed()
+            ->paginate(10)]
+        );
     }
 
     /**
@@ -142,8 +147,9 @@ class ScheduleController extends Controller
         return redirect()->back();
     }
 
-    public function restore(Schedule $schedule)
+    public function restore($schedule)
     {
+        $schedule = Schedule::whereId($schedule)->onlyTrashed()->first();
         $schedule->restore();
         return redirect()->back();
     }

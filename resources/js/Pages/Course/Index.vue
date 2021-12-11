@@ -32,10 +32,10 @@ export default {
   props: {
     items: {
       type: Object,
-      default: [],
+      default: {},
     },
   },
-  data() {
+  data () {
     return {
       headers: ['Course Name', 'Code', 'Department', 'Actions'],
       columnKeys: ['name', 'code', 'department'],
@@ -48,7 +48,7 @@ export default {
     })
   },
   methods: {
-    fetchData() {
+    fetchData () {
       Echo.private('course').listen('CourseCreated', (e) => {
         console.log(e)
         this.items.shift(e.course)

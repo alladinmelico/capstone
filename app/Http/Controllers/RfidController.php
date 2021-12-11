@@ -14,30 +14,13 @@ class RfidController extends Controller
      */
     public function index()
     {
-        return inertia('Rfid/Index', [
-            'items' => Rfid::with('user')
-                ->orderBy('updated_at', 'desc')
-                ->get()
-                ->map(function ($rfid) {
-                    return [
-                        'id' => $rfid->id,
-                        'value' => $rfid->value,
-                        'user' => $rfid->user->name ?? null,
-                        'is_logged' => $rfid->is_logged ? 'Yes' : 'No',
-                        'updated_at' => $rfid->updated_at->toDateTimeString(),
-                    ];
-                }),
-            'allowNewRfids' => config('constants.allow_new_rfid')]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return inertia('Rfid/Form');
+        return inertia('Rfid/Index', ['items' => Rfid::where('value', 'like', '%'. request()->search . '%')
+            ->orWhere('user_id', 'like', '%'. request()->search . '%')
+            ->orderBy('updated_at', 'desc')
+            ->with('user')
+            ->paginate(10),
+            'allowNewRfids' => config('constants.allow_new_rfid')]
+        );
     }
 
     /**

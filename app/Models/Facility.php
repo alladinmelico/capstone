@@ -21,6 +21,6 @@ class Facility extends Model
 
     public function getTypeAttribute($value)
     {
-        return Config::get('constants.facilities.types.' . $value);
+        return config('constants.facilities.types.' . $value);
     }
 }
