@@ -18,7 +18,13 @@ class ClassroomController extends Controller
      */
     public function index()
     {
-        return ClassroomResource::collection(Classroom::all());
+        return ClassroomResource::collection(Classroom::where('name', 'like', '%'. request()->search . '%')
+            ->orWhere('description_heading', 'like', '%'. request()->search . '%')
+            ->orWhere('section', 'like', '%'. request()->search . '%')
+            ->with('subject')
+            ->withTrashed()
+            ->paginate(10)
+        );
     }
 
     public function store(ClassroomRequest $request)
@@ -56,7 +62,13 @@ class ClassroomController extends Controller
      */
     public function update(Request $request, Classroom $classroom)
     {
-        //
+        $validated = $request->validated();
+        $classroom = Classroom::update($validated);
+        $classroom->users()->sync($validated['users']);
+
+        $user = auth()->user();
+        $user->notify(new ClassroomCreated($classroom));
+        return new ClassroomResource($classroom);
     }
 
     /**
@@ -67,6 +79,6 @@ class ClassroomController extends Controller
      */
     public function destroy(Classroom $classroom)
     {
-        //
+        return $classroom->delete();
     }
 }

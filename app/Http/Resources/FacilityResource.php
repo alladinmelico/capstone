@@ -17,6 +17,9 @@ class FacilityResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'code' => $this->code,
+            'capacity' => $this->capacity,
+            'type' => $this->type,
             'building' => config('constants.buildings.' . $this->building_id),
         ];
     }

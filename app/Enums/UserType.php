@@ -11,7 +11,8 @@ use BenSampo\Enum\Enum;
  */
 final class UserType extends Enum
 {
-    const OptionOne =   0;
-    const OptionTwo =   1;
-    const OptionThree = 2;
+    const ADMIN = 1;
+    const FACULTY = 2;
+    const STUDENT = 3;
+    const GUEST = 4;
 }

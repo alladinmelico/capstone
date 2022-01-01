@@ -4,65 +4,38 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\FacilityResource;
+use App\Http\Requests\FacilityRequest;
 use App\Models\Facility;
 use Illuminate\Http\Request;
 
 class FacilityController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index(Request $request)
     {
         return FacilityResource::collection(
-            Facility::where('type', $request->type)->get()
+            Facility::where('type', $request->type && 1)->get()
         );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(FacilityRequest $request)
     {
-        //
+        return new FacilityResource(Facility::create($request->validated()));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Facility  $facility
-     * @return \Illuminate\Http\Response
-     */
     public function show(Facility $facility)
     {
         return new FacilityResource($facility);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Facility  $facility
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Facility $facility)
+    public function update(FacilityRequest $request, Facility $facility)
     {
-        //
+        $facility->update($request->validated());
+        return new FacilityResource($facility);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Facility  $facility
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Facility $facility)
     {
-        //
+        return $facility->delete();
     }
 }

@@ -11,12 +11,6 @@ use Illuminate\Support\Facades\Validator;
 
 class RfidController extends Controller
 {
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $data = $request->all();
@@ -32,12 +26,6 @@ class RfidController extends Controller
         return Rfid::create($data);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Rfid  $rfid
-     * @return \Illuminate\Http\Response
-     */
     public function show(Rfid $rfid)
     {
         if ($rfid->is_logged) {

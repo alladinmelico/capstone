@@ -16,6 +16,7 @@ class Facility extends Model
         'name',
         'code',
         'capacity',
+        'building_id',
         'type',
     ];
 

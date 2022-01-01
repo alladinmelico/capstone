@@ -39,54 +39,19 @@ class ScheduleController extends Controller
         return new ScheduleResource($schedule);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Schedule $schedule)
+    public function update(ScheduleRequest $request, Schedule $schedule)
     {
-        $data = $request->all();
-
-        $validator = Validator::make($data, $this->rules());
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        $data['valid_until'] = Carbon::parse($data['valid_until']);
-
-        return new ScheduleResource($schedule->update($data));
+        $schedule->update($request->validated());
+        return new ScheduleResource($schedule->load('classroom'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Schedule $schedule)
     {
-        return response()->json($schedule->delete());
+        return $schedule->delete();
     }
 
     public function restore(Schedule $schedule)
     {
-        return response()->json($schedule->update(['deleted_at' => '']));
-    }
-
-    protected function rules(): array
-    {
-        return [
-            'start_at' => 'required',
-            'end_at' => 'required',
-            'day' => 'required|string|in:monday,tuesday,wednesday,thursday,friday,saturday,sunday',
-            'valid_until' => 'required|date',
-            'note' => 'nullable',
-            'facility_id' => 'required|numeric|exists:facilities,id',
-            'user_id' => 'required|numeric|exists:users,id',
-        ];
+        return new ScheduleResource($schedule->update(['deleted_at' => ''])->load('classroom'));
     }
 }
