@@ -30,15 +30,22 @@ class ScheduleResource extends JsonResource
 
         return [
             'id' => $this->id,
+            'title' => $this->title,
             'start_at' => $this->start_at,
+            'start_date' => $this->start_date,
             'end_at' => $this->end_at,
-            'day' => $this->day,
-            'valid_until' => $validUntil,
-            'readable_valid_until' => $validUntil->diffForHumans(),
+            'end_date' => $this->end_date,
+            'days_of_week' => $this->days_of_week,
+            'is_recurring' => $this->is_recurring,
+            'type' => $this->type,
+            'repeat_by' => $this->repeat_by,
+            'created_by' => $this->user_id,
             'note' => $this->note,
             'facility_id' => $this->facility_id,
             'facility_name' => $this->facility->name,
+            'readable_valid_until' => $validUntil->diffForHumans(),
             'is_valid_now' => $isValid,
+            'classroom' => new ClassroomResource($this->whenLoaded('classroom')),
         ];
     }
 }

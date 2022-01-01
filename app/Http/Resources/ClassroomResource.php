@@ -14,6 +14,18 @@ class ClassroomResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'description' => $this->description,
+            'description_heading' => $this->description_heading,
+            'google_classroom_id' => $this->google_classroom_id,
+            'name' => $this->name,
+            'section' => $this->section,
+            'invite_code' => $this->invite_code,
+            'subject_id' => $this->subject_id,
+            'subject' => new SubjectResource($this->subject),
+            'users' => UserResource::collection($this->users),
+            'schedules' => ScheduleResource::collection($this->whenLoaded('schedules')),
+        ];
     }
 }

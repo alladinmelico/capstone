@@ -40,18 +40,16 @@
                   :src="`/storage/${type.image}.svg`"
                   :alt="type.name"
                   class="-mt-8"
-                />
+                >
                 <p class="absolute bottom-0 inset-x-0 mb-2">{{ type.name }}</p>
               </div>
             </div>
             <label class="col-span-3 flex items-center">
               <breeze-checkbox
-                name="has_gclassroom"
                 v-model:checked="hasGClassroom"
+                name="has_gclassroom"
               />
-              <span class="ml-2 text-sm text-gray-600"
-                >Select from Google Classroom</span
-              >
+              <span class="ml-2 text-sm text-gray-600">Select from Google Classroom</span>
             </label>
             <FormSelect
               v-model="form.google_classroom_id"
@@ -117,10 +115,32 @@
                   :src="`/storage/${type.image}.svg`"
                   :alt="type.name"
                   class="-mt-8"
-                />
+                >
                 <p class="absolute bottom-0 inset-x-0 mb-2">{{ type.name }}</p>
               </div>
             </div>
+            <FormSelect
+              v-if="!!form.start_date"
+              v-model="form.facility_id"
+              :options="facilities"
+              class="col-span-3"
+              :error="form.errors.facility_id"
+              label="Facility"
+              required
+            />
+            <FormInput
+              v-model="facilityCapacity"
+              class="col-span-3"
+              label="Facility Capacity"
+              disabled
+            />
+            <FormSelect
+              v-model="form.subject_id"
+              :options="subjects"
+              class="col-span-6"
+              :error="form.errors.subject_id"
+              label="Subject"
+            />
             <FormInput
               v-model="form.start_at"
               :max="form.end_at"
@@ -140,43 +160,42 @@
               label="End Time"
               required
             />
-            <FormSelect
-              v-model="form.day"
-              :options="days"
-              class="col-span-3"
-              :error="form.errors.day"
-              label="Day"
+            <FormDatepicker
+              v-model="form.start_date"
+              type="date"
+              :class="form.is_recurring ? 'col-span-3':'col-span-6'"
+              :error="form.errors.start_date"
+              label="Start Date"
               required
             />
+            <label v-if="form.is_recurring" class="col-span-3 flex items-center">
+              <breeze-checkbox
+                v-model:checked="form.is_end_of_sem"
+                name="is_end_of_sem"
+              />
+              <span class="ml-2 text-sm text-gray-600">Until end of current sem</span>
+            </label>
+            <div class="col-span-6 align-items-end">
+              <switch-component
+                v-model:checked="form.is_recurring"
+                label="Repeat"
+              />
+            </div>
             <FormDatepicker
-              v-model="form.valid_until"
+              v-model="form.date_range"
               type="date"
               class="col-span-3"
-              :error="form.errors.valid_until"
-              label="Valid Schedule after:"
+              :error="form.errors.date_range"
+              label="Start Date"
+              range
               required
             />
-            <FormSelect
-              v-if="!!form.valid_until"
-              v-model="form.facility_id"
-              :options="facilities"
+            <FormMultiselect
+              v-model="form.days"
+              :error="form.errors.days"
+              label="Select days of week"
               class="col-span-3"
-              :error="form.errors.facility_id"
-              label="Facility"
               required
-            />
-            <FormSelect
-              v-model="form.subject_id"
-              :options="subjects"
-              class="col-span-3"
-              :error="form.errors.subject_id"
-              label="Subject"
-            />
-            <FormInput
-              v-model="facilityCapacity"
-              class="col-span-3"
-              label="Facility Capacity"
-              disabled
             />
           </div>
           <div
@@ -214,8 +233,8 @@
                   :column-keys="involvedPeopleColumnKeys"
                   create-modal
                   remove-only
-                  @openModal="isAddingPeople = true"
-                  @removeItem="removePerson"
+                  @open-modal="isAddingPeople = true"
+                  @remove-item="removePerson"
                 />
                 <SimpleModal
                   :show="isAddingPeople"
@@ -237,8 +256,8 @@
                         <li
                           v-for="user in filteredUsers"
                           :key="user.id"
-                          @click="searchUser = user.email"
                           class="cursor-pointer my-2"
+                          @click="searchUser = user.email"
                         >
                           {{ user.name }}
                           <span
@@ -250,8 +269,7 @@
                               bg-gray-200
                               text-secondary-dark
                             "
-                            >{{ user.email }}</span
-                          >
+                          >{{ user.email }}</span>
                         </li>
                       </ul>
                     </div>
@@ -261,8 +279,9 @@
                       <jet-secondary-button
                         class="mr-4"
                         @click="isAddingPeople = false"
-                        >Cancel</jet-secondary-button
                       >
+                        Cancel
+                      </jet-secondary-button>
                       <jet-button @click="addToPeople">Add</jet-button>
                     </div>
                   </template>
@@ -318,11 +337,11 @@
                 >
                   <input
                     id="attachment"
+                    ref="fileAttachment"
                     class="block absolute opacity-0 pin-r pin-t w-full"
                     type="file"
                     @change="previewFiles"
-                    ref="fileAttachment"
-                  />
+                  >
                   <document-add-icon class="w-7 h-7 text-secondary" />
                 </div>
               </div>
@@ -356,12 +375,12 @@ import JetFormSection from '@/Components/FormSection'
 import JetButton from '@/Components/Button'
 import JetSecondaryButton from '@/Components/SecondaryButton'
 import FormDatepicker from '@/Components/FormDatepicker'
+import FormMultiselect from '@/Components/FormMultiselect'
 import FormInput from '@/Components/FormInput'
 import FormSelect from '@/Components/FormSelect'
 import InputTextArea from '@/Components/FormTextArea'
 import BreezeCheckbox from '@/Components/Checkbox'
 import SwitchComponent from '@/Components/Switch'
-import CustomLabel from '@/Components/Label'
 import SimpleTable from '@/Components/SimpleTable'
 import SimpleModal from '@/Components/SimpleModal'
 import { ChevronDoubleRightIcon } from '@heroicons/vue/solid'
@@ -378,9 +397,9 @@ export default {
     FormInput,
     BreezeAuthenticatedLayout,
     FormDatepicker,
+    FormMultiselect,
     FormSelect,
     InputTextArea,
-    CustomLabel,
     BreezeCheckbox,
     SwitchComponent,
     SimpleTable,
@@ -394,22 +413,23 @@ export default {
     item: {
       type: Object,
       required: false,
+      default: () => {},
     },
     subjects: {
       type: Array,
       required: true,
     },
-    existing_classrooms: {
+    existingClassrooms: {
       type: Array,
       required: true,
-      default: [],
+      default: () => [],
     },
-    schedule_classroom: {
+    scheduleClassroom: {
       type: Object,
-      default: {
+      default: () => ({
         google_classroom_id: '',
         subject_id: '',
-      },
+      }),
     },
     token: {
       type: String,
@@ -421,16 +441,13 @@ export default {
     },
     users: {
       type: Array,
-      default: [],
+      default: () => [],
     },
   },
-  mounted() {
-    this.getClasses()
-  },
-  data() {
+  data () {
     const item = this.item
     if (item) {
-      item.valid_until = new Date(item.valid_until)
+      item.start_date = new Date(item.start_date)
     }
     return {
       form: this.$inertia.form({
@@ -441,8 +458,12 @@ export default {
         section: this.section,
         start_at: '',
         end_at: '',
-        day: '',
-        valid_until: new Date(),
+        start_date: new Date(),
+        end_date: new Date(),
+        date_range: [new Date(), new Date()],
+        days: [],
+        repeat_by: '',
+        days_of_week: '',
         note: '',
         facility_id: null,
         attachment: null,
@@ -457,34 +478,10 @@ export default {
             : null,
         user_id: this.$page.props.auth.user.id,
         users: [],
+        is_recurring: false,
+        is_end_of_sem: true,
         ...item,
       }),
-      days: [
-        {
-          id: 'monday',
-          name: 'Monday',
-        },
-        {
-          id: 'tuesday',
-          name: 'Tuesday',
-        },
-        {
-          id: 'wednesday',
-          name: 'Wednesday',
-        },
-        {
-          id: 'thursday',
-          name: 'Thursday',
-        },
-        {
-          id: 'friday',
-          name: 'Friday',
-        },
-        {
-          id: 'saturday',
-          name: 'Saturday',
-        },
-      ],
       classes: [],
       hasGClassroom: false,
       activeStep: 0,
@@ -561,16 +558,16 @@ export default {
   },
 
   computed: {
-    isEditing() {
+    isEditing () {
       return !!this.item?.id
     },
-    gClassrooms() {
-      // this.classes.map(() => )
+    // gClassrooms () {
+    //   // this.classes.map(() => )
+    // },
+    selectedClassroom () {
+      return this.classes.find((cl) => this.form.google_classroom_id === cl.id)
     },
-    selectedClassroom() {
-      return this.classes.find((cl) => this.form.google_classroom_id == cl.id)
-    },
-    maxTime() {
+    maxTime () {
       const format = 'HH:mm'
       const startTime = dayjs()
         .set('hour', this.form.start_at.split(':')[0])
@@ -580,28 +577,56 @@ export default {
         .set('minute', this.form.end_at.split(':')[1])
       const max = dayjs().set('hour', 22).set('minute', 0)
 
-      if (endTime.isAfter(max) || startTime.add(8, 'hour').isAfter(max))
+      if (endTime.isAfter(max) || startTime.add(8, 'hour').isAfter(max)) {
         return max.format(format)
-      console.log(endTime.diff(startTime, 'hour'))
+      }
       if (endTime.diff(startTime, 'hour') > 8) {
         return startTime.add(8, 'hour').format(format)
       }
+      return endTime
     },
   },
 
-  mounted() {
+  watch: {
+    'form.google_classroom_id' () {
+      this.form.name = this.selectedClassroom.name
+      this.form.description = this.selectedClassroom.description
+      this.form.description_heading = this.selectedClassroom.descriptionHeading
+    },
+    hasGClassroom (value) {
+      if (!value) {
+        this.form.name = ''
+        this.form.description = ''
+        this.form.description_heading = ''
+        this.form.section = ''
+      }
+    },
+    searchUser (value) {
+      this.filteredUsers = []
+      if (value.length > 1) {
+        this.filteredUsers = this.users.filter((user) =>
+          user.email.includes(value.toLowerCase()),
+        )
+      }
+    },
+    facilityType () {
+      this.getFacilities()
+    },
+  },
+  mounted () {
+    this.getClasses()
     this.getFacilities()
   },
 
   methods: {
-    save() {
+    save () {
       if (this.activeStep !== 3) {
         this.steps[this.activeStep].isDone = true
         this.activeStep++
         return
       }
-      this.form.valid_until = dayjs(this.form.valid_until).format(
-        'YYYY-MM-D hh:mm:ss'
+      this.form.start_date = dayjs(this.form.start_date).format(
+        'YYYY-MM-D hh:mm:ss',
       )
       const url = this.isEditing ? `/schedule/${this.item.id}` : '/schedule'
       this.form
@@ -616,7 +641,7 @@ export default {
           },
         })
     },
-    async getFacilities() {
+    async getFacilities () {
       this.facilities = []
       const response = await axios
         .get('/api/facility', {
@@ -629,62 +654,30 @@ export default {
         })
       this.facilities = response.data.data
     },
-    async getClasses() {
+    async getClasses () {
       this.classes = []
-      const response = await axios
-        .get('https://classroom.googleapis.com/v1/courses', {
-          params: {
-            access_token: this.token,
-          },
+      await fetch('https://classroom.googleapis.com/v1/courses?access_token=' + this.token)
+        .then(response => response.json())
+        .then(data => {
+          this.classes = data.courses
         })
-        .catch(function (error) {
-          if (error.response.status === 401) {
-            axios.post('/logout')
-            window.location.reload()
-          }
+        .catch(err => {
+          console.log(err)
         })
-      this.classes = response.data.courses
     },
-    previewFiles() {
+    previewFiles () {
       this.form.attachment = this.$refs.fileAttachment.files[0]
     },
-    addToPeople() {
+    addToPeople () {
       this.form.users.push(this.filteredUsers[0])
       this.isAddingPeople = false
       this.searchUser = ''
     },
-    removePerson(id) {
+    removePerson (id) {
       this.form.users = this.form.users.filter((person) => person.id !== id)
     },
-    changeActive(value) {
+    changeActive (value) {
       this.activeStep = value
-    },
-  },
-
-  watch: {
-    'form.google_classroom_id'() {
-      this.form.name = this.selectedClassroom.name
-      this.form.description = this.selectedClassroom.description
-      this.form.description_heading = this.selectedClassroom.descriptionHeading
-    },
-    hasGClassroom(value) {
-      if (!value) {
-        this.form.name = ''
-        this.form.description = ''
-        this.form.description_heading = ''
-        this.form.section = ''
-      }
-    },
-    searchUser(value) {
-      this.filteredUsers = []
-      if (value.length > 1) {
-        this.filteredUsers = this.users.filter((user) =>
-          user.email.includes(value.toLowerCase())
-        )
-      }
-    },
-    facilityType() {
-      this.getFacilities()
     },
   },
 }

@@ -24,8 +24,12 @@ class ClassroomFactory extends Factory
     public function definition()
     {
         return [
+            'name' => $this->faker->sentence(),
+            'description_heading' => $this->faker->sentence(),
+            'description' => $this->faker->sentence(),
+            'section' => $this->faker->word(),
+            'invite_code' => $this->faker->word(),
             'subject_id' => Subject::inRandomOrder()->first()->id,
-            'schedule_id' => Schedule::inRandomOrder()->first()->id,
         ];
     }
 }

@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\TemperatureController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -45,4 +46,6 @@ Route::middleware('raspberry')->group(function () {
 Route::middleware('api')->group(function () {
     Route::post('/auth', [RegisteredUserController::class, 'handleGoogleSignIn']);
     Route::post('/auth-code', [RegisteredUserController::class, 'handleCode']);
+    Route::post('/login', [AuthenticatedSessionController::class, 'store'])
+                ->middleware('guest');
 });

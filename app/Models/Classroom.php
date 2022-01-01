@@ -19,8 +19,7 @@ class Classroom extends Model
         'description',
         'section',
         'invite_code',
-        'subject_id',
-        'schedule_id',
+        'subject_id'
     ];
 
     public function users()
@@ -33,9 +32,9 @@ class Classroom extends Model
         return $this->belongsTo(Subject::class);
     }
 
-    public function schedule()
+    public function schedules()
     {
-        return $this->belongsTo(Schedule::class);
+        return $this->hasMany(Schedule::class);
     }
 
 }

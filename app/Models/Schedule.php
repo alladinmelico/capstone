@@ -16,11 +16,23 @@ class Schedule extends Model
     protected $fillable = [
         'start_at',
         'end_at',
+        'end_date',
+        'start_date',
         'day',
         'valid_until',
         'note',
         'facility_id',
+        'is_recurring',
+        'days_of_week',
+        'repeat_by',
+        'type',
+        'title',
         'user_id',
+        'classroom_id',
+    ];
+
+    protected $casts = [
+        'days_of_week' => 'json',
     ];
 
     public function getStartAtAttribute($value)
@@ -43,8 +55,8 @@ class Schedule extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function classrooms()
+    public function classroom()
     {
-        return $this->hasMany(Classroom::class);
+        return $this->belongsTo(Classroom::class);
     }
 }

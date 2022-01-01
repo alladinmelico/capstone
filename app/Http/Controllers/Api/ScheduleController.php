@@ -4,19 +4,20 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ScheduleResource;
+use App\Models\Classroom;
+use App\Models\Facility;
 use App\Models\Schedule;
+use App\Models\Subject;
 use App\Models\User;
+use App\Http\Requests\ScheduleRequest;
+use App\Notifications\ScheduleCreated;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class ScheduleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index(Request $request)
     {
         $schedules = User::with('classrooms.schedule')
@@ -28,33 +29,11 @@ class ScheduleController extends Controller
         return ScheduleResource::collection($schedules);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(ScheduleRequest $request)
     {
-        $data = $request->all();
-
-        $validator = Validator::make($data, $this->rules());
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        $data['valid_until'] = Carbon::parse($data['valid_until']);
-
-        return new ScheduleResource(Schedule::create($data));
+        return new ScheduleResource(Schedule::create($request->validated())->load('classroom'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show(Schedule $schedule)
     {
         return new ScheduleResource($schedule);

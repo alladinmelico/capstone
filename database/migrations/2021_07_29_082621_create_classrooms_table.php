@@ -22,7 +22,6 @@ class CreateClassroomsTable extends Migration
             $table->string('section')->nullable();
             $table->string('invite_code')->unique()->nullable();
             $table->foreignId('subject_id')->constrained();
-            $table->foreignId('schedule_id')->constrained();
             $table->softDeletes();
             $table->timestamps();
         });

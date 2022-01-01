@@ -21,7 +21,7 @@ class ScheduleController extends Controller
     public function index(Request $request)
     {
         return inertia('Schedule/Index', ['items' => Schedule::where('note', 'like', '%'. $request->search . '%')
-            ->orWhere('day', 'like', '%'. $request->search . '%')
+            ->orWhere('title', 'like', '%'. $request->search . '%')
             ->with('user', 'facility')
             ->withTrashed()
             ->paginate(10)]

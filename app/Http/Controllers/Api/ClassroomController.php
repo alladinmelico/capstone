@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ClassroomResource;
+use App\Notifications\ClassroomCreated;
 use App\Models\Classroom;
+use App\Http\Requests\ClassroomRequest;
 use Illuminate\Http\Request;
 
 class ClassroomController extends Controller
@@ -17,18 +19,21 @@ class ClassroomController extends Controller
     public function index()
     {
         return ClassroomResource::collection(Classroom::all());
-
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(ClassroomRequest $request)
     {
-        //
+        $validated = $request->validated();
+        $validated['invite_code'] = uniqid();
+        $classroom = Classroom::create($validated);
+
+        if (!empty($validated['users'])) {
+            $classroom->users()->sync($validated['users']);
+        }
+
+        $user = auth()->user();
+        $user->notify(new ClassroomCreated($classroom));
+        return new ClassroomResource($classroom);
     }
 
     /**
@@ -39,7 +44,7 @@ class ClassroomController extends Controller
      */
     public function show(Classroom $classroom)
     {
-        return new ClassroomResource($classroom);
+        return new ClassroomResource($classroom->load(['users', 'schedules', 'subject']));
     }
 
     /**
