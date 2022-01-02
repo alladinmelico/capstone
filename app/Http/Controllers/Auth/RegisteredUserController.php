@@ -121,10 +121,10 @@ class RegisteredUserController extends Controller
             ]], 201);
         }
 
-        return response()->json(['data' => [
+        return response()->json([
             'id' => $findUser->id,
             'token' => $findUser->createToken('SSCsystem')->plainTextToken,
-        ]], 200);
+        ], 200);
     }
 
     public function handleCode(Request $request)
