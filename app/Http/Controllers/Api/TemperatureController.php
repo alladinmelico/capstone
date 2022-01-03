@@ -11,9 +11,9 @@ use Illuminate\Http\Request;
 class TemperatureController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return TemperatureResource::collection(Temperature::simplePaginate());
+        return TemperatureResource::collection(Temperature::paginate($request->limit));
     }
 
     public function store(TemperatureRequest $request)

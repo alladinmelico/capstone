@@ -14,7 +14,7 @@ class FacilityController extends Controller
     public function index(Request $request)
     {
         return FacilityResource::collection(
-            Facility::where('type', $request->type && 1)->get()
+            Facility::where('type', $request->type && 1)->paginate($request->limit)
         );
     }
 

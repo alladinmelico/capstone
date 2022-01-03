@@ -6,13 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SubjectRequest;
 use App\Http\Resources\SubjectResource;
 use App\Models\Subject;
+use Illuminate\Http\Request;
 
 class SubjectController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return SubjectResource::collection(Subject::all());
+        return SubjectResource::collection(Subject::paginate($request->limit));
     }
 
     public function store(SubjectRequest $request)

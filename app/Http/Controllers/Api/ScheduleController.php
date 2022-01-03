@@ -22,7 +22,7 @@ class ScheduleController extends Controller
     {
         $schedules = User::with('classrooms.schedule')
             ->where('id', $request->user_id)
-            ->get()
+            ->paginate($request->limit)
             ->pluck('classrooms')
             ->flatten()
             ->pluck('schedule');

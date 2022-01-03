@@ -11,9 +11,9 @@ use App\Http\Resources\UserResource;
 class UserController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return UserResource::collection(User::orderBy('updated_at', 'desc')->get());
+        return UserResource::collection(User::orderBy('updated_at', 'desc')->paginate($request->limit));
     }
 
     public function store(Request $request)

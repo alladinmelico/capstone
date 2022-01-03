@@ -16,14 +16,14 @@ class ClassroomController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         return ClassroomResource::collection(Classroom::where('name', 'like', '%'. request()->search . '%')
             ->orWhere('description_heading', 'like', '%'. request()->search . '%')
             ->orWhere('section', 'like', '%'. request()->search . '%')
             ->with('subject')
             ->withTrashed()
-            ->paginate(10)
+            ->paginate($request->limit)
         );
     }
 

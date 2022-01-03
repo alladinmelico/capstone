@@ -121,7 +121,7 @@ class RegisteredUserController extends Controller
 
             return response()->json([
                 'id' => $newUser->id,
-                'hasProfile' => false,
+                'hasProfile' => $newUser->role_id === 1,
                 'token' => $newUser->createToken('SSCsystem')->plainTextToken,
             ], 201);
         }
