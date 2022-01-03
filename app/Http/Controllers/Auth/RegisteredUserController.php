@@ -119,14 +119,16 @@ class RegisteredUserController extends Controller
 
             event(new Registered($newUser));
 
-            return response()->json(['data' => [
+            return response()->json([
                 'id' => $newUser->id,
+                'hasProfile' => false,
                 'token' => $newUser->createToken('SSCsystem')->plainTextToken,
-            ]], 201);
+            ], 201);
         }
 
         return response()->json([
             'id' => $findUser->id,
+            'hasProfile' => (bool)$findUser->school_id,
             'token' => $findUser->createToken('SSCsystem')->plainTextToken,
         ], 200);
     }
