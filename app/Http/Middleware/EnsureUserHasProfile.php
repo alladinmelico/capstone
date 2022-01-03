@@ -20,7 +20,7 @@ class EnsureUserHasProfile
         $user = Auth::user();
 
         if (empty($user->school_id)) {
-            return redirect()->route('profile-registration');
+            abort(419);
         }
         return $next($request);
     }
