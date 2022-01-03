@@ -17,10 +17,9 @@ class EnsureUserHasProfile
      */
     public function handle(Request $request, Closure $next)
     {
-        return $next($request);
         $user = Auth::user();
 
-        if (empty($user->school_id)) {
+        if (empty($user->school_id) && Auth::user() && str_contains(config('constants.admins'), Auth::user()->email)) {
             abort(419);
         }
         return $next($request);
