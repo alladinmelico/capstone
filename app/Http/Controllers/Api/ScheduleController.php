@@ -20,6 +20,13 @@ class ScheduleController extends Controller
 
     public function index(Request $request)
     {
+        return ScheduleResource::collection(
+            Schedule::paginate($request->limit)
+        );
+    }
+
+    public function users(Request $request)
+    {
         $schedules = User::with('classrooms.schedule')
             ->where('id', $request->user_id)
             ->paginate($request->limit)
