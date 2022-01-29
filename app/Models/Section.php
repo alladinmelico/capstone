@@ -9,6 +9,12 @@ class Section extends Model
 {
     use HasFactory;
 
+     protected $fillable = [
+        'name',
+        'president_id',
+        'faculty_id',
+    ];
+
     public function users()
     {
         return $this->belongsToMany(User::class)->using(SectionUser::class);

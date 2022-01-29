@@ -16,7 +16,7 @@ class SectionController extends Controller
         return SectionResource::collection(Section::with(['president', 'faculty'])->paginate($request->limit));
     }
 
-    public function store(Request $request)
+    public function store(SectionRequest $request)
     {
         return new SectionResource(Section::create($request->validated()));
     }
@@ -26,7 +26,7 @@ class SectionController extends Controller
         return new SectionResource($section);
     }
 
-    public function update(Request $request, Section $section)
+    public function update(SectionRequest $request, Section $section)
     {
         $section->update($request->validated());
         return new SectionResource($section);
