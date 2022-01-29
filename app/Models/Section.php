@@ -13,4 +13,14 @@ class Section extends Model
     {
         return $this->belongsToMany(User::class)->using(SectionUser::class);
     }
+
+    public function president()
+    {
+        return $this->belongsTo(User::class, 'president_id');
+    }
+
+    public function faculty()
+    {
+        return $this->belongsTo(User::class, 'faculty_id');
+    }
 }
