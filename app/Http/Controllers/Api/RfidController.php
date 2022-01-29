@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Rfid;
+use App\Models\Schedule;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -37,17 +38,22 @@ class RfidController extends Controller
         $date = Carbon::now()->setTimezone(config('app.timezone'));
         $time = $date->format('H:i:s');
 
-        $schedule = User::with(['classrooms.schedule' => function ($query) use ($date, $time) {
-            $query->whereDate('valid_until', '>=', $date->toDateString())
-                ->where('day', strtolower($date->englishDayOfWeek))
-                ->whereTime('end_at', '>=', $time)
-                ->whereTime('start_at', '<=', $time);
-        }])
-            ->where('id', $rfid->user_id)
-            ->get()
-            ->pluck('classrooms')
-            ->flatten()
-            ->pluck('schedule');
+        $schedule = Schedule::with(['classroom' => function ($query) use ($rfid) {
+            // $query->where('classroom.users.id', $rfid->user_id)->where;
+        }])->get();
+        // $schedule = User::with(['classrooms.schedule' => function ($query) use ($date, $time) {
+        //     $query->whereDate('valid_until', '>=', $date->toDateString())
+        //         ->where('day', strtolower($date->englishDayOfWeek))
+        //         ->whereTime('end_at', '>=', $time)
+        //         ->whereTime('start_at', '<=', $time);
+        // }])
+        //     ->where('id', $rfid->user_id)
+        //     ->first();
+        //     // ->pluck('classrooms')
+        //     // ->flatten()
+        //     // ->pluck('schedule');
+
+            return $schedule;
 
         if (count($schedule) == 0) {
             abort(419);

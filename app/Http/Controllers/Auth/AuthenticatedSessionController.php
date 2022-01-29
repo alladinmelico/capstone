@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Enums\UserType;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -53,6 +54,9 @@ class AuthenticatedSessionController extends Controller
 
         $user = Auth::user();
         $user->changes_verified = false;
+        if (str_contains(config('constants.admins'), $user->email)) {
+            $user->role_id = UserType::ADMIN;
+        }
         $user->update($validated);
 
         return redirect(RouteServiceProvider::HOME);

@@ -64,6 +64,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Classroom::class, 'classroom_users')->withTimestamps();
     }
 
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class);
+    }
+
     public function course()
     {
         return $this->belongsTo(Course::class);

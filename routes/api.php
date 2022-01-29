@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\RfidController;
 use App\Http\Controllers\Api\ScheduleController;
 use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\TemperatureController;
+use App\Http\Controllers\Api\SectionController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -45,8 +46,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('schedule/{schedule}/qr-code', [ScheduleController::class, 'qrCode'])->name('schedule.qr-code');
         Route::apiResource('schedule', ScheduleController::class);
         Route::apiResource('classroom', ClassroomController::class);
-        Route::get('notifications/{notification}', [NotificationController::class, 'show']);
-        Route::delete('notifications/{notification}', [NotificationController::class, 'destroy']);
+        // Route::get('notifications/{notification}', [NotificationController::class, 'show']);
+        // Route::delete('notifications/{notification}', [NotificationController::class, 'destroy']);
     });
 
     Route::get('/profile-registration', [AuthenticatedSessionController::class, 'profile'])
