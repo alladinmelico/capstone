@@ -29,4 +29,14 @@ class Section extends Model
     {
         return $this->belongsTo(User::class, 'faculty_id');
     }
+
+    public function getPresidentNameAttribute()
+    {
+        return $this->president->name;
+    }
+
+    public function getFacultyNameAttribute()
+    {
+        return $this->faculty->name;
+    }
 }
