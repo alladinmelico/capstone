@@ -36,25 +36,7 @@ class RfidController extends Controller
             abort(204);
         }
 
-        $date = Carbon::now()->setTimezone(config('app.timezone'));
-        $time = $date->format('H:i:s');
-
-        $schedule = Schedule::whereIn('classroom_id', function ($query) use ($rfid) {
-                $query->select('classroom_id')->from('classroom_users')->where('user_id', $rfid->user_id);
-            })
-            ->whereDate('end_date', '>=', $date->toDateString())
-            ->whereTime('end_at', '>=', $time)
-            ->whereTime('start_at', '<=', $time)
-            ->get()
-            ->filter(function ($value, $key) use ($date) {
-                if ($value->is_recurring) {
-                    if ($value->repeat_by !== 'daily' && !str_contains($value->days_of_week, strtolower($date->englishDayOfWeek))) {
-                        return false;
-                    }
-                    return true;
-                }
-                return $value > 2;
-            });
+        $schedule = Schedule::hasSchedule($rfid->user_id);
 
         if (count($schedule) == 0) {
             abort(419);

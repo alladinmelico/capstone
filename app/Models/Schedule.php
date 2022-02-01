@@ -73,4 +73,26 @@ class Schedule extends Model
     {
         return $this->belongsTo(Classroom::class);
     }
+
+    public static function hasSchedule($userId) {
+        $date = Carbon::now()->setTimezone(config('app.timezone'));
+        $time = $date->format('H:i:s');
+
+        return Schedule::whereIn('classroom_id', function ($query) use ($userId) {
+                $query->select('classroom_id')->from('classroom_users')->where('user_id', $userId);
+            })
+            ->whereDate('end_date', '>=', $date->toDateString())
+            ->whereTime('end_at', '>=', $time)
+            ->whereTime('start_at', '<=', $time)
+            ->get()
+            ->filter(function ($value, $key) use ($date) {
+                if ($value->is_recurring) {
+                    if ($value->repeat_by !== 'daily' && !str_contains($value->days_of_week, strtolower($date->englishDayOfWeek))) {
+                        return false;
+                    }
+                    return true;
+                }
+                return $value > 2;
+            });
+    }
 }
