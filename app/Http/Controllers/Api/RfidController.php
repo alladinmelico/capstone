@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Rfid;
 use App\Models\Schedule;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -38,22 +39,22 @@ class RfidController extends Controller
         $date = Carbon::now()->setTimezone(config('app.timezone'));
         $time = $date->format('H:i:s');
 
-        $schedule = Schedule::with(['classroom' => function ($query) use ($rfid) {
-            // $query->where('classroom.users.id', $rfid->user_id)->where;
-        }])->get();
-        // $schedule = User::with(['classrooms.schedule' => function ($query) use ($date, $time) {
-        //     $query->whereDate('valid_until', '>=', $date->toDateString())
-        //         ->where('day', strtolower($date->englishDayOfWeek))
-        //         ->whereTime('end_at', '>=', $time)
-        //         ->whereTime('start_at', '<=', $time);
-        // }])
-        //     ->where('id', $rfid->user_id)
-        //     ->first();
-        //     // ->pluck('classrooms')
-        //     // ->flatten()
-        //     // ->pluck('schedule');
-
-            return $schedule;
+        $schedule = Schedule::whereIn('classroom_id', function ($query) use ($rfid) {
+                $query->select('classroom_id')->from('classroom_users')->where('user_id', $rfid->user_id);
+            })
+            ->whereDate('end_date', '>=', $date->toDateString())
+            ->whereTime('end_at', '>=', $time)
+            ->whereTime('start_at', '<=', $time)
+            ->get()
+            ->filter(function ($value, $key) use ($date) {
+                if ($value->is_recurring) {
+                    if ($value->repeat_by !== 'daily' && !str_contains($value->days_of_week, strtolower($date->englishDayOfWeek))) {
+                        return false;
+                    }
+                    return true;
+                }
+                return $value > 2;
+            });
 
         if (count($schedule) == 0) {
             abort(419);
