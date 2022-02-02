@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ClassroomResource;
-use App\Notifications\ClassroomCreated;
-use App\Models\Classroom;
 use App\Http\Requests\ClassroomRequest;
+use App\Http\Resources\ClassroomResource;
+use App\Models\Classroom;
+use App\Notifications\ClassroomCreated;
 use Illuminate\Http\Request;
 
 class ClassroomController extends Controller
@@ -18,12 +18,12 @@ class ClassroomController extends Controller
      */
     public function index(Request $request)
     {
-        return ClassroomResource::collection(Classroom::where('name', 'like', '%'. request()->search . '%')
-            ->orWhere('description_heading', 'like', '%'. request()->search . '%')
-            ->orWhere('section', 'like', '%'. request()->search . '%')
-            ->with('subject')
-            ->withTrashed()
-            ->paginate($request->limit)
+        return ClassroomResource::collection(Classroom::where('name', 'like', '%' . request()->search . '%')
+                ->orWhere('description_heading', 'like', '%' . request()->search . '%')
+                ->orWhere('section', 'like', '%' . request()->search . '%')
+                ->with('subject')
+                ->withTrashed()
+                ->paginate($request->limit)
         );
     }
 
@@ -60,10 +60,10 @@ class ClassroomController extends Controller
      * @param  \App\Models\Classroom  $classroom
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Classroom $classroom)
+    public function update(ClassroomRequest $request, Classroom $classroom)
     {
         $validated = $request->validated();
-        $classroom = Classroom::update($validated);
+        $classroom->update($validated);
         $classroom->users()->sync($validated['users']);
 
         $user = auth()->user();
