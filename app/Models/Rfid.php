@@ -11,6 +11,8 @@ class Rfid extends Model
 
     protected $fillable = [
         'value',
+        'is_logged',
+        'user_id'
     ];
 
     public function user()

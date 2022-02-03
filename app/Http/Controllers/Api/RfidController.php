@@ -9,26 +9,38 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\RfidResource;
+use App\Http\Requests\RfidRequest;
 
 class RfidController extends Controller
 {
-    public function store(Request $request)
+    public function index(Request $request)
     {
-        $data = $request->all();
+        return RfidResource::collection(Rfid::paginate($request->limit));
+    }
 
-        $validator = Validator::make($data, [
-            'value' => 'required|string|max:255|unique:rfids,value',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        return Rfid::create($data);
+    public function store(RfidRequest $request)
+    {
+        return new RfidResource(Rfid::create($request->validated()));
     }
 
     public function show(Rfid $rfid)
+    {
+        return new RfidResource($rfid);
+    }
+
+    public function update(RfidRequest $request, Rfid $rfid)
+    {
+        $rfid->update($request->validated());
+        return new RfidResource($rfid);
+    }
+
+    public function destroy(Rfid $rfid)
+    {
+        return $rfid->delete();
+    }
+
+    public function log(Rfid $rfid)
     {
         if ($rfid->is_logged) {
             $rfid->is_logged = false;

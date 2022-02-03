@@ -46,6 +46,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('schedule/{schedule}/qr-code', [ScheduleController::class, 'qrCode'])->name('schedule.qr-code');
         Route::apiResource('schedule', ScheduleController::class);
         Route::apiResource('classroom', ClassroomController::class);
+        Route::apiResource('rfid', RfidController::class);
         // Route::get('notifications/{notification}', [NotificationController::class, 'show']);
         // Route::delete('notifications/{notification}', [NotificationController::class, 'destroy']);
     });
@@ -59,8 +60,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::middleware('raspberry')->group(function () {
     Route::apiResource('temperature', TemperatureController::class);
-    Route::post('rfid', [RfidController::class, 'store']);
-    Route::get('rfid/{rfid:value}', [RfidController::class, 'show']);
+    Route::get('rfid/{rfid:value}/log', [RfidController::class, 'log']);
 });
 
 Route::middleware('api')->group(function () {
