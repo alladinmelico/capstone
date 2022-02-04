@@ -26,11 +26,6 @@ class TemperatureController extends Controller
         return new TemperatureResource($temperature);
     }
 
-    public function update(Request $request, Temperature $temperature)
-    {
-        //
-    }
-
     public function destroy(Temperature $temperature)
     {
         return $temperature->delete();

@@ -47,6 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('schedule', ScheduleController::class);
         Route::apiResource('classroom', ClassroomController::class);
         Route::apiResource('rfid', RfidController::class);
+        Route::apiResource('temperature', TemperatureController::class)->except('store');
         // Route::get('notifications/{notification}', [NotificationController::class, 'show']);
         // Route::delete('notifications/{notification}', [NotificationController::class, 'destroy']);
     });
@@ -59,7 +60,7 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::middleware('raspberry')->group(function () {
-    Route::apiResource('temperature', TemperatureController::class);
+    Route::post('temperature', [TemperatureController::class, 'store']);
     Route::get('rfid/{rfid:value}/log', [RfidController::class, 'log']);
 });
 
