@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Resources\UserResource;
-
 
 class UserController extends Controller
 {
@@ -15,30 +15,31 @@ class UserController extends Controller
     {
         return UserResource::collection(
             User::when($request->role, function ($query) use ($request) {
-                    return $query->where('role_id', $request->role);
-                })
+                return $query->where('role_id', $request->role);
+            })
                 ->orderBy('updated_at', 'desc')
                 ->paginate($request->limit)
-            );
+        );
     }
 
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        //
+        return new UserResource(User::create($request->validated()));
     }
 
     public function show(User $user)
     {
-        //
+        return new UserResource($user);
     }
 
-    public function update(Request $request, User $user)
+    public function update(UserRequest $request, User $user)
     {
-        //
+        $user->update($request->validated());
+        return new UserResource($user);
     }
 
     public function destroy(User $user)
     {
-        //
+        return $user->delete();
     }
 }
