@@ -48,6 +48,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('classroom', ClassroomController::class);
         Route::apiResource('rfid', RfidController::class);
         Route::apiResource('temperature', TemperatureController::class)->except('store');
+        Route::get('buildings', function () {
+            return mapToIdValue(config('constants.buildings'));
+        });
+        Route::get('facility-types', function () {
+            return mapToIdValue(config('constants.facilities.types'));
+        });
+        Route::get('departments', function () {
+            return mapToIdValue(config('constants.departments'));
+        });
         // Route::get('notifications/{notification}', [NotificationController::class, 'show']);
         // Route::delete('notifications/{notification}', [NotificationController::class, 'destroy']);
     });
@@ -70,3 +79,9 @@ Route::middleware('api')->group(function () {
     Route::post('/login', [AuthenticatedSessionController::class, 'store'])
                 ->middleware('guest');
 });
+
+function mapToIdValue ($arr) {
+    return array_map(function ($key, $value) {
+        return ['id' => $key, 'value' => $value];
+    }, array_keys($arr), $arr);
+}
