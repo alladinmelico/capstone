@@ -13,7 +13,13 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        return UserResource::collection(User::orderBy('updated_at', 'desc')->paginate($request->limit));
+        return UserResource::collection(
+            User::when($request->role, function ($query) use ($request) {
+                    return $query->where('role_id', $request->role);
+                })
+                ->orderBy('updated_at', 'desc')
+                ->paginate($request->limit)
+            );
     }
 
     public function store(Request $request)
