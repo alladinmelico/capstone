@@ -40,6 +40,16 @@ class ScheduleRequest extends FormRequest
             'facility_id' => 'required|numeric|exists:facilities,id',
             'classroom_id' => 'required|numeric|exists:classrooms,id',
             'user_id' => 'required|numeric|exists:users,id',
+            'is_end_of_sem' => 'sometimes|boolean'
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        if ($this->is_end_of_sem) {
+            $this->merge([
+                'end_date' => date("Y-m-d", mktime(11, 14, 54, 8, 12, 2023)),
+            ]);
+        }
     }
 }

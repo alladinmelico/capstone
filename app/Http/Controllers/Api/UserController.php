@@ -15,8 +15,13 @@ class UserController extends Controller
     {
         return UserResource::collection(
             User::when($request->role, function ($query) use ($request) {
-                return $query->where('role_id', $request->role);
-            })
+                    return $query->where('role_id', $request->role);
+                })
+                ->when($request->classroom_id, function ($query) use ($request) {
+                    return $query->whereIn('id', function ($query) use ($request) {
+                        $query->select('user_id')->from('classroom_users')->where('classroom_id', $request->classroom_id);
+                    });
+                })
                 ->orderBy('updated_at', 'desc')
                 ->paginate($request->limit)
         );
