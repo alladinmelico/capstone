@@ -34,7 +34,6 @@ class UserRequest extends FormRequest
             'google_id' => 'nullable|string|max:255',
             'avatar' => 'nullable|string|max:255',
             'avatar_original' => 'nullable|string|max:255',
-            'role_id' => ['required', Rule::in(UserType::getValues())],
             'course_id' => 'required|numeric|exists:courses,id',
             'school_id' => 'required|string|max:255',
             'verified_teacher' => 'nullable|boolean'
