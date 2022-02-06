@@ -19,7 +19,6 @@ class Schedule extends Model
         'end_date',
         'start_date',
         'day',
-        'valid_until',
         'note',
         'facility_id',
         'is_recurring',
@@ -29,6 +28,7 @@ class Schedule extends Model
         'title',
         'user_id',
         'classroom_id',
+        'attachment'
     ];
 
     protected $casts = [
