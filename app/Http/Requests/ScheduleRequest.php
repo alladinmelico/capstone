@@ -40,7 +40,9 @@ class ScheduleRequest extends FormRequest
             'facility_id' => 'required|numeric|exists:facilities,id',
             'classroom_id' => 'required|numeric|exists:classrooms,id',
             'user_id' => 'required|numeric|exists:users,id',
-            'is_end_of_sem' => 'sometimes|boolean'
+            'is_end_of_sem' => 'sometimes|boolean',
+            'attachments' => 'sometimes|array',
+            'attachments.*' => 'sometimes|mimes:jpg,bmp,png,pdf'
         ];
     }
 
