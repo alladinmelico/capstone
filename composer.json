@@ -17,6 +17,7 @@
         "laravel/socialite": "^5.2",
         "laravel/telescope": "^4.7",
         "laravel/tinker": "^2.5",
+        "league/flysystem-aws-s3-v3": "*",
         "pusher/pusher-php-server": "^7.0",
         "spatie/laravel-settings": "^2.3",
         "tightenco/ziggy": "^1.0"
@@ -64,7 +65,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true

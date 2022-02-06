@@ -14,6 +14,7 @@ use App\Notifications\ScheduleCreated;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class ScheduleController extends Controller
 {
@@ -38,7 +39,15 @@ class ScheduleController extends Controller
 
     public function store(ScheduleRequest $request)
     {
-        return new ScheduleResource(Schedule::create($request->validated())->load('classroom'));
+        $data = $request->validated();
+
+        if($request->hasFile('attachment'))
+        {
+            $path = $request->file('attachment')->store('attachments', 's3');
+            $data['attachment'] = Storage::disk('s3')->url($path);
+        }
+
+        return new ScheduleResource(Schedule::create($data)->load('classroom'));
     }
 
     public function show(Schedule $schedule)
