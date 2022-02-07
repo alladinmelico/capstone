@@ -41,7 +41,7 @@ class ScheduleRequest extends FormRequest
             'classroom_id' => 'required|numeric|exists:classrooms,id',
             'user_id' => 'required|numeric|exists:users,id',
             'is_end_of_sem' => 'sometimes|boolean',
-            'attachment' => 'sometimes|mimes:jpg,bmp,png,pdf'
+            'attachment' => 'sometimes|mimes:jpg,jpeg,bmp,png,pdf'
         ];
     }
 
