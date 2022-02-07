@@ -15,19 +15,6 @@ class ScheduleResource extends JsonResource
      */
     public function toArray($request)
     {
-        $now = Carbon::now()->setTimezone(config('app.timezone'));
-        $validUntil = Carbon::parse($this->valid_until);
-        $time = $now->format('H:i:s');
-
-        $isValid = true;
-
-        if (($now->greaterThanOrEqualTo($validUntil)) ||
-            ($this->day !== strtolower($now->englishDayOfWeek)) ||
-            (time() >= strtotime($this->end_at)) ||
-            (time() <= strtotime($this->start_at))) {
-            $isValid = false;
-        }
-
         return [
             'id' => $this->id,
             'title' => $this->title,
@@ -39,12 +26,13 @@ class ScheduleResource extends JsonResource
             'is_recurring' => $this->is_recurring,
             'type' => $this->type,
             'repeat_by' => $this->repeat_by,
-            'created_by' => $this->user_id,
+            'user_id' => $this->user_id,
             'note' => $this->note,
-            'facility_id' => $this->facility_id,
-            'facility_name' => $this->facility->name,
-            'readable_valid_until' => $validUntil->diffForHumans(),
-            'is_valid_now' => $isValid,
+            'classroom_id' => $this->classroom_id,
+            'users' => $this->classroom?->users,
+            'facility' => $this->facility,
+            'attachment' => $this->attachment,
+            'is_valid_now' => $this->is_valid,
             'classroom' => new ClassroomResource($this->whenLoaded('classroom')),
         ];
     }

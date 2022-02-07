@@ -18,7 +18,6 @@ class Schedule extends Model
         'end_at',
         'end_date',
         'start_date',
-        'day',
         'note',
         'facility_id',
         'is_recurring',
