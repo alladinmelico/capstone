@@ -36,3 +36,5 @@ Route::get('/auth/redirect', function () {
 })->name('oauth');
 
 Route::get('/auth/callback', [RegisteredUserController::class, 'handleGoogleCallback']);
+
+Route::get('/schedule/{schedule}',[ScheduleController::class, 'check']);

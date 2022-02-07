@@ -49,6 +49,17 @@ class Schedule extends Model
         return Carbon::parse($value)->format('H:i:s');
     }
 
+    public function getIsValidAttribute()
+    {
+        $currDate = Carbon::now()->setTimezone(config('app.timezone'));
+        $currTime = $currDate->format('H:i:s');
+        return
+            $currDate->betweenIncluded(Carbon::create($this->start_date), Carbon::create($this->end_date)) &&
+            $currDate->betweenIncluded(Carbon::create($this->start_at)->format('H:i:s'), Carbon::create($this->end_at)->format('H:i:s')) &&
+            ($this->is_recurring && $this->repeat_by !== 'daily' &&
+                str_contains($this->days_of_week, strtolower($currDate->englishDayOfWeek)));
+    }
+
     public function getStartAtAttribute($value)
     {
         return Carbon::parse($value)->format('H:i:s');

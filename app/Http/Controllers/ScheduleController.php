@@ -167,4 +167,9 @@ class ScheduleController extends Controller
     {
         return inertia('Schedule/ShowCode', ['url' => route('schedule.qr-code', ['schedule' => $schedule->id])]);
     }
+
+    public function check(Schedule $schedule)
+    {
+         return view('schedule', ['isValid' => $schedule->is_valid]);
+    }
 }
