@@ -23,9 +23,9 @@ class ClassroomResource extends JsonResource
             'section' => $this->section,
             'invite_code' => $this->invite_code,
             'subject_id' => $this->subject_id,
-            'subject' => new SubjectResource($this->subject),
+            'subject' => new SubjectResource($this->whenLoaded('subject')),
             'subject_name' => $this->subject->name,
-            'users' => UserResource::collection($this->users),
+            'users' => UserResource::collection($this->whenLoaded('users')),
             'schedules' => ScheduleResource::collection($this->whenLoaded('schedules')),
         ];
     }
