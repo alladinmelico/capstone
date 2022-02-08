@@ -43,7 +43,6 @@ class ScheduleRequest extends FormRequest
             'is_end_of_sem' => 'sometimes|boolean',
             'attachment' => 'sometimes|file|mimes:jpg,jpeg,bmp,png,pdf',
             'users' => 'sometimes|array',
-            'users.*' => 'sometimes|exists:users,id'
         ];
     }
 

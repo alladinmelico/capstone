@@ -41,6 +41,10 @@ class ScheduleController extends Controller
     {
         $data = $request->validated();
 
+        if (!empty($data['users'])) {
+            // TODO: Batches
+        }
+
         if($request->hasFile('attachment'))
         {
             $path = $request->file('attachment')->store('attachments', 's3');
