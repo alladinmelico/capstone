@@ -25,6 +25,7 @@ class UserResource extends JsonResource
             'avatar_original' => $this->avatar_original,
             'role_id' => $this->role_id,
             'course_id' => $this->course_id,
+            'course_name' => $this->course?->name,
             'school_id' => $this->school_id,
             'verified_teacher' => $this->verified_teacher,
         ];
