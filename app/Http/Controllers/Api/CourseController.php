@@ -7,6 +7,7 @@ use App\Http\Resources\CourseResource;
 use App\Models\Course;
 use App\Http\Requests\CourseRequest;
 use Illuminate\Http\Request;
+use App\Events\CourseCreated;
 
 class CourseController extends Controller
 {
@@ -25,7 +26,9 @@ class CourseController extends Controller
 
     public function store(CourseRequest $request)
     {
-        return new CourseResource(Course::create($request->validated()));
+        $course = Course::create($request->validated());
+        broadcast(new CourseCreated($course))->toOthers();
+        return new CourseResource($course);
     }
 
     public function show(Course $course)

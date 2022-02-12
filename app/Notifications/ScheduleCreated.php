@@ -57,4 +57,9 @@ class ScheduleCreated extends Notification implements ShouldQueue
     {
         return 'A new schedule created';
     }
+
+    public function broadcastType()
+    {
+        return 'new-schedule';
+    }
 }
