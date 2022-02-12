@@ -32,6 +32,6 @@ class ScheduleCreated implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('user.' . $this->user->id);
+        return new PrivateChannel('App.Models.User.' . $this->user->id);
     }
 }
