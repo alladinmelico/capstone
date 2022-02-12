@@ -9,8 +9,8 @@ use App\Models\Facility;
 use App\Models\Schedule;
 use App\Models\Subject;
 use App\Models\User;
-use App\Http\Requests\ScheduleRequest;
 use App\Notifications\ScheduleCreated;
+use App\Http\Requests\ScheduleRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -51,7 +51,12 @@ class ScheduleController extends Controller
             $data['attachment'] = Storage::disk('s3')->url($path);
         }
 
-        return new ScheduleResource(Schedule::create($data)->load('classroom'));
+        $schedule = Schedule::create($data);
+
+        $user = User::find($data['user_id']);
+        $user->notify(new ScheduleCreated($schedule));
+
+        return new ScheduleResource($schedule->load('classroom'));
     }
 
     public function show(Schedule $schedule)
