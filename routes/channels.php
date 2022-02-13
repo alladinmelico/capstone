@@ -20,3 +20,11 @@ Broadcast::channel('user.{id}', function ($user, $id) {
 Broadcast::channel('course', function ($user) {
     return true;
 });
+
+Broadcast::channel('schedule', function ($user) {
+    return true;
+});
+
+Broadcast::channel('classroom', function ($user) {
+    return true;
+});

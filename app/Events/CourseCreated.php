@@ -32,6 +32,6 @@ class CourseCreated implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('course');
+        return new Channel('course');
     }
 }

@@ -32,6 +32,6 @@ class ClassroomCreated
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('user.' . $this->user->id);
+        return new Channel('classroom');
     }
 }
