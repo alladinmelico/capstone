@@ -24,8 +24,8 @@ class ScheduleController extends Controller
         $userId = $request->user_id;
 
         return ScheduleResource::collection(
-            Schedule::when($userId, function ($query) use ($userId) {
-                return whereIn('classroom_id', function ($query) use ($userId) {
+            Schedule::when(!empty($userId), function ($query) use ($userId) {
+                return $query->whereIn('classroom_id', function ($query) use ($userId) {
                     $query->select('classroom_id')->from('classroom_users')->where('user_id', $userId);
                 });
             })->paginate($request->limit)

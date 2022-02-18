@@ -27,7 +27,7 @@ class Schedule extends Model
         'title',
         'user_id',
         'classroom_id',
-        'attachment'
+        'attachment',
     ];
 
     protected $casts = [
@@ -39,10 +39,10 @@ class Schedule extends Model
         $date = Carbon::now()->setTimezone(config('app.timezone'));
         $time = $date->format('H:i:s');
 
-         $query->whereDate('end_date', '>=', $date->toDateString())
-                ->where('days', strtolower($date->englishDayOfWeek))
-                ->whereTime('end_at', '>=', $time)
-                ->whereTime('start_at', '<=', $time);
+        $query->whereDate('end_date', '>=', $date->toDateString())
+            ->where('days', strtolower($date->englishDayOfWeek))
+            ->whereTime('end_at', '>=', $time)
+            ->whereTime('start_at', '<=', $time);
 
         return $query->where('end_date');
         return Carbon::parse($value)->format('H:i:s');
@@ -53,10 +53,10 @@ class Schedule extends Model
         $currDate = Carbon::now()->setTimezone(config('app.timezone'));
         $currTime = $currDate->format('H:i:s');
         return
-            $currDate->betweenIncluded(Carbon::create($this->start_date), Carbon::create($this->end_date)) &&
-            $currDate->betweenIncluded(Carbon::create($this->start_at)->format('H:i:s'), Carbon::create($this->end_at)->format('H:i:s')) &&
+        $currDate->betweenIncluded(Carbon::create($this->start_date), Carbon::create($this->end_date)) &&
+        $currDate->betweenIncluded(Carbon::create($this->start_at)->format('H:i:s'), Carbon::create($this->end_at)->format('H:i:s')) &&
             ($this->is_recurring && $this->repeat_by !== 'daily' &&
-                str_contains($this->days_of_week, strtolower($currDate->englishDayOfWeek)));
+            str_contains($this->days_of_week, strtolower($currDate->englishDayOfWeek)));
     }
 
     public function getStartAtAttribute($value)
@@ -67,6 +67,11 @@ class Schedule extends Model
     public function getEndAtAttribute($value)
     {
         return Carbon::parse($value)->format('H:i:s');
+    }
+
+    public function getIsRecurringAttribute($value)
+    {
+        return !!$value;
     }
 
     public function facility()
@@ -84,13 +89,14 @@ class Schedule extends Model
         return $this->belongsTo(Classroom::class);
     }
 
-    public static function hasSchedule($userId) {
+    public static function hasSchedule($userId)
+    {
         $date = Carbon::now()->setTimezone(config('app.timezone'));
         $time = $date->format('H:i:s');
 
         return Schedule::whereIn('classroom_id', function ($query) use ($userId) {
-                $query->select('classroom_id')->from('classroom_users')->where('user_id', $userId);
-            })
+            $query->select('classroom_id')->from('classroom_users')->where('user_id', $userId);
+        })
             ->whereDate('end_date', '>=', $date->toDateString())
             ->whereTime('end_at', '>=', $time)
             ->whereTime('start_at', '<=', $time)
