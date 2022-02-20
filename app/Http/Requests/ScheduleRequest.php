@@ -29,7 +29,7 @@ class ScheduleRequest extends FormRequest
         return [
             'title' => 'nullable|string',
             'start_at' => 'required|date_format:H:i|before:end_at',
-            'start_date' => 'required|date_format:Y-m-d|before:end_at',
+            'start_date' => 'required|date_format:Y-m-d|before:end_date',
             'end_at' => 'required|date_format:H:i|after:start_at',
             'end_date' => 'required|date_format:Y-m-d|after:start_date',
             'days_of_week' => 'sometimes',
@@ -53,5 +53,11 @@ class ScheduleRequest extends FormRequest
                 'end_date' => date("Y-m-d", mktime(11, 14, 54, 8, 12, 2023)),
             ]);
         }
+        if ($this->days_of_week) {
+            $this->merge([
+                'days_of_week' => explode(',', str_replace(' ', '', $this->days_of_week)) ,
+            ]);
+        }
+
     }
 }
