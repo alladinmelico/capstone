@@ -53,11 +53,5 @@ class ScheduleRequest extends FormRequest
                 'end_date' => date("Y-m-d", mktime(11, 14, 54, 8, 12, 2023)),
             ]);
         }
-        if ($this->days_of_week) {
-            $this->merge([
-                'days_of_week' => explode(',', str_replace(' ', '', $this->days_of_week)) ,
-            ]);
-        }
-
     }
 }
