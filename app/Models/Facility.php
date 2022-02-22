@@ -24,4 +24,9 @@ class Facility extends Model
     {
         return config('constants.facilities.types.' . $value);
     }
+
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class);
+    }
 }

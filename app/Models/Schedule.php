@@ -39,13 +39,10 @@ class Schedule extends Model
         $date = Carbon::now()->setTimezone(config('app.timezone'));
         $time = $date->format('H:i:s');
 
-        $query->whereDate('end_date', '>=', $date->toDateString())
-            ->where('days', strtolower($date->englishDayOfWeek))
+        return $query->whereDate('end_date', '>=', $date->toDateString())
+            ->where('days_of_week', 'like', '%'.strtolower($date->englishDayOfWeek).'%')
             ->whereTime('end_at', '>=', $time)
             ->whereTime('start_at', '<=', $time);
-
-        return $query->where('end_date');
-        return Carbon::parse($value)->format('H:i:s');
     }
 
     public function getIsValidAttribute()
