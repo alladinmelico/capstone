@@ -2,9 +2,11 @@
 
 return [
     'departments' => [
-        1 => 'Electrical and Allied',
-        2 => 'Civil and Allied',
-        3 => 'Mechanical and Allied',
+        1 => 'Bachelor of Engineering and Allied Department',
+        2 => 'Basic Arts and Sciences Department',
+        4 => 'Civil and Allied Department',
+        5 => 'Electrical and Allied Department',
+        6 => 'Mechanical and Allied Department',
     ],
     'buildings' => [
         1 => 'Building 1',
