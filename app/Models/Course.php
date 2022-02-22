@@ -13,6 +13,7 @@ class Course extends Model
     protected $fillable = [
         'name',
         'code',
+        'department_id'
     ];
 
     protected $appends = ['department'];

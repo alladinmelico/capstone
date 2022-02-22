@@ -30,7 +30,9 @@ class FacilityRequest extends FormRequest
             'name' => 'required|string',
             'code' => 'required|string|unique:facilities,code,'.optional($this->facility)->id.',id',
             'capacity' => 'required|integer',
+            'svg_key' => 'required|string|unique:facilities,svg_key,'.optional($this->facility)->id.',id',
             'building_id' => ['required', Rule::in(array_keys(config('constants.buildings')))],
+            'department_id' => ['required', Rule::in(array_keys(config('constants.departments')))],
             'type' => ['required', Rule::in(array_keys(config('constants.facilities.types')))],
         ];
     }

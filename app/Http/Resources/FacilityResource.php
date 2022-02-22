@@ -22,6 +22,9 @@ class FacilityResource extends JsonResource
             'occupied' => $this->occupied,
             'type' => $this->type,
             'building_id' => $this->building_id,
+            'department_id' => $this->department_id,
+            'svg_key' => $this->svg_key,
+            'department' => config('constants.departments.' . $this->department_id),
             'building' => config('constants.buildings.' . $this->building_id),
             'schedules' => $this->whenLoaded('schedules'),
         ];
