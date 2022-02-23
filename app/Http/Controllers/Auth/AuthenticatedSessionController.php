@@ -8,6 +8,8 @@ use App\Models\Course;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
+use App\Http\Requests\ProfileRequest;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -41,16 +43,9 @@ class AuthenticatedSessionController extends Controller
         ]);
     }
 
-    public function storeProfile(Request $request)
+    public function storeProfile(ProfileRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'sometimes|string|min:3',
-            'email' => 'sometimes|email|ends_with:@tup.edu.ph',
-            'school_id' => 'required|string|unique:users|max:12|regex:/(TUPT-)\d\d-\d\d\d\d/i',
-            'course_id' => 'required|numeric|exists:courses,id',
-            'year' => 'required|numeric|between:1,4',
-            'section' => 'required|alpha|min:1',
-        ]);
+        $validated = $request->validated();
 
         $user = Auth::user();
         $user->changes_verified = false;
@@ -59,7 +54,7 @@ class AuthenticatedSessionController extends Controller
         }
         $user->update($validated);
 
-        return redirect(RouteServiceProvider::HOME);
+        return new UserResource($user->load('course'));
     }
 
     /**
