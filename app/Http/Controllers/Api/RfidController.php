@@ -56,6 +56,14 @@ class RfidController extends Controller
 
         $rfid->is_logged = true;
         $rfid->save();
-        return $rfid;
+        $rfid->load('user');
+        return [
+            'id' => $rfid->user_id,
+            'name' => $rfid->user->name,
+            'photo' => $rfid->user->avatar_original,
+            'school_id' => $rfid->user->school_id,
+            'start_at' => $schedule->first()->start_at,
+            'end_at' => $schedule->first()->end_at,
+        ];
     }
 }
