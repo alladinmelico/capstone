@@ -45,6 +45,16 @@ class Schedule extends Model
             ->whereTime('start_at', '<=', $time);
     }
 
+    public function scopeHasScheduleToday($query)
+    {
+        $date = Carbon::now()->setTimezone(config('app.timezone'));
+        $time = $date->format('H:i:s');
+
+        return $query->whereDate('end_date', '>=', $date->toDateString())
+            ->whereDate('start_date', '<=', $date->toDateString())
+            ->whereTime('start_at', '<=', $time);
+    }
+
     public function getIsValidAttribute()
     {
         $currDate = Carbon::now()->setTimezone(config('app.timezone'));
@@ -69,6 +79,14 @@ class Schedule extends Model
     public function getIsRecurringAttribute($value)
     {
         return !!$value;
+    }
+
+    public function getDiffEndTimeAttribute($currDate = null) {
+        if (!$currDate) {
+            $currDate = Carbon::now()->setTimezone(config('app.timezone'));
+        }
+        $endTime = Carbon::parse($this->end_at);
+        return [$endTime->diffInHours($currDate)];
     }
 
     public function facility()

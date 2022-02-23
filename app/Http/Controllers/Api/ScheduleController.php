@@ -86,4 +86,38 @@ class ScheduleController extends Controller
     {
         return new ScheduleResource($schedule->update(['deleted_at' => ''])->load('classroom'));
     }
+
+    public function dashboard()
+    {
+        $date = Carbon::now()->setTimezone(config('app.timezone'));
+        $time = $date->format('H:i:s');
+
+        $schedulesToday = Schedule::hasScheduleToday()
+            ->with(['classroom.users.rfid'])
+            ->get()
+            ->filter(function ($value, $key) use ($date) {
+                if ($value->is_recurring) {
+                    if ($value->repeat_by !== 'daily' && !str_contains($value->days_of_week, strtolower($date->englishDayOfWeek))) {
+                        return false;
+                    }
+                    return true;
+                }
+                return $value > 2;
+            });
+        // $schedulesNow = $schedulesToday->filter(function ($value, $key) {
+        //     return $value->end_time <= $time;
+        // });
+
+        return $schedulesToday;
+        $countUsers = $schedulesToday->pluck('classroom.users')->flatten()->count();
+        $presentStudents = $schedulesToday->pluck('classroom.users')->flatten()->filter(function ($value, $key) {
+            return !empty($value->rfid) && $value->rfid->is_logged === 1;
+        })->count();
+
+        return [
+            'present_students' => $presentStudents,
+            'count_schedules' => $schedulesToday->count(),
+            'count_scheduled_users' => $countUsers,
+        ];
+    }
 }

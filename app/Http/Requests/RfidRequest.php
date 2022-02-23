@@ -15,8 +15,7 @@ class RfidRequest extends FormRequest
      */
     public function authorize()
     {
-        $role = auth()->user()->role_id;
-        return $role === UserType::ADMIN || $role === UserType::FACULTY;
+        return true;
     }
 
     /**

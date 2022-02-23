@@ -56,6 +56,6 @@ class RfidController extends Controller
 
         $rfid->is_logged = true;
         $rfid->save();
-        return response('success', 200);
+        return $rfid;
     }
 }

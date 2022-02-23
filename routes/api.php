@@ -31,7 +31,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('hasProfile')->group(function () {
-        Route::apiResource('temperature', TemperatureController::class)->only('index');
+        Route::get('temperature', [TemperatureController::class, 'index']);
         Route::apiResource('facility', FacilityController::class);
         Route::apiResource('subject', SubjectController::class);
         Route::group(['middleware' => 'admin'], function () {
@@ -42,6 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('user', UserController::class);
         Route::apiResource('course', CourseController::class);
         Route::apiResource('rfid', RfidController::class);
+        Route::get('dashboard', [ScheduleController::class, 'dashboard']);
         Route::put('schedule/{schedule}/restore', [ScheduleController::class, 'restore']);
         Route::get('schedule/{schedule}/qr-code', [ScheduleController::class, 'qrCode'])->name('schedule.qr-code');
         Route::apiResource('schedule', ScheduleController::class);
