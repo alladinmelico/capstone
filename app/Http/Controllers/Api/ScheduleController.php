@@ -97,7 +97,7 @@ class ScheduleController extends Controller
             ->get()
             ->filter(function ($value, $key) use ($date) {
                 if ($value->is_recurring) {
-                    if ($value->repeat_by !== 'daily' && !str_contains($value->days_of_week, strtolower($date->englishDayOfWeek))) {
+                    if ($value->repeat_by !== 'daily' && !str_contains(json_encode($value->days_of_week), strtolower($date->englishDayOfWeek))) {
                         return false;
                     }
                     return true;
