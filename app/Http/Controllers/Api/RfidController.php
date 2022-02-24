@@ -46,7 +46,7 @@ class RfidController extends Controller
         if ($rfid->is_logged) {
             $rfid->is_logged = false;
             $rfid->save();
-            UserLogging::dispatch($rfid);
+            UserLogging::dispatch($rfid->load('user'));
             abort(204);
         }
 
