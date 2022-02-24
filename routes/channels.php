@@ -17,6 +17,10 @@ Broadcast::channel('user.{id}', function ($user, $id) {
     return true;
 });
 
+Broadcast::channel('dashboard', function () {
+    return true;
+});
+
 Broadcast::channel('course', function ($user) {
     return true;
 });
