@@ -43,6 +43,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('course', CourseController::class);
         Route::apiResource('rfid', RfidController::class);
         Route::get('dashboard', [ScheduleController::class, 'dashboard']);
+        Route::get('today', [ScheduleController::class, 'today']);
         Route::put('schedule/{schedule}/restore', [ScheduleController::class, 'restore']);
         Route::get('schedule/{schedule}/qr-code', [ScheduleController::class, 'qrCode'])->name('schedule.qr-code');
         Route::apiResource('schedule', ScheduleController::class);
