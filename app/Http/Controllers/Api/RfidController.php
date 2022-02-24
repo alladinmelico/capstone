@@ -11,7 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Resources\RfidResource;
 use App\Http\Requests\RfidRequest;
-use App\Events\DashboardUpdate;
+use App\Events\UserLogging;
 
 class RfidController extends Controller
 {
@@ -46,7 +46,7 @@ class RfidController extends Controller
         if ($rfid->is_logged) {
             $rfid->is_logged = false;
             $rfid->save();
-            DashboardUpdate::dispatch('log', ['is_logged' => false]);
+            UserLogging::dispatch($rfid);
             abort(204);
         }
 
@@ -60,7 +60,7 @@ class RfidController extends Controller
         $rfid->save();
         $rfid->load('user');
 
-        DashboardUpdate::dispatch('log', ['is_logged' => true]);
+        UserLogging::dispatch($rfid);
 
         return [
             'id' => $rfid->user_id,

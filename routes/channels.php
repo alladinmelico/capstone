@@ -21,6 +21,10 @@ Broadcast::channel('dashboard', function () {
     return true;
 });
 
+Broadcast::channel('logging', function () {
+    return true;
+});
+
 Broadcast::channel('course', function ($user) {
     return true;
 });
