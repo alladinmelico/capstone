@@ -40,7 +40,7 @@ class Schedule extends Model
         $time = $date->format('H:i:s');
 
         return $query->whereDate('end_date', '>=', $date->toDateString())
-            ->where('days_of_week', 'like', '%'.strtolower($date->englishDayOfWeek).'%')
+            ->whereDate('start_date', '<=', $date->toDateString())
             ->whereTime('end_at', '>=', $time)
             ->whereTime('start_at', '<=', $time);
     }
@@ -52,6 +52,17 @@ class Schedule extends Model
 
         return $query->whereDate('end_date', '>=', $date->toDateString())
             ->whereDate('start_date', '<=', $date->toDateString())
+            ->whereTime('start_at', '<=', $time);
+    }
+
+    public function scopeOverstayNow($query)
+    {
+        $date = Carbon::now()->setTimezone(config('app.timezone'));
+        $time = $date->format('H:i:s');
+
+        return $query->whereDate('end_date', '>=', $date->toDateString())
+            ->whereDate('start_date', '<=', $date->toDateString())
+            ->whereTime('end_at', '<=', $time)
             ->whereTime('start_at', '<=', $time);
     }
 
@@ -81,10 +92,8 @@ class Schedule extends Model
         return !!$value;
     }
 
-    public function getDiffEndTimeAttribute($currDate = null) {
-        if (!$currDate) {
-            $currDate = Carbon::now()->setTimezone(config('app.timezone'));
-        }
+    public function getDiffEndTimeAttribute() {
+        $currDate = Carbon::now()->setTimezone(config('app.timezone'));
         $endTime = Carbon::parse($this->end_at);
         return [$endTime->diffInHours($currDate)];
     }

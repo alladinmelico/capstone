@@ -104,20 +104,25 @@ class ScheduleController extends Controller
                 }
                 return $value > 2;
             });
-        // $schedulesNow = $schedulesToday->filter(function ($value, $key) {
-        //     return $value->end_time <= $time;
-        // });
 
-        return $schedulesToday;
+        $schedulesNow = $schedulesToday->filter(function ($value, $key) use ($date) {
+            return $date->greaterThan($value->start_at) && $date->lessThan($value->end_at);
+        });
+
+        $schedulesOverstay = $schedulesToday->filter(function ($value, $key) use ($date) {
+            return $date->greaterThan($value->end_at);
+        });
+
         $countUsers = $schedulesToday->pluck('classroom.users')->flatten()->count();
-        $presentStudents = $schedulesToday->pluck('classroom.users')->flatten()->filter(function ($value, $key) {
+        $presentStudents = $schedulesNow->pluck('classroom.users')->flatten()->filter(function ($value, $key) {
             return !empty($value->rfid) && $value->rfid->is_logged === 1;
         })->count();
 
         return [
             'present_students' => $presentStudents,
-            'count_schedules' => $schedulesToday->count(),
-            'count_scheduled_users' => $countUsers,
+            'schedules_today' => $schedulesToday->values(),
+            'schedules_now' => $schedulesNow->values(),
+            'schedules_overstay' => $schedulesOverstay->values(),
         ];
     }
 }
