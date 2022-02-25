@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 
 class ProfileRequest extends FormRequest
 {
@@ -23,13 +24,13 @@ class ProfileRequest extends FormRequest
      */
     public function rules()
     {
+        Log::alert($this);
         return [
-            'name' => 'sometimes|string|min:3',
-            'email' => 'sometimes|email|ends_with:@tup.edu.ph',
-            'school_id' => 'sometimes|string|max:12|regex:/(TUPT-)\d\d-\d\d\d\d/i',
+            'name' => 'required|string|min:3',
+            'school_id' => 'required|string|max:12|regex:/(TUPT-)\d\d-\d\d\d\d/i|unique:users,school_id,'.auth()->user()->id.',id',
             'course_id' => 'sometimes|numeric|exists:courses,id',
-            'year' => 'sometimes|numeric|between:1,4',
-            // 'section' => 'sometimes|numeric|exists:sections,id',
+            'year' => 'sometimes|numeric|between:1,5',
+            'section_id' => 'sometimes|numeric|exists:sections,id',
         ];
     }
 }
