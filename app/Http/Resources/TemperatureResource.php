@@ -19,7 +19,7 @@ class TemperatureResource extends JsonResource
             'temperature' => $this->temperature,
             'created_at' => $this->created_at,
             'user_id' => $this->user_id,
-            'user_name' => $this->user->name,
+            'user' => $this->whenLoaded('user'),
         ];
     }
 }

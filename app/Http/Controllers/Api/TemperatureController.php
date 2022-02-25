@@ -13,7 +13,7 @@ class TemperatureController extends Controller
 
     public function index(Request $request)
     {
-        return TemperatureResource::collection(Temperature::paginate($request->limit));
+        return TemperatureResource::collection(Temperature::with('user')->paginate($request->limit));
     }
 
     public function store(TemperatureRequest $request)
@@ -23,7 +23,7 @@ class TemperatureController extends Controller
 
     public function show(Temperature $temperature)
     {
-        return new TemperatureResource($temperature);
+        return new TemperatureResource($temperature->load('user'));
     }
 
     public function destroy(Temperature $temperature)
