@@ -31,6 +31,7 @@ class ClassroomController extends Controller
                 })
                 ->with(['subject', 'users'])
                 ->withTrashed()
+                ->orderBy('updated_at', 'desc')
                 ->paginate($request->limit)
         );
     }

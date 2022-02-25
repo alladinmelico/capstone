@@ -25,6 +25,10 @@ Broadcast::channel('logging', function () {
     return true;
 });
 
+Broadcast::channel('temperature', function () {
+    return true;
+});
+
 Broadcast::channel('course', function ($user) {
     return true;
 });

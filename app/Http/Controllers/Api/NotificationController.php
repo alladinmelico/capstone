@@ -18,7 +18,7 @@ class NotificationController extends Controller
      */
     public function index(Request $request)
     {
-        return NotificationResource::collection(Notification::for(auth()->user())->get());
+        return NotificationResource::collection(Notification::for(auth()->user())->orderBy('updated_at', 'desc')->get());
     }
 
     /**

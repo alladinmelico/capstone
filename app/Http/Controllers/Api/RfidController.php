@@ -17,7 +17,7 @@ class RfidController extends Controller
 {
     public function index(Request $request)
     {
-        return RfidResource::collection(Rfid::with(['user'])->paginate($request->limit));
+        return RfidResource::collection(Rfid::with(['user'])->orderBy('updated_at', 'desc')->paginate($request->limit));
     }
 
     public function store(RfidRequest $request)

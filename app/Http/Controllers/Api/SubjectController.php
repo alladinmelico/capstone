@@ -13,7 +13,7 @@ class SubjectController extends Controller
 
     public function index(Request $request)
     {
-        return SubjectResource::collection(Subject::paginate($request->limit));
+        return SubjectResource::collection(Subject::orderBy('updated_at', 'desc')->paginate($request->limit));
     }
 
     public function store(SubjectRequest $request)

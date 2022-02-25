@@ -20,6 +20,7 @@ class CourseController extends Controller
     {
         return CourseResource::collection(Course::where('name', 'like', '%'. $request->search . '%')
             ->orWhere('code', 'like', '%'. $request->search . '%')
+            ->orderBy('updated_at', 'desc')
             ->paginate($request->limit)
         );
     }

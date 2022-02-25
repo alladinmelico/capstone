@@ -13,7 +13,7 @@ class SectionController extends Controller
 
     public function index(Request $request)
     {
-        return SectionResource::collection(Section::with(['president', 'faculty'])->paginate($request->limit));
+        return SectionResource::collection(Section::with(['president', 'faculty'])->orderBy('updated_at', 'desc')->paginate($request->limit));
     }
 
     public function store(SectionRequest $request)
