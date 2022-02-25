@@ -23,7 +23,7 @@ class SectionController extends Controller
 
     public function show(Section $section)
     {
-        return new SectionResource($section);
+        return new SectionResource($section->load(['president', 'faculty']));
     }
 
     public function update(SectionRequest $request, Section $section)

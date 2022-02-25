@@ -19,8 +19,8 @@ class SectionResource extends JsonResource
             'name' => $this->name,
             'president_name' => $this->president_name,
             'faculty_name' => $this->faculty_name,
-            'president' => $this->president,
-            'faculty' => $this->faculty,
+            'president' => $this->whenLoaded('president'),
+            'faculty' => $this->whenLoaded('faculty'),
         ];
     }
 }

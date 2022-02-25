@@ -18,7 +18,7 @@ class RfidResource extends JsonResource
             'id' => $this->id,
             'value' => $this->value,
             'is_logged' => $this->is_logged,
-            'user' => $this->user,
+            'user' => $this->whenLoaded('user'),
             'user_name' => $this->user->name
         ];
     }

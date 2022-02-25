@@ -17,7 +17,7 @@ class RfidController extends Controller
 {
     public function index(Request $request)
     {
-        return RfidResource::collection(Rfid::paginate($request->limit));
+        return RfidResource::collection(Rfid::with(['user'])->paginate($request->limit));
     }
 
     public function store(RfidRequest $request)
@@ -27,7 +27,7 @@ class RfidController extends Controller
 
     public function show(Rfid $rfid)
     {
-        return new RfidResource($rfid);
+        return new RfidResource($rfid->load('user'));
     }
 
     public function update(RfidRequest $request, Rfid $rfid)
