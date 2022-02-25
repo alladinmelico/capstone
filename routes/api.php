@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\TemperatureController;
 use App\Http\Controllers\Api\SectionController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Http\Request;
@@ -39,6 +40,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('user-approve/{user}', [UserController::class, 'userApprove'])->name('user-approve');
         });
         Route::apiResource('section', SectionController::class);
+        Route::put('user/{user}/verify', [UserController::class, 'verify']);
         Route::apiResource('user', UserController::class);
         Route::apiResource('course', CourseController::class);
         Route::apiResource('rfid', RfidController::class);
@@ -59,8 +61,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('departments', function () {
             return mapToIdValue(config('constants.departments'));
         });
-        // Route::get('notifications/{notification}', [NotificationController::class, 'show']);
-        // Route::delete('notifications/{notification}', [NotificationController::class, 'destroy']);
+        Route::group(['prefix' => 'notifications'], function () {
+            Route::get('/', [NotificationController::class, 'index']);
+            Route::delete('/{notification}', [NotificationController::class, 'destroy']);
+            Route::post('/{notification}/read', [NotificationController::class, 'read']);
+            Route::post('/{notification}/unread', [NotificationController::class, 'unread']);
+            Route::post('/mark-all-read', [NotificationController::class, 'markAllRead']);
+            Route::get('/unread-count', [NotificationController::class, 'unreadNotifCount']);
+        });
     });
 
     Route::get('/profile-registration', [AuthenticatedSessionController::class, 'profile'])

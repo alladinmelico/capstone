@@ -44,6 +44,14 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
+    public function verify(Request $request, User $user)
+    {
+        $user->changes_verified = True;
+        $user->verified_by = auth()->user()->id;
+        $user->save();
+        return new UserResource($user);
+    }
+
     public function destroy(User $user)
     {
         return $user->delete();
