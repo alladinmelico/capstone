@@ -14,6 +14,7 @@ class ScheduleCreated extends Notification implements ShouldQueue
     use Queueable;
     use BroadcastsNotification;
 
+    private $type = 'schedule';
     public $schedule;
 
     /**
@@ -24,20 +25,6 @@ class ScheduleCreated extends Notification implements ShouldQueue
     public function __construct(Schedule $schedule)
     {
         $this->schedule = $schedule;
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            'message' => 'A new schedule created.',
-            'url' => '',
-        ];
     }
 
     /**
@@ -56,5 +43,27 @@ class ScheduleCreated extends Notification implements ShouldQueue
     protected function message(): string
     {
         return 'A new schedule created';
+    }
+
+    protected function url(): string
+    {
+        return 'schedule/' . $this->id;
+    }
+
+    public function toDatabase($notifiable)
+    {
+        return $this->data($notifiable);
+    }
+
+    public function data($notifiable)
+    {
+        return [
+            'id'                => $this->id,
+            'type'              => $this->type,
+            'message'           => $this->schedule->title,
+            'notifiable_id'     => $notifiable->id,
+            'timestamp'         => now()->toISOString(),
+            'model'             => $this->schedule
+        ];
     }
 }

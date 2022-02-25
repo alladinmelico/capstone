@@ -39,7 +39,6 @@ class ScheduleRequest extends FormRequest
             'note' => 'nullable',
             'facility_id' => 'required|numeric|exists:facilities,id',
             'classroom_id' => 'required|numeric|exists:classrooms,id',
-            'user_id' => 'required|numeric|exists:users,id',
             'is_end_of_sem' => 'sometimes|boolean',
             'attachment' => 'sometimes|file|mimes:jpg,jpeg,bmp,png,pdf',
             'users' => 'nullable',

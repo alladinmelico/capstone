@@ -46,6 +46,8 @@ class ScheduleController extends Controller
     public function store(ScheduleRequest $request)
     {
         $data = $request->validated();
+        $user = auth()->user();
+        $data['user_id'] = $user->id;
 
         if (!empty($data['users'])) {
             // TODO: Batches
@@ -58,8 +60,6 @@ class ScheduleController extends Controller
         }
 
         $schedule = Schedule::create($data);
-
-        $user = User::find($data['user_id']);
         $user->notify(new ScheduleCreated($schedule));
 
         return new ScheduleResource($schedule->load('classroom'));

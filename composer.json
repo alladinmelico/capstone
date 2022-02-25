@@ -20,6 +20,7 @@
         "league/flysystem-aws-s3-v3": "*",
         "pusher/pusher-php-server": "^7.0",
         "spatie/laravel-settings": "^2.3",
+        "staudenmeir/eloquent-json-relations": "^1.1",
         "tightenco/ziggy": "^1.0"
     },
     "require-dev": {
