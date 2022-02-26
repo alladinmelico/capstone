@@ -22,7 +22,7 @@ class UserController extends Controller
                         $query->select('user_id')->from('classroom_users')->where('classroom_id', $request->classroom_id);
                     });
                 })
-                ->with(['course'])
+                ->with(['course', 'section'])
                 ->orderBy('updated_at', 'desc')
                 ->paginate($request->limit)
         );
