@@ -35,7 +35,7 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        return new UserResource($user->load(['course']));
+        return new UserResource($user->load(['course', 'section']));
     }
 
     public function update(UserRequest $request, User $user)
