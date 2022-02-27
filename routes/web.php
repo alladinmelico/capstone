@@ -1,20 +1,8 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\ClassroomController;
-use App\Http\Controllers\CourseController;
-use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\RfidController;
 use App\Http\Controllers\ScheduleController;
-use App\Http\Controllers\SectionController;
-use App\Http\Controllers\TemperatureController;
-use App\Http\Controllers\UserController;
-use App\Models\Schedule;
-use App\Models\User;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,4 +25,10 @@ Route::get('/auth/redirect', function () {
 
 Route::get('/auth/callback', [RegisteredUserController::class, 'handleGoogleCallback']);
 
-Route::get('/schedule/{schedule}',[ScheduleController::class, 'check']);
+Route::get('/schedule/{schedule}', [ScheduleController::class, 'check']);
+
+Route::get('/sample', function () {
+    $pdf = PDF::loadView('reports.temperature');
+    return $pdf->download('pdfview.pdf');
+    return view('reports.temperature');
+});
