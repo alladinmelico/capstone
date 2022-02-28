@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ScheduleResource;
 use App\Models\Classroom;
 use App\Models\Facility;
+use App\Models\Batch;
 use App\Models\Schedule;
 use App\Models\Subject;
 use App\Models\User;
@@ -49,10 +50,6 @@ class ScheduleController extends Controller
         $user = auth()->user();
         $data['user_id'] = $user->id;
 
-        if (!empty($data['users'])) {
-            // TODO: Batches
-        }
-
         if($request->hasFile('attachment'))
         {
             $path = $request->file('attachment')->store('attachments', 's3');
@@ -62,7 +59,25 @@ class ScheduleController extends Controller
         $schedule = Schedule::create($data);
         $user->notify(new ScheduleCreated($schedule));
 
-        return new ScheduleResource($schedule->load('classroom'));
+
+        if (!empty($data['users'])) {
+            $schedule->batches()->saveMany($this->formatUsers($data['users']));
+        }
+
+        return new ScheduleResource($schedule->load(['classroom', 'batches']));
+    }
+
+    public function formatUsers ($users) {
+        $usersArr = [];
+        for ($i=0; $i < count($users); $i++) {
+            for ($j=0; $j < count($users[$i]); $j++) {
+                $usersArr[] = new Batch([
+                    'user_id' => $users[$i][$j],
+                    'batch' => $i
+                ]);
+            }
+        }
+        return $usersArr;
     }
 
     public function show(Schedule $schedule)
@@ -73,8 +88,13 @@ class ScheduleController extends Controller
 
     public function update(ScheduleRequest $request, Schedule $schedule)
     {
-        $schedule->update($request->validated());
-        return new ScheduleResource($schedule->load('classroom'));
+        $data = $request->validated();
+        $schedule->update($data);
+        if (!empty($data['users'])) {
+            $schedule->batches()->delete();
+            $schedule->batches()->saveMany($this->formatUsers($data['users']));
+        }
+        return new ScheduleResource($schedule->load(['classroom', 'batches']));
     }
 
     public function destroy(Schedule $schedule)

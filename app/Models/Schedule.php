@@ -113,6 +113,11 @@ class Schedule extends Model
         return $this->belongsTo(Classroom::class);
     }
 
+    public function batches()
+    {
+        return $this->hasMany(Batch::class);
+    }
+
     public static function hasSchedule($userId)
     {
         $date = Carbon::now()->setTimezone(config('app.timezone'));
