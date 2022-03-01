@@ -3,18 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ScheduleRequest;
 use App\Http\Resources\ScheduleResource;
-use App\Models\Classroom;
-use App\Models\Facility;
 use App\Models\Batch;
 use App\Models\Schedule;
-use App\Models\Subject;
 use App\Models\User;
 use App\Notifications\ScheduleCreated;
-use App\Http\Requests\ScheduleRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 
 class ScheduleController extends Controller
@@ -50,30 +46,36 @@ class ScheduleController extends Controller
         $user = auth()->user();
         $data['user_id'] = $user->id;
 
-        if($request->hasFile('attachment'))
-        {
+        if ($request->hasFile('attachment')) {
             $path = $request->file('attachment')->store('attachments', 's3');
             $data['attachment'] = Storage::disk('s3')->url($path);
         }
 
         $schedule = Schedule::create($data);
-        $user->notify(new ScheduleCreated($schedule));
-
 
         if (!empty($data['users'])) {
             $schedule->batches()->saveMany($this->formatUsers($data['users']));
+            $schedule->batches->each(function ($item, $key) use ($schedule) {
+                $item->user->notify(new ScheduleCreated($schedule));
+            });
+            $classroom = $schedule->classroom;
+
+            if (!empty($classroom)) {
+                $classroom->section->faculty->notify(new ScheduleCreated($schedule));
+            }
         }
 
         return new ScheduleResource($schedule->load(['classroom', 'batches']));
     }
 
-    public function formatUsers ($users) {
+    public function formatUsers($users)
+    {
         $usersArr = [];
-        for ($i=0; $i < count($users); $i++) {
-            for ($j=0; $j < count($users[$i]); $j++) {
+        for ($i = 0; $i < count($users); $i++) {
+            for ($j = 0; $j < count($users[$i]); $j++) {
                 $usersArr[] = new Batch([
                     'user_id' => $users[$i][$j],
-                    'batch' => $i
+                    'batch' => $i,
                 ]);
             }
         }
@@ -82,7 +84,7 @@ class ScheduleController extends Controller
 
     public function show(Schedule $schedule)
     {
-        $schedule->load(['classroom']);
+        $schedule->load(['classroom', 'batches']);
         return new ScheduleResource($schedule);
     }
 
@@ -107,22 +109,23 @@ class ScheduleController extends Controller
         return new ScheduleResource($schedule->update(['deleted_at' => ''])->load('classroom'));
     }
 
-    public function today() {
+    public function today()
+    {
         $date = Carbon::now()->setTimezone(config('app.timezone'));
         $time = $date->format('H:i:s');
 
         return ScheduleResource::collection(Schedule::hasScheduleToday()
-            ->with(['classroom.users.rfid'])
-            ->get()
-            ->filter(function ($value, $key) use ($date) {
-                if ($value->is_recurring) {
-                    if ($value->repeat_by !== 'daily' && !str_contains(json_encode($value->days_of_week), strtolower($date->englishDayOfWeek))) {
-                        return false;
+                ->with(['classroom.users.rfid'])
+                ->get()
+                ->filter(function ($value, $key) use ($date) {
+                    if ($value->is_recurring) {
+                        if ($value->repeat_by !== 'daily' && !str_contains(json_encode($value->days_of_week), strtolower($date->englishDayOfWeek))) {
+                            return false;
+                        }
+                        return true;
                     }
-                    return true;
-                }
-                return $value > 2;
-            }));
+                    return $value > 2;
+                }));
     }
 
     public function dashboard()

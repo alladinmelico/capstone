@@ -19,7 +19,8 @@ class Classroom extends Model
         'description',
         'section',
         'invite_code',
-        'subject_id'
+        'subject_id',
+        'section_id'
     ];
 
     public function users()
@@ -35,6 +36,11 @@ class Classroom extends Model
     public function schedules()
     {
         return $this->hasMany(Schedule::class);
+    }
+
+    public function section()
+    {
+        return $this->belongsTo(Section::class);
     }
 
 }

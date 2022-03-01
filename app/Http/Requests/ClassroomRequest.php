@@ -27,9 +27,9 @@ class ClassroomRequest extends FormRequest
             'name' => 'nullable|string',
             'description_heading' => 'nullable|string',
             'description' => 'nullable|string',
-            'section' => 'nullable|string',
             'google_classroom_id' => 'nullable|string',
             'subject_id' => 'nullable|numeric|exists:subjects,id',
+            'section_id' => 'nullable|numeric|exists:sections,id',
             'users' => 'nullable|array',
         ];
     }
