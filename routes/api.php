@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\TemperatureController;
 use App\Http\Controllers\Api\SectionController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\CommunicationController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -36,6 +37,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('facility', FacilityController::class);
         Route::apiResource('subject', SubjectController::class);
         Route::group(['middleware' => 'admin'], function () {
+            Route::post('admin-report', [CommunicationController::class, 'report']);
+            Route::post('bypass', [CommunicationController::class, 'bypass']);
+            Route::post('policy', [CommunicationController::class, 'policy']);
             Route::get('user-requests', [UserController::class, 'userRequests'])->name('user-requests');
             Route::post('user-approve/{user}', [UserController::class, 'userApprove'])->name('user-approve');
         });
