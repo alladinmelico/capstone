@@ -48,7 +48,7 @@ class ClassroomController extends Controller
 
         $user = auth()->user();
         $user->notify(new ClassroomCreated($classroom));
-        return new ClassroomResource($classroom);
+        return new ClassroomResource($classroom->load('section'));
     }
 
     /**
@@ -59,7 +59,7 @@ class ClassroomController extends Controller
      */
     public function show(Classroom $classroom)
     {
-        return new ClassroomResource($classroom->load(['users', 'schedules', 'subject']));
+        return new ClassroomResource($classroom->load(['users', 'schedules', 'subject', 'section']));
     }
 
     /**
@@ -77,7 +77,7 @@ class ClassroomController extends Controller
 
         $user = auth()->user();
         $user->notify(new ClassroomCreated($classroom));
-        return new ClassroomResource($classroom);
+        return new ClassroomResource($classroom->load('section'));
     }
 
     /**
