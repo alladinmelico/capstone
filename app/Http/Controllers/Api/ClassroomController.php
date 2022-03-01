@@ -29,7 +29,7 @@ class ClassroomController extends Controller
                         $query->select('classroom_id')->from('classroom_users')->where('user_id', auth()->user()->id);
                     });
                 })
-                ->with(['subject', 'users'])
+                ->with(['subject', 'users', 'section'])
                 ->withTrashed()
                 ->orderBy('updated_at', 'desc')
                 ->paginate($request->limit)
