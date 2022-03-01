@@ -20,6 +20,7 @@ class ClassroomResource extends JsonResource
             'description_heading' => $this->description_heading,
             'google_classroom_id' => $this->google_classroom_id,
             'name' => $this->name,
+            'section_id' => $this->section_id,
             'section' => $this->whenLoaded('section'),
             'invite_code' => $this->invite_code,
             'subject_id' => $this->subject_id,
