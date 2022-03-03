@@ -25,7 +25,7 @@ class ScheduleController extends Controller
                 return $query->whereIn('classroom_id', function ($query) use ($userId) {
                     $query->select('classroom_id')->from('classroom_users')->where('user_id', $userId);
                 });
-            })->orderBy('updated_at', 'desc')->paginate($request->limit)
+            })->with(['classroom', 'batches', 'facility'])->orderBy('updated_at', 'desc')->paginate($request->limit)
         );
     }
 
@@ -84,7 +84,7 @@ class ScheduleController extends Controller
 
     public function show(Schedule $schedule)
     {
-        $schedule->load(['classroom', 'batches']);
+        $schedule->load(['classroom', 'batches', 'facility']);
         return new ScheduleResource($schedule);
     }
 
@@ -96,7 +96,7 @@ class ScheduleController extends Controller
             $schedule->batches()->delete();
             $schedule->batches()->saveMany($this->formatUsers($data['users']));
         }
-        return new ScheduleResource($schedule->load(['classroom', 'batches']));
+        return new ScheduleResource($schedule->load(['classroom', 'batches', 'facility']));
     }
 
     public function destroy(Schedule $schedule)
