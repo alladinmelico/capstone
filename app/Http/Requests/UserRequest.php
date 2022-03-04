@@ -30,10 +30,7 @@ class UserRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|email',
             'year' => 'required|integer',
-            'section' => 'required|string|max:255' ,
-            'google_id' => 'nullable|string|max:255',
-            'avatar' => 'nullable|string|max:255',
-            'avatar_original' => 'nullable|string|max:255',
+            'section_id' => 'sometimes|numeric|exists:sections,id',
             'course_id' => 'required|numeric|exists:courses,id',
             'school_id' => 'required|string|max:255',
             'verified_teacher' => 'nullable|boolean'
