@@ -25,7 +25,7 @@ class ScheduleController extends Controller
                 return $query->whereIn('classroom_id', function ($query) use ($userId) {
                     $query->select('classroom_id')->from('classroom_users')->where('user_id', $userId);
                 });
-            })->with(['classroom', 'batches', 'facility'])->orderBy('updated_at', 'desc')->paginate($request->limit)
+            })->with(['classroom', 'batches', 'facility', 'user'])->orderBy('updated_at', 'desc')->paginate($request->limit)
         );
     }
 
@@ -46,9 +46,14 @@ class ScheduleController extends Controller
         $user = auth()->user();
         $data['user_id'] = $user->id;
 
+        return $request->file('attachment');
+
         if ($request->hasFile('attachment')) {
             $path = $request->file('attachment')->store('attachments', 's3');
             $data['attachment'] = Storage::disk('s3')->url($path);
+        } else if ($request->has('attachment_string')) {
+
+            Storage::disk('s3')->put('attachments/',base64_decode($request->attachment_string));
         }
 
         $schedule = Schedule::create($data);
@@ -65,7 +70,7 @@ class ScheduleController extends Controller
             }
         }
 
-        return new ScheduleResource($schedule->load(['classroom', 'batches']));
+        return new ScheduleResource($schedule->load(['classroom', 'batches', 'user']));
     }
 
     public function formatUsers($users)
@@ -84,7 +89,7 @@ class ScheduleController extends Controller
 
     public function show(Schedule $schedule)
     {
-        $schedule->load(['classroom', 'batches', 'facility']);
+        $schedule->load(['classroom', 'batches', 'facility', 'user']);
         return new ScheduleResource($schedule);
     }
 
@@ -96,7 +101,7 @@ class ScheduleController extends Controller
             $schedule->batches()->delete();
             $schedule->batches()->saveMany($this->formatUsers($data['users']));
         }
-        return new ScheduleResource($schedule->load(['classroom', 'batches', 'facility']));
+        return new ScheduleResource($schedule->load(['classroom', 'batches', 'facility', 'user']));
     }
 
     public function destroy(Schedule $schedule)
