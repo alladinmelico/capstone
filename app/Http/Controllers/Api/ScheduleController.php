@@ -49,8 +49,10 @@ class ScheduleController extends Controller
         if ($request->hasFile('attachment')) {
             $path = $request->file('attachment')->store('attachments', 's3');
             $data['attachment'] = Storage::disk('s3')->url($path);
-        } else if ($request->has('attachment_string')) {
-            Storage::disk('s3')->put('attachments/' . $data['title'] . time() . '.pdf',base64_decode($request->attachment_string));
+        } else if (!empty($data['attachment_string'])) {
+            $fileName = 'attachments/' . uniqid(preg_replace('/\s+/', '', $data['title'])) . '.pdf';
+            Storage::disk('s3')->put($fileName,base64_decode($request->attachment_string));
+            $data['attachment'] = Storage::disk('s3')->url($fileName);
         }
 
         $schedule = Schedule::create($data);
