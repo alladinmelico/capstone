@@ -25,7 +25,7 @@ class ScheduleController extends Controller
                 return $query->whereIn('classroom_id', function ($query) use ($userId) {
                     $query->select('classroom_id')->from('classroom_users')->where('user_id', $userId);
                 });
-            })->with(['classroom', 'batches', 'facility', 'user'])->orderBy('updated_at', 'desc')->paginate($request->limit)
+            })->filterAccess()->with(['classroom', 'batches', 'facility', 'user'])->orderBy('updated_at', 'desc')->paginate($request->limit)
         );
     }
 

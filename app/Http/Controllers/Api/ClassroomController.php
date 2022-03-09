@@ -18,13 +18,15 @@ class ClassroomController extends Controller
      */
     public function index(Request $request)
     {
+        $user = auth()->user();
+
         return ClassroomResource::collection(
                 Classroom::when($request->search, function ($query) {
                     return $request->where('name', 'like', '%' . request()->search . '%')
                         ->orWhere('description_heading', 'like', '%' . request()->search . '%')
                         ->orWhere('section', 'like', '%' . request()->search . '%');
                 })
-                ->when($request->user_id, function ($query) {
+                ->when($user->role_id !== 1, function ($query) {
                     return $query->whereIn('id', function ($query) {
                         $query->select('classroom_id')->from('classroom_users')->where('user_id', auth()->user()->id);
                     });

@@ -34,6 +34,16 @@ class Schedule extends Model
         'days_of_week' => 'json',
     ];
 
+    public function scopeFilterAccess($query)
+    {
+        $user = auth()->user();
+
+        if ($user->role_id !== 1) {
+            return $query->whereUserId($user->id);
+        }
+        return $query;
+    }
+
     public function scopeHasScheduleNow($query)
     {
         $date = Carbon::now()->setTimezone(config('app.timezone'));
