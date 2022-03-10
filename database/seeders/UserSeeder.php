@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Section;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
@@ -15,7 +16,8 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::factory()
-            ->times(20)
+            ->times(300)
+            ->for(Section::factory()->create())
             ->create();
     }
 }

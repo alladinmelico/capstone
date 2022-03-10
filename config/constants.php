@@ -9,9 +9,10 @@ return [
         5 => 'Mechanical and Allied Department',
     ],
     'buildings' => [
-        1 => 'Building 1',
-        2 => 'Building 2',
-        3 => 'Building 3',
+        1 => 'Information Technology Building',
+        2 => 'Basic Arts & Sciences Department Building',
+        3 => 'Technology Building',
+        3 => 'Italian Building',
     ],
     'facilities' => [
         'types' => [

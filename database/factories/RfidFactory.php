@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Rfid;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class RfidFactory extends Factory
@@ -22,7 +23,9 @@ class RfidFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'value' => $this->faker->numberBetween($min = 10000, $max = 99999),
+            'is_logged' => $this->faker->boolean(),
+            'user_id' => User::inRandomOrder()->first()->id
         ];
     }
 }

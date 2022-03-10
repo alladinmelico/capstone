@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Facility;
 use Illuminate\Database\Seeder;
 
 class FacilitySeeder extends Seeder
@@ -13,6 +14,9 @@ class FacilitySeeder extends Seeder
      */
     public function run()
     {
-        //
+        Facility::factory()
+            ->count(20)
+            ->hasSchedules(10)
+            ->create();
     }
 }

@@ -22,7 +22,8 @@ class SubjectFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => $this->faker->sentence(),
+            'code' => $this->faker->word() . mt_rand(0, 99),
         ];
     }
 }

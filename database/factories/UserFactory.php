@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Course;
+use App\Models\Section;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -32,8 +33,9 @@ class UserFactory extends Factory
             'course_id' => Course::inRandomOrder()->first()->id,
             'school_id' => $this->faker->randomNumber(),
             'year' => $this->faker->randomElement([1, 2, 3, 4]),
-            'section' => $this->faker->randomElement(['A', 'B', 'C', 'D']),
             'role_id' => $this->faker->randomElement(User::ROLES),
+            'avatar' => 'https://ui-avatars.com/api/?name=' . $this->faker->name(),
+            'avatar_original' => 'https://ui-avatars.com/api/?name=' . $this->faker->name(),
         ];
     }
 

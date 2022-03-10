@@ -23,7 +23,7 @@ class TemperatureFactory extends Factory
     public function definition()
     {
         return [
-            'temperature' => $this->faker->randomFloat(null, 36, 38),
+            'temperature' => $this->faker->randomFloat(null, 35, 38),
             'user_id' => User::inRandomOrder()->first()->id,
         ];
     }

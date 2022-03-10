@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\Rfid;
 
 class RfidSeeder extends Seeder
 {
@@ -13,6 +14,6 @@ class RfidSeeder extends Seeder
      */
     public function run()
     {
-        //
+        Rfid::factory()->count(200)->create();
     }
 }

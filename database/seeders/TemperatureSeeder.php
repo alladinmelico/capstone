@@ -17,7 +17,7 @@ class TemperatureSeeder extends Seeder
     {
         Temperature::factory()
             ->for(User::inRandomOrder()->first())
-            ->times(40)
+            ->times(400)
             ->create();
     }
 }

@@ -23,9 +23,9 @@ class SectionFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->word(),
-            'president_id' => User::inRandomOrder()->first()->id,
-            'faculty_id' => User::inRandomOrder()->first()->id,
+            'name' => $this->faker->sentence(),
+            'president_id' => User::factory(),
+            'faculty_id' => User::factory(),
         ];
     }
 }

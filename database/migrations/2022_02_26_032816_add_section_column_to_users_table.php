@@ -14,7 +14,7 @@ class AddSectionColumnToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('section_id');
+            $table->foreignId('section_id')->nullable();
         });
     }
 

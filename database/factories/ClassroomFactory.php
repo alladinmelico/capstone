@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Classroom;
-use App\Models\Schedule;
+use App\Models\Section;
 use App\Models\Subject;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -27,9 +27,9 @@ class ClassroomFactory extends Factory
             'name' => $this->faker->sentence(),
             'description_heading' => $this->faker->sentence(),
             'description' => $this->faker->sentence(),
-            'section' => $this->faker->word(),
-            'invite_code' => $this->faker->word(),
+            'invite_code' => $this->faker->word() . mt_rand(0, 99),
             'subject_id' => Subject::inRandomOrder()->first()->id,
+            'section_id' => Section::inRandomOrder()->first()->id,
         ];
     }
 }
