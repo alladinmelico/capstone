@@ -27,13 +27,13 @@
         "laravel-echo": "^1.11.1",
         "lodash": "^4.17.19",
         "postcss": "^8.2.13",
-        "postcss-import": "^14.0.1",
         "pusher-js": "^7.0.3",
         "tailwindcss": "^2.1.2",
         "vue": "^3.0.5",
         "vue-loader": "^16.1.2"
     },
     "dependencies": {
+        "postcss-import": "^14.0.2",
         "@googleapis/classroom": "^0.3.1",
         "@heroicons/vue": "^1.0.3",
         "@jobinsjp/vue3-datatable": "^1.0.12",
