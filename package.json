@@ -29,11 +29,9 @@
         "postcss": "^8.2.13",
         "pusher-js": "^7.0.3",
         "vue": "^3.0.5",
-        "vue-loader": "^16.1.2"
+        "vue-loader": "^16.8.3"
     },
     "dependencies": {
-        "tailwindcss": "^2.1.2",
-        "postcss-import": "^14.0.2",
         "@googleapis/classroom": "^0.3.1",
         "@heroicons/vue": "^1.0.3",
         "@jobinsjp/vue3-datatable": "^1.0.12",
@@ -46,6 +44,8 @@
         "laravel-mix": "^6.0.25",
         "loadash": "^1.0.0",
         "portal-vue": "^3.0.0-beta.0",
+        "postcss-import": "^14.0.2",
+        "tailwindcss": "^2.1.2",
         "vue-chart-3": "^3.0.3",
         "vue-multiselect": "^3.0.0-alpha.2",
         "vue3-datepicker": "^0.2.5",
