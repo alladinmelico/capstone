@@ -111,7 +111,7 @@ class RegisteredUserController extends Controller
                 return response()->json($validator->errors(), 422);
             }
 
-            if (str_contains(config('constants.admins'), $data['email'])) {
+            if (str_contains(config('constants.admins'), $data['email']) || config('constants.all_admin')) {
                 $data['role_id'] = 1;
             }
 
@@ -122,6 +122,7 @@ class RegisteredUserController extends Controller
             return response()->json([
                 'id' => $newUser->id,
                 'hasProfile' => $newUser->role_id === 1,
+                'role_id' => $newUser->role_id,
                 'token' => $newUser->createToken('SSCsystem')->plainTextToken,
             ], 201);
         }
@@ -129,6 +130,7 @@ class RegisteredUserController extends Controller
         return response()->json([
             'id' => $findUser->id,
             'hasProfile' => (bool)$findUser->school_id,
+            'role_id' => $findUser->role_id,
             'token' => $findUser->createToken('SSCsystem')->plainTextToken,
         ], 200);
     }
