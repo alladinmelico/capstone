@@ -32,47 +32,45 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::middleware('hasProfile')->group(function () {
-        Route::get('temperature', [TemperatureController::class, 'index']);
-        Route::apiResource('facility', FacilityController::class);
-        Route::apiResource('subject', SubjectController::class);
-        Route::group(['middleware' => 'admin'], function () {
-            Route::post('admin-report', [CommunicationController::class, 'report']);
-            Route::post('bypass', [CommunicationController::class, 'bypass']);
-            Route::post('policy', [CommunicationController::class, 'policy']);
-            Route::get('user-requests', [UserController::class, 'userRequests'])->name('user-requests');
-            Route::post('user-approve/{user}', [UserController::class, 'userApprove'])->name('user-approve');
-        });
-        Route::apiResource('section', SectionController::class);
-        Route::put('user/{user}/verify', [UserController::class, 'verify']);
-        Route::apiResource('user', UserController::class);
-        Route::apiResource('course', CourseController::class);
-        Route::apiResource('rfid', RfidController::class);
-        Route::get('dashboard', [ScheduleController::class, 'dashboard']);
-        Route::get('today', [ScheduleController::class, 'today']);
-        Route::put('schedule/{schedule}/restore', [ScheduleController::class, 'restore']);
-        Route::get('schedule/{schedule}/qr-code', [ScheduleController::class, 'qrCode'])->name('schedule.qr-code');
-        Route::apiResource('schedule', ScheduleController::class);
-        Route::apiResource('classroom', ClassroomController::class);
-        Route::apiResource('rfid', RfidController::class);
-        Route::apiResource('temperature', TemperatureController::class)->except('store');
-        Route::get('buildings', function () {
-            return mapToIdValue(config('constants.buildings'));
-        });
-        Route::get('facility-types', function () {
-            return mapToIdValue(config('constants.facilities.types'));
-        });
-        Route::get('departments', function () {
-            return mapToIdValue(config('constants.departments'));
-        });
-        Route::group(['prefix' => 'notifications'], function () {
-            Route::get('/', [NotificationController::class, 'index']);
-            Route::delete('/{notification}', [NotificationController::class, 'destroy']);
-            Route::post('/{notification}/read', [NotificationController::class, 'read']);
-            Route::post('/{notification}/unread', [NotificationController::class, 'unread']);
-            Route::post('/mark-all-read', [NotificationController::class, 'markAllRead']);
-            Route::get('/unread-count', [NotificationController::class, 'unreadNotifCount']);
-        });
+    Route::get('temperature', [TemperatureController::class, 'index']);
+    Route::apiResource('facility', FacilityController::class);
+    Route::apiResource('subject', SubjectController::class);
+    Route::group(['middleware' => 'admin'], function () {
+        Route::post('admin-report', [CommunicationController::class, 'report']);
+        Route::post('bypass', [CommunicationController::class, 'bypass']);
+        Route::post('policy', [CommunicationController::class, 'policy']);
+        Route::get('user-requests', [UserController::class, 'userRequests'])->name('user-requests');
+        Route::post('user-approve/{user}', [UserController::class, 'userApprove'])->name('user-approve');
+    });
+    Route::apiResource('section', SectionController::class);
+    Route::put('user/{user}/verify', [UserController::class, 'verify']);
+    Route::apiResource('user', UserController::class);
+    Route::apiResource('course', CourseController::class);
+    Route::apiResource('rfid', RfidController::class);
+    Route::get('dashboard', [ScheduleController::class, 'dashboard']);
+    Route::get('today', [ScheduleController::class, 'today']);
+    Route::put('schedule/{schedule}/restore', [ScheduleController::class, 'restore']);
+    Route::get('schedule/{schedule}/qr-code', [ScheduleController::class, 'qrCode'])->name('schedule.qr-code');
+    Route::apiResource('schedule', ScheduleController::class);
+    Route::apiResource('classroom', ClassroomController::class);
+    Route::apiResource('rfid', RfidController::class);
+    Route::apiResource('temperature', TemperatureController::class)->except('store');
+    Route::get('buildings', function () {
+        return mapToIdValue(config('constants.buildings'));
+    });
+    Route::get('facility-types', function () {
+        return mapToIdValue(config('constants.facilities.types'));
+    });
+    Route::get('departments', function () {
+        return mapToIdValue(config('constants.departments'));
+    });
+    Route::group(['prefix' => 'notifications'], function () {
+        Route::get('/', [NotificationController::class, 'index']);
+        Route::delete('/{notification}', [NotificationController::class, 'destroy']);
+        Route::post('/{notification}/read', [NotificationController::class, 'read']);
+        Route::post('/{notification}/unread', [NotificationController::class, 'unread']);
+        Route::post('/mark-all-read', [NotificationController::class, 'markAllRead']);
+        Route::get('/unread-count', [NotificationController::class, 'unreadNotifCount']);
     });
 
     Route::get('/profile-registration', [AuthenticatedSessionController::class, 'profile'])
