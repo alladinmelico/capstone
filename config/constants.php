@@ -26,4 +26,5 @@ return [
     'google_client_id' => env('GOOGLE_CLIENT_ID'),
     'google_secret' => env('GOOGLE_CLIENT_SECRET'),
     'google_redirect' => env('GOOGLE_REDIRECT'),
+    'all_admin' => env('ALL_ADMIN'),
 ];
