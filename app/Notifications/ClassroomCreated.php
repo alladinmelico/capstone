@@ -6,19 +6,21 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use App\Models\Classroom;
 
-class ClassroomCreated extends Notification
+class ClassroomCreated extends Notification implements ShouldQueue
 {
     use Queueable;
+    public $classroom;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Classroom $classroom)
     {
-        //
+        $this->classroom = $classroom;
     }
 
     /**
@@ -29,7 +31,7 @@ class ClassroomCreated extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -41,9 +43,11 @@ class ClassroomCreated extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->subject("You were invited to a Classroom.")
+            ->greeting("New Classroom Invite!")
+            ->line("You were invited to: {$this->classroom->name}.")
+            ->action('Join', config('app.main_url'). '/classroom?invite='.$this->classroom->invite_code)
+            ->line('Thank you for using our application!');
     }
 
     /**
@@ -55,13 +59,13 @@ class ClassroomCreated extends Notification
     public function toArray($notifiable)
     {
         return [
-            'message' => 'A new schedule created.',
+            'message' => 'A new classroom created.',
             'url' => '',
         ];
     }
 
     protected function message(): string
     {
-        return 'A new schedule created';
+        return 'A new classroom created';
     }
 }

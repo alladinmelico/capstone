@@ -17,7 +17,7 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::user() && str_contains(config('constants.admins'), Auth::user()->email)) {
+        if (Auth::check() && Auth::user()->role_id === 1) {
             return $next($request);
         }
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ClassroomRequest;
 use App\Http\Resources\ClassroomResource;
 use App\Models\Classroom;
+use App\Models\User;
 use App\Notifications\ClassroomCreated;
 use Illuminate\Http\Request;
 
@@ -45,11 +46,15 @@ class ClassroomController extends Controller
         $classroom = Classroom::create($validated);
 
         if (!empty($validated['users'])) {
-            $classroom->users()->sync($validated['users']);
+            $users = User::whereIn('id', $validated['users'])->get();
+            $user = auth()->user();
+            $users->each(function ($item, $key) use ($classroom, $user) {
+                if ($item->id != $user->id){
+                    $item->notify(new ClassroomCreated($classroom));
+                }
+            });
         }
 
-        $user = auth()->user();
-        $user->notify(new ClassroomCreated($classroom));
         return new ClassroomResource($classroom->load('section'));
     }
 
@@ -92,4 +97,13 @@ class ClassroomController extends Controller
     {
         return $classroom->delete();
     }
+
+    public function accept(Request $request, User $user)
+    {
+        $request->validate(['code' => 'required|string']);
+        $classroom = Classroom::where('invite_code', $request->code)->firstOrFail();
+        $classroom->users()->attach($user);
+        response()->json(['success' => 'success'], 200);
+    }
+
 }

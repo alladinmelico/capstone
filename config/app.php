@@ -14,6 +14,7 @@ return [
      */
 
     'name' => env('APP_NAME', 'Laravel'),
+    'main_url' => 'https://www.sscsystem.tech',
 
     /*
     |--------------------------------------------------------------------------

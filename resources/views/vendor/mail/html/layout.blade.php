@@ -28,6 +28,7 @@ width: 100% !important;
 <table class="wrapper" width="100%" cellpadding="0" cellspacing="0" role="presentation">
 <tr>
 <td align="center">
+<img src="https://www.sscsystem.tech/logo192.png" style="margin-left: auto; margin-right: auto" />
 <table class="content" width="100%" cellpadding="0" cellspacing="0" role="presentation">
 {{ $header ?? '' }}
 

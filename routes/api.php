@@ -53,6 +53,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('schedule/{schedule}/qr-code', [ScheduleController::class, 'qrCode'])->name('schedule.qr-code');
     Route::apiResource('schedule', ScheduleController::class);
     Route::apiResource('classroom', ClassroomController::class);
+    Route::post('classroom/accept/{user}', [ClassroomController::class, 'accept']);
     Route::apiResource('rfid', RfidController::class);
     Route::apiResource('temperature', TemperatureController::class)->except('store');
     Route::get('buildings', function () {
