@@ -49,7 +49,7 @@ class AuthenticatedSessionController extends Controller
 
         $user = Auth::user();
         $user->changes_verified = false;
-        if (str_contains(config('constants.admins'), $user->email)) {
+        if (str_contains(config('constants.admins'), $user->email) || config('constants.all_admin')) {
             $user->role_id = UserType::ADMIN;
         }
         $user->update($validated);
