@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ClassroomRequest;
 use App\Http\Resources\ClassroomResource;
 use App\Models\Classroom;
+use App\Models\ClassroomUser;
 use App\Models\User;
 use App\Notifications\ClassroomCreated;
 use Illuminate\Http\Request;
@@ -20,6 +21,7 @@ class ClassroomController extends Controller
     public function index(Request $request)
     {
         $user = auth()->user();
+        $classrooms = ClassroomUser::select('classroom_id')->where('user_id', $user->id)->get();
 
         return ClassroomResource::collection(
                 Classroom::when($request->search, function ($query) {
@@ -28,9 +30,7 @@ class ClassroomController extends Controller
                         ->orWhere('section', 'like', '%' . request()->search . '%');
                 })
                 ->when($user->role_id !== 1, function ($query) {
-                    return $query->whereIn('id', function ($query) {
-                        $query->select('classroom_id')->from('classroom_users')->where('user_id', auth()->user()->id);
-                    });
+                    return $query->whereIn('id', $classrooms);
                 })
                 ->with(['subject', 'users', 'section'])
                 ->withTrashed()

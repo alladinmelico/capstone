@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Models\ClassroomUser;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -13,14 +14,17 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
+        $classrooms = array();
+        if (!empty($request->classroom_id)) {
+            $classrooms = ClassroomUser::select('user_id')->where('classroom_id', $request->classroom_id)->get();
+        }
+
         return UserResource::collection(
             User::when($request->role, function ($query) use ($request) {
                     return $query->where('role_id', $request->role);
                 })
-                ->when($request->classroom_id, function ($query) use ($request) {
-                    return $query->whereIn('id', function ($query) use ($request) {
-                        $query->select('user_id')->from('classroom_users')->where('classroom_id', $request->classroom_id);
-                    });
+                ->when(!empty($request->classroom_id), function ($query) use ($request, $classrooms) {
+                    return $query->whereIn('id', $classrooms);
                 })
                 ->with(['course', 'section'])
                 ->orderBy('updated_at', 'desc')
