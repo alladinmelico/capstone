@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ScheduleRequest;
+use App\Http\Requests\ScheduleUpdateRequest;
 use App\Http\Resources\ScheduleResource;
 use App\Models\Batch;
 use App\Models\Schedule;
@@ -92,9 +93,19 @@ class ScheduleController extends Controller
         return new ScheduleResource($schedule);
     }
 
-    public function update(ScheduleRequest $request, Schedule $schedule)
+    public function update(ScheduleUpdateRequest $request, Schedule $schedule)
     {
         $data = $request->validated();
+
+        if ($request->hasFile('attachment')) {
+            $path = $request->file('attachment')->store('attachments', 's3');
+            $data['attachment'] = Storage::disk('s3')->url($path);
+        } else if (!empty($data['attachment_string'])) {
+            $fileName = 'attachments/' . uniqid(preg_replace('/\s+/', '', $data['title'])) . '.pdf';
+            Storage::disk('s3')->put($fileName,base64_decode($request->attachment_string));
+            $data['attachment'] = Storage::disk('s3')->url($fileName);
+        }
+
         $schedule->update($data);
         if (!empty($data['users'])) {
             $schedule->batches()->delete();
