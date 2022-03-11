@@ -88,7 +88,7 @@ class ScheduleController extends Controller
 
     public function show(Schedule $schedule)
     {
-        $schedule->load(['classroom.users', 'batches', 'facility', 'user']);
+        $schedule->load(['classroom', 'batches.user', 'facility', 'user']);
         return new ScheduleResource($schedule);
     }
 

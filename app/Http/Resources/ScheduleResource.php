@@ -30,7 +30,7 @@ class ScheduleResource extends JsonResource
             'note' => $this->note,
             'classroom_id' => $this->classroom_id,
             'facility_id' => $this->facility_id,
-            'batches' => $this->whenLoaded('batches'),
+            'batches' => BatchResource::collection($this->whenLoaded('batches')),
             'facility' => $this->whenLoaded('facility'),
             'user' => $this->whenLoaded('user'),
             'attachment' => $this->attachment,
