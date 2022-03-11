@@ -20,6 +20,12 @@ class BatchController extends Controller
         response()->json(['success' => 'success'], 200);
     }
 
+    public function approve (Request $request, Batch $batch) {
+        $batch->is_approved = true;
+        $batch->save();
+        response()->json(['success' => 'success'], 200);
+    }
+
     public function leaveApplication (Request $request, Batch $batch) {
         $data = $request->validate([
             'note' => 'required|string',

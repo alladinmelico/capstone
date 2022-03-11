@@ -48,6 +48,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('user', UserController::class);
     Route::apiResource('course', CourseController::class);
     Route::apiResource('rfid', RfidController::class);
+    Route::post('batch/{batch}/approve', [BatchController::class, 'approve']);
     Route::post('batch/{batch}/attendance', [BatchController::class, 'attendance']);
     Route::post('batch/{batch}/leaveApplication', [BatchController::class, 'leaveApplication']);
     Route::get('dashboard', [ScheduleController::class, 'dashboard']);
