@@ -14,6 +14,9 @@ class Batch extends Model
         'user_id',
         'batch',
         'is_absent',
+        'is_approved',
+        'note',
+        'attachment',
     ];
 
     public function user()

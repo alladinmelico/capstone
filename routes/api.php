@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\TemperatureController;
 use App\Http\Controllers\Api\SectionController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CommunicationController;
+use App\Http\Controllers\Api\BatchController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -47,6 +48,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('user', UserController::class);
     Route::apiResource('course', CourseController::class);
     Route::apiResource('rfid', RfidController::class);
+    Route::post('batch/{batch}/attendance', [BatchController::class, 'attendance']);
+    Route::post('batch/{batch}/leaveApplication', [BatchController::class, 'leaveApplication']);
     Route::get('dashboard', [ScheduleController::class, 'dashboard']);
     Route::get('today', [ScheduleController::class, 'today']);
     Route::put('schedule/{schedule}/restore', [ScheduleController::class, 'restore']);
