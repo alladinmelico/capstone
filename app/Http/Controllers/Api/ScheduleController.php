@@ -7,6 +7,7 @@ use App\Http\Requests\ScheduleRequest;
 use App\Http\Resources\ScheduleResource;
 use App\Models\Batch;
 use App\Models\Schedule;
+use App\Models\ClassroomUser;
 use App\Models\User;
 use App\Notifications\ScheduleCreated;
 use Carbon\Carbon;
@@ -19,12 +20,11 @@ class ScheduleController extends Controller
     public function index(Request $request)
     {
         $userId = $request->user_id;
+        $classrooms = ClassroomUser::select('classroom_id')->where('user_id', $userId)->get();
 
         return ScheduleResource::collection(
             Schedule::when(!empty($userId), function ($query) use ($userId) {
-                return $query->whereIn('classroom_id', function ($query) use ($userId) {
-                    $query->select('classroom_id')->from('classroom_users')->where('user_id', $userId);
-                });
+                return $query->whereIn('classroom_id', $classrooms);
             })->filterAccess()->with(['classroom.users', 'batches', 'facility', 'user'])->orderBy('updated_at', 'desc')->paginate($request->limit)
         );
     }
