@@ -121,6 +121,6 @@ class User extends Authenticatable implements NotifiableInterface
      */
     public function routeNotificationForOneSignal()
     {
-        return ['include_external_user_ids' => strval($this->id)];
+        return strval($this->id);
     }
 }
