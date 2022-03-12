@@ -93,7 +93,7 @@ Route::middleware('auth:sanctum')->group(function () {
             return response('Inconsistent request', 401);
         } else {
             $beamsToken = $user->createToken($user->id)->plainTextToken;
-            return response()->json(['beamsToken' => $beamsToken]);
+            return response()->json(['jwt' => $beamsToken]);
         }
     });
 });
