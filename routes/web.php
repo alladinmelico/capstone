@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ScheduleController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,8 +28,6 @@ Route::get('/auth/callback', [RegisteredUserController::class, 'handleGoogleCall
 
 Route::get('/schedule/{schedule}', [ScheduleController::class, 'check']);
 
-Route::get('/sample', function () {
-    $pdf = PDF::loadView('reports.temperature');
-    return $pdf->download('pdfview.pdf');
-    return view('reports.temperature');
-});
+Route::get('report/user', [ReportController::class, 'user']);
+Route::get('report/schedule', [ReportController::class, 'schedule']);
+Route::get('report/temperature', [ReportController::class, 'temperature']);

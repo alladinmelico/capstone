@@ -6,7 +6,6 @@ use App\Http\Controllers\Api\CommunicationController;
 use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\FacilityController;
 use App\Http\Controllers\Api\NotificationController;
-use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\RfidController;
 use App\Http\Controllers\Api\ScheduleController;
 use App\Http\Controllers\Api\SectionController;
@@ -41,9 +40,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('admin-report', [CommunicationController::class, 'report']);
         Route::post('bypass', [CommunicationController::class, 'bypass']);
         Route::post('policy', [CommunicationController::class, 'policy']);
-        Route::get('report/user', [ReportController::class, 'user']);
-        Route::get('report/schedule', [ReportController::class, 'schedule']);
-        Route::get('report/temperature', [ReportController::class, 'temperature']);
         Route::get('user-requests', [UserController::class, 'userRequests'])->name('user-requests');
         Route::post('user-approve/{user}', [UserController::class, 'userApprove'])->name('user-approve');
     });
