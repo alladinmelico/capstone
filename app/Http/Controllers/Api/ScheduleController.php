@@ -20,13 +20,17 @@ class ScheduleController extends Controller
 
     public function index(Request $request)
     {
-        $userId = $request->user_id;
-        $classrooms = ClassroomUser::select('classroom_id')->where('user_id', $userId)->get();
+        $user = auth()->user();
+        $classrooms = array();
+
+        if ($user->role_id !== 1) {
+            $classrooms = ClassroomUser::select('classroom_id')->where('user_id', $user->id)->get();
+        }
 
         return ScheduleResource::collection(
-            Schedule::when(!empty($userId), function ($query) use ($userId, $classrooms) {
+            Schedule::when($user->role_id !== 1, function ($query) use ($classrooms) {
                 return $query->whereIn('classroom_id', $classrooms);
-            })->filterAccess()->with(['classroom.users', 'batches', 'facility', 'user'])->orderBy('updated_at', 'desc')->paginate($request->limit)
+            })->filterAccess()->orderBy('updated_at', 'desc')->paginate($request->limit)
         );
     }
 
