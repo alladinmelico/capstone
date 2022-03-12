@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
-use App\Models\User;
 use App\Models\ClassroomUser;
+use App\Models\User;
+use App\Notifications\OverStayNotification;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -21,8 +22,8 @@ class UserController extends Controller
 
         return UserResource::collection(
             User::when($request->role, function ($query) use ($request) {
-                    return $query->where('role_id', $request->role);
-                })
+                return $query->where('role_id', $request->role);
+            })
                 ->when(!empty($request->classroom_id), function ($query) use ($request, $classrooms) {
                     return $query->whereIn('id', $classrooms);
                 })
@@ -50,7 +51,7 @@ class UserController extends Controller
 
     public function verify(Request $request, User $user)
     {
-        $user->changes_verified = True;
+        $user->changes_verified = true;
         $user->verified_by = auth()->user()->id;
         $user->save();
         return new UserResource($user);
@@ -59,5 +60,11 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         return $user->delete();
+    }
+
+    public function overstay(Request $request, User $user)
+    {
+        $user->notify(new OverStayNotification($user));
+        response()->json(['success' => 'success'], 200);
     }
 }

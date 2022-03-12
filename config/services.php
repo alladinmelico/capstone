@@ -35,5 +35,9 @@ return [
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect' => env('GOOGLE_REDIRECT'),
     ],
+    'pusher' => [
+        'beams_instance_id' => env('BEAM_INSTANCE'),
+        'beams_secret_key' => env('BEAM_KEY'),
+    ],
 
 ];

@@ -40,6 +40,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('admin-report', [CommunicationController::class, 'report']);
         Route::post('bypass', [CommunicationController::class, 'bypass']);
         Route::post('policy', [CommunicationController::class, 'policy']);
+        Route::post('overstay/{user}', [UserController::class, 'overstay']);
         Route::get('user-requests', [UserController::class, 'userRequests'])->name('user-requests');
         Route::post('user-approve/{user}', [UserController::class, 'userApprove'])->name('user-approve');
     });
@@ -83,7 +84,20 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/profile-registration', [AuthenticatedSessionController::class, 'storeProfile'])
         ->name('store-profile');
+
+    Route::get('/pusher/beams-auth', function (Request $request) {
+        $user = auth()->user();
+        $userIDInQueryParam = $request->user_id;
+
+        if ($user->id != $userIDInQueryParam) {
+            return response('Inconsistent request', 401);
+        } else {
+            $beamsToken = $user->createToken($user->id)->plainTextToken;
+            return response()->json($beamsToken);
+        }
+    });
 });
+
 
 Route::middleware('raspberry')->group(function () {
     Route::post('temperature', [TemperatureController::class, 'store']);

@@ -109,4 +109,9 @@ class User extends Authenticatable implements NotifiableInterface
     {
         return 'App.Models.User.' . $this->id;
     }
+
+    public function routeNotificationForFcm()
+    {
+        return $this->fcm_token;
+    }
 }
