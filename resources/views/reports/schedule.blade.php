@@ -29,11 +29,11 @@
       <td>Friday</td>
     </tr>
     <tr>
-      <td>{{ $daysOfWeek['monday'] }}</td>
-      <td>{{ $daysOfWeek['tuesday'] }}</td>
-      <td>{{ $daysOfWeek['wednesday'] }}</td>
-      <td>{{ $daysOfWeek['thursday'] }}</td>
-      <td>{{ $daysOfWeek['friday'] }}</td>
+      <td>{{ $daysOfWeek['monday'] ?? 'n/a' }}</td>
+      <td>{{ $daysOfWeek['tuesday'] ?? 'n/a' }}</td>
+      <td>{{ $daysOfWeek['wednesday'] ?? 'n/a' }}</td>
+      <td>{{ $daysOfWeek['thursday'] ?? 'n/a' }}</td>
+      <td>{{ $daysOfWeek['friday'] ?? 'n/a' }}</td>
     </tr>
   </table>
   <br>

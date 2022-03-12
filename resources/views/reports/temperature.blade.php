@@ -38,7 +38,7 @@
         <td>{{ $item->created_at }}</td>
         <td>{{ $item->temperature }}</td>
         <td>{{ $item->user_id }}</td>
-        <td>{{ $item->user->school_id }}</td>
+        <td>{{ $item->user?->school_id }}</td>
       </tr>
     @endforeach
   </table>
