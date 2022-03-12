@@ -33,7 +33,7 @@ class UserBypassCreated extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject("New user bypass submitted.")
-            ->greeting("New user bypass submitted.")
+            ->greeting("Hey Admin!")
             ->line("User: {$this->user->name}.")
             ->line("Reason: {$this->reason}.")
             ->line("Message: {$this->message}.");

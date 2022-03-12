@@ -1,19 +1,20 @@
 <?php
 
+use App\Http\Controllers\Api\BatchController;
 use App\Http\Controllers\Api\ClassroomController;
+use App\Http\Controllers\Api\CommunicationController;
 use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\FacilityController;
+use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\RfidController;
 use App\Http\Controllers\Api\ScheduleController;
+use App\Http\Controllers\Api\SectionController;
 use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\TemperatureController;
-use App\Http\Controllers\Api\SectionController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\CommunicationController;
-use App\Http\Controllers\Api\BatchController;
-use App\Http\Controllers\Api\NotificationController;
-use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -40,6 +41,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('admin-report', [CommunicationController::class, 'report']);
         Route::post('bypass', [CommunicationController::class, 'bypass']);
         Route::post('policy', [CommunicationController::class, 'policy']);
+        Route::get('report/user', [ReportController::class, 'user']);
+        Route::get('report/schedule', [ReportController::class, 'schedule']);
+        Route::get('report/temperature', [ReportController::class, 'temperature']);
         Route::get('user-requests', [UserController::class, 'userRequests'])->name('user-requests');
         Route::post('user-approve/{user}', [UserController::class, 'userApprove'])->name('user-approve');
     });
@@ -94,10 +98,11 @@ Route::middleware('api')->group(function () {
     Route::post('/auth', [RegisteredUserController::class, 'handleGoogleSignIn']);
     Route::post('/auth-code', [RegisteredUserController::class, 'handleCode']);
     Route::post('/login', [AuthenticatedSessionController::class, 'store'])
-                ->middleware('guest');
+        ->middleware('guest');
 });
 
-function mapToIdValue ($arr) {
+function mapToIdValue($arr)
+{
     return array_map(function ($key, $value) {
         return ['id' => $key, 'value' => $value];
     }, array_keys($arr), $arr);

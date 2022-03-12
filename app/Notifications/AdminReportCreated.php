@@ -30,6 +30,7 @@ class AdminReportCreated extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject("New report submitted.")
+            ->greeting("Hey Admin!")
             ->line("Reason: {$this->reason}.")
             ->line("Message: {$this->message}.");
     }

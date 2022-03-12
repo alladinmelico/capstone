@@ -39,6 +39,7 @@ class ScheduleCreated extends Notification implements ShouldQueue
             ->subject("Schedule successfully created.")
             ->greeting("You got a new Schedule!")
             ->line("{$this->schedule->user->name} created a schedule.")
+            ->action('View', config('app.main_url'). "/schedule/{$this->schedule->id}")
             ->line('Thank you for using our application!');
     }
 

@@ -85,6 +85,11 @@ class User extends Authenticatable implements NotifiableInterface
         return $this->hasMany(Temperature::class);
     }
 
+    public function batches()
+    {
+        return $this->hasMany(Batch::class);
+    }
+
     public function rfid()
     {
         return $this->hasOne(Rfid::class);
