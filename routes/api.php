@@ -92,7 +92,7 @@ Route::middleware('auth:sanctum')->group(function () {
         if ($user->id != $userIDInQueryParam) {
             return response('Inconsistent request', 401);
         } else {
-            $beamsToken = $user->createToken($user->id)->plainTextToken;
+            $beamsToken = $user->createToken($user->id);
             return response()->json($beamsToken);
         }
     });
