@@ -39,5 +39,9 @@ return [
         'beams_instance_id' => env('BEAM_INSTANCE'),
         'beams_secret_key' => env('BEAM_KEY'),
     ],
+    'onesignal' => [
+        'app_id' => env('ONESIGNAL_APP_ID'),
+        'rest_api_key' => env('ONESIGNAL_REST_API_KEY')
+    ],
 
 ];

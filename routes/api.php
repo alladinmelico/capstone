@@ -84,18 +84,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/profile-registration', [AuthenticatedSessionController::class, 'storeProfile'])
         ->name('store-profile');
-
-    Route::get('/pusher/beams-auth', function (Request $request) {
-        $user = auth()->user();
-        $userIDInQueryParam = $request->user_id;
-
-        if ($user->id != $userIDInQueryParam) {
-            return response('Inconsistent request', 401);
-        } else {
-            $beamsToken = $user->createToken($user->id)->plainTextToken;
-            return response()->json(['token' => "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"]);
-        }
-    });
 });
 
 

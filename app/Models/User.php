@@ -114,4 +114,13 @@ class User extends Authenticatable implements NotifiableInterface
     {
         return $this->fcm_token;
     }
+
+    /**
+     * Send the notification based on an external user id
+     * @return array
+     */
+    public function routeNotificationForOneSignal()
+    {
+        return ['include_external_user_ids' => strval($this->id)];
+    }
 }

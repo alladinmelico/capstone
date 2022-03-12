@@ -3,14 +3,10 @@
 namespace App\Notifications;
 
 use App\Models\User;
-use App\Models\Schedule;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use NotificationChannels\PusherPushNotifications\PusherChannel;
-use NotificationChannels\PusherPushNotifications\PusherMessage;
-use NotificationChannels\Fcm\Resources\Notification as FcmNotification;
+use NotificationChannels\OneSignal\OneSignalChannel;
+use NotificationChannels\OneSignal\OneSignalMessage;
 
 class OverstayNotification extends Notification
 {
@@ -35,39 +31,15 @@ class OverstayNotification extends Notification
      */
     public function via($notifiable)
     {
-        return [PusherChannel::class];
+        return [OneSignalChannel::class];
     }
 
-    public function toPushNotification($notifiable)
+    public function toOneSignal($notifiable)
     {
-         $image_url = public_path() . '/icon.png';
-
-        return PusherMessage::create()
-            ->android()
-            ->icon($image_url)
-            ->title("Overstay reminder")
-            ->body("Hi ${$this->user->name}! to keep the our campus from overcrowding, kindly leave the campus immediately.");
-    }
-
-     /**
-     * @param $notifiable
-     * @return FcmMessage
-     */
-    public function toFcm($notifiable)
-    {
-        $data = $this->data($notifiable);
-        $image_url = public_path() . '/icon.png';
-
-        $fcmNotification = FcmNotification::create()
-            ->setTitle("Overstay reminder")
-            ->setBody("Hi ${$this->user->name}! to keep the our campus from overcrowding, kindly leave the campus immediately.")
-            ->setImage($image_url);
-
-        return FcmMessage::create()
-            ->setData([
-                'payload' => json_encode($data),
-            ])
-            ->setNotification($fcmNotification);
+        return OneSignalMessage::create()
+            ->setSubject("Overstay reminder")
+            ->setIcon(public_path() . '/icon.png')
+            ->setBody("Hi {$this->user->name}! to keep the our campus from overcrowding, kindly leave the campus immediately.");
     }
 
     private function data($notifiable)
@@ -78,7 +50,6 @@ class OverstayNotification extends Notification
             'timestamp' => now()->toISOString(),
         ];
     }
-
 
     /**
      * Send report if notification failed;
