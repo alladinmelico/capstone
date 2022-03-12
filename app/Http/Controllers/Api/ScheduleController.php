@@ -24,7 +24,7 @@ class ScheduleController extends Controller
         $classrooms = ClassroomUser::select('classroom_id')->where('user_id', $userId)->get();
 
         return ScheduleResource::collection(
-            Schedule::when(!empty($userId), function ($query) use ($userId) {
+            Schedule::when(!empty($userId), function ($query) use ($userId, $classrooms) {
                 return $query->whereIn('classroom_id', $classrooms);
             })->filterAccess()->with(['classroom.users', 'batches', 'facility', 'user'])->orderBy('updated_at', 'desc')->paginate($request->limit)
         );

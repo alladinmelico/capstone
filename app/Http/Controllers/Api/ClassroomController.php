@@ -29,7 +29,7 @@ class ClassroomController extends Controller
                         ->orWhere('description_heading', 'like', '%' . request()->search . '%')
                         ->orWhere('section', 'like', '%' . request()->search . '%');
                 })
-                ->when($user->role_id !== 1, function ($query) {
+                ->when($user->role_id !== 1, function ($query) use ($classrooms) {
                     return $query->whereIn('id', $classrooms);
                 })
                 ->with(['subject', 'users', 'section'])
