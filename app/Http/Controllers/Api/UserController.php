@@ -7,7 +7,7 @@ use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\ClassroomUser;
 use App\Models\User;
-use App\Notifications\OverStayNotification;
+use App\Notifications\OverstayNotification;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -64,7 +64,7 @@ class UserController extends Controller
 
     public function overstay(Request $request, User $user)
     {
-        $user->notify(new OverStayNotification($user));
+        $user->notify(new OverstayNotification($user));
         response()->json(['success' => 'success'], 200);
     }
 }
