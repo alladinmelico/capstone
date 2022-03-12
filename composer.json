@@ -23,7 +23,8 @@
         "pusher/pusher-php-server": "^7.0",
         "spatie/laravel-settings": "^2.3",
         "staudenmeir/eloquent-json-relations": "^1.1",
-        "tightenco/ziggy": "^1.0"
+        "tightenco/ziggy": "^1.0",
+        "ext-gd": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
