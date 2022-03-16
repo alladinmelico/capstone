@@ -69,7 +69,7 @@ class ScheduleController extends Controller
             });
             $classroom = $schedule->classroom;
 
-            if (!empty($classroom) && !empty($classroom->section?->faculty)) {
+            if (!empty($classroom) && !empty($classroom->section->faculty)) {
                 $classroom->section->faculty->notify(new ScheduleCreated($schedule));
             }
         }

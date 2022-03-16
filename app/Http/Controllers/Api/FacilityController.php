@@ -21,7 +21,7 @@ class FacilityController extends Controller
                     }])->paginate($request->limit);
 
             $facilities = $facilities->map(function ($facility) use ($schedulesNow) {
-                $facility->occupied = ($schedulesNow->firstWhere('facility_id', $facility->id))?->classroom->users->count();
+                $facility->occupied = ($schedulesNow->firstWhere('facility_id', $facility->id))->classroom->users->count();
                 return $facility;
             });
 
