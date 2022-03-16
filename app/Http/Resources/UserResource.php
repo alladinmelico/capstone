@@ -27,7 +27,7 @@ class UserResource extends JsonResource
             'role_id' => $this->role_id,
             'course_id' => $this->course_id,
             'changes_verified' => $this->changes_verified,
-            'course_name' => $this->relationLoaded('course') ? $this->course->name : '',
+            'course_name' => $this->relationLoaded('course') ? $this->course?->name : '',
             'course' => $this->whenLoaded('course'),
             'school_id' => $this->school_id,
             'verified_teacher' => $this->verified_teacher,
