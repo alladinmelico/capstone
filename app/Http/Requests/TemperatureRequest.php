@@ -24,8 +24,7 @@ class TemperatureRequest extends FormRequest
     public function rules()
     {
         return [
-            'temperature' => 'required|numeric',
-            'user_id' => 'required|exists:users,id',
+            'temperature' => 'required|numeric'
         ];
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TemperatureRequest;
 use App\Http\Resources\TemperatureResource;
 use App\Models\Temperature;
+use App\Models\Rfid;
 use Illuminate\Http\Request;
 use App\Events\UserTemperature;
 
@@ -19,9 +20,15 @@ class TemperatureController extends Controller
 
     public function store(TemperatureRequest $request)
     {
-        $temperature = Temperature::create($request->validated());
-        UserTemperature::dispatch($temperature->load('user'));
-        return new TemperatureResource($temperature);
+        $data = $request->validated();
+        $rfid = Rfid::orderBy('updated_at', 'desc')->firstOrFail();
+        if (!$rfid->is_logged){
+            $data['user_id'] = $rfid->user_id;
+            $temperature = Temperature::create($data);
+            UserTemperature::dispatch($temperature->load('user'));
+            return new TemperatureResource($temperature);
+        }
+        return response()->json([], 200);
     }
 
     public function show(Temperature $temperature)

@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\UserLogging;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RfidRequest;
+use App\Http\Resources\RfidResource;
 use App\Models\Rfid;
 use App\Models\Schedule;
-use Illuminate\Support\Facades\DB;
+use App\Models\Temperature;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Http\Resources\RfidResource;
-use App\Http\Requests\RfidRequest;
-use App\Events\UserLogging;
 
 class RfidController extends Controller
 {
@@ -43,32 +42,34 @@ class RfidController extends Controller
 
     public function log(Rfid $rfid)
     {
-        if ($rfid->is_logged) {
-            $rfid->is_logged = false;
+        $temp = Temperature::orderBy('updated_at', 'desc')->firstOrFail();
+        if ($temp->user_id === $rfid->user_id && $temp->temperature < 37.5) {
+            if ($rfid->is_logged) {
+                $rfid->is_logged = false;
+                $rfid->save();
+                UserLogging::dispatch($rfid->load('user'));
+                abort(204);
+            }
+
+            $schedule = Schedule::hasSchedule($rfid->user_id);
+
+            if (count($schedule) == 0) {
+                abort(419);
+            }
+
+            $rfid->is_logged = true;
             $rfid->save();
-            UserLogging::dispatch($rfid->load('user'));
-            abort(204);
+            $rfid->load('user');
+
+            UserLogging::dispatch($rfid);
+
+            return [
+                'id' => $rfid->user_id,
+                'name' => $rfid->user->name,
+                'photo' => $rfid->user->avatar_original,
+                'school_id' => $rfid->user->school_id
+            ];
         }
-
-        $schedule = Schedule::hasSchedule($rfid->user_id);
-
-        if (count($schedule) == 0) {
-            abort(419);
-        }
-
-        $rfid->is_logged = true;
-        $rfid->save();
-        $rfid->load('user');
-
-        UserLogging::dispatch($rfid);
-
-        return [
-            'id' => $rfid->user_id,
-            'name' => $rfid->user->name,
-            'photo' => $rfid->user->avatar_original,
-            'school_id' => $rfid->user->school_id,
-            'start_at' => $schedule->first()->start_at,
-            'end_at' => $schedule->first()->end_at,
-        ];
+        return response()->json([], 200);
     }
 }
