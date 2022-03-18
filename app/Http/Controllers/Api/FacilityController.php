@@ -18,7 +18,7 @@ class FacilityController extends Controller
             $schedulesNow = Schedule::hasScheduleNow()->with(['classroom.users'])->orderBy('updated_at', 'desc')->get();
             $facilities = Facility::with(['schedules' => function ($q) use ($schedulesNow) {
                         return $q->whereIn('id', $schedulesNow->pluck('id'));
-                    }])->paginate($request->limit);
+                    }])->orderBy('updated_at', 'desc')->paginate($request->limit);
 
             $facilities = $facilities->map(function ($facility) use ($schedulesNow) {
                 $facility->occupied = ($schedulesNow->firstWhere('facility_id', $facility->id))?->classroom->users->count();

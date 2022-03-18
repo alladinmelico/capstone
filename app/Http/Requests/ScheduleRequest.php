@@ -38,7 +38,7 @@ class ScheduleRequest extends FormRequest
             'repeat_by' => ['sometimes', Rule::in(ScheduleRepeatType::getValues())],
             'note' => 'nullable',
             'facility_id' => 'required|numeric|exists:facilities,id',
-            'classroom_id' => 'required|numeric|exists:classrooms,id',
+            'classroom_id' => 'nullable|numeric|exists:classrooms,id',
             'is_end_of_sem' => 'sometimes|boolean',
             'attachment' => 'sometimes|file|mimes:jpg,jpeg,bmp,png,pdf',
             'users' => 'nullable|array',
