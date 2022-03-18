@@ -51,15 +51,16 @@ class RfidController extends Controller
                 abort(204);
             }
 
-            $schedule = Schedule::hasSchedule($rfid->user_id);
+            $schedules = Schedule::hasSchedule($rfid->user_id);
 
-            if (count($schedule) == 0) {
+            if (count($schedules) == 0) {
                 abort(419);
             }
 
             $rfid->is_logged = true;
             $rfid->save();
             $rfid->load('user');
+            $rfid->schedules = $schedules;
 
             UserLogging::dispatch($rfid);
 
