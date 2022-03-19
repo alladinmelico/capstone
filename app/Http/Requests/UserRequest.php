@@ -26,6 +26,9 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
+        $roles = UserType::getValues();
+        array_shift($roles);
+
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|email',
@@ -33,7 +36,8 @@ class UserRequest extends FormRequest
             'section_id' => 'sometimes|numeric|exists:sections,id',
             'course_id' => 'required|numeric|exists:courses,id',
             'school_id' => 'required|string|max:12|regex:/(TUPT-)\d\d-\d\d\d\d/i|unique:users,school_id,'.auth()->user()->id.',id',
-            'verified_teacher' => 'nullable|boolean'
+            'verified_teacher' => 'nullable|boolean',
+            'role_id' => ['sometimes', Rule::in($roles)],
         ];
     }
 }

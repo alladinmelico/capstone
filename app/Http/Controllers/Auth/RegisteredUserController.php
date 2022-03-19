@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Socialite\Facades\Socialite;
+use App\Notifications\ProfileUpdateNotification;
 
 class RegisteredUserController extends Controller
 {
@@ -118,6 +119,7 @@ class RegisteredUserController extends Controller
             $newUser = User::create($data);
 
             event(new Registered($newUser));
+            $newUser->notify(new ProfileUpdateNotification());
 
             return response()->json([
                 'id' => $newUser->id,
