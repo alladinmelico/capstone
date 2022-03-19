@@ -23,7 +23,7 @@ class BatchResource extends JsonResource
             'is_approved' => $this->is_approved,
             'note' => $this->note,
             'attachment' => $this->attachment,
-            'user' => $this->whenLoaded('user'),
+            'user' => new UserResource($this->whenLoaded('user')),
             'schedule' => $this->whenLoaded('schedule'),
         ];
     }

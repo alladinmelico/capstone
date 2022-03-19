@@ -7,8 +7,8 @@ use App\Http\Requests\ScheduleRequest;
 use App\Http\Requests\ScheduleUpdateRequest;
 use App\Http\Resources\ScheduleResource;
 use App\Models\Batch;
-use App\Models\Schedule;
 use App\Models\ClassroomUser;
+use App\Models\Schedule;
 use App\Models\User;
 use App\Notifications\ScheduleCreated;
 use Carbon\Carbon;
@@ -56,7 +56,7 @@ class ScheduleController extends Controller
             $data['attachment'] = Storage::disk('s3')->url($path);
         } else if (!empty($data['attachment_string'])) {
             $fileName = 'attachments/' . uniqid(preg_replace('/\s+/', '', $data['title'])) . '.pdf';
-            Storage::disk('s3')->put($fileName,base64_decode($request->attachment_string));
+            Storage::disk('s3')->put($fileName, base64_decode($request->attachment_string));
             $data['attachment'] = Storage::disk('s3')->url($fileName);
         }
 
@@ -106,7 +106,7 @@ class ScheduleController extends Controller
             $data['attachment'] = Storage::disk('s3')->url($path);
         } else if (!empty($data['attachment_string'])) {
             $fileName = 'attachments/' . uniqid(preg_replace('/\s+/', '', $data['title'])) . '.pdf';
-            Storage::disk('s3')->put($fileName,base64_decode($request->attachment_string));
+            Storage::disk('s3')->put($fileName, base64_decode($request->attachment_string));
             $data['attachment'] = Storage::disk('s3')->url($fileName);
         }
 
@@ -145,6 +145,26 @@ class ScheduleController extends Controller
                     }
                     return $value > 2;
                 }));
+    }
+
+    public function overstayed()
+    {
+        $date = Carbon::now()->setTimezone(config('app.timezone'));
+        $time = $date->format('H:i:s');
+
+        $schedules = Schedule::with('batches.user.rfid')->hasScheduleToday()->get();
+        $schedulesOverstay = $schedules->filter(function ($value, $key) use ($date) {
+            $additional30mins = Carbon::parse($value->end_at)->addMinutes(30);
+            return $date->greaterThan($additional30mins);
+        });
+
+        $schedulesOverstay->each(function ($schedule, $k) {
+            $schedule->batches = $schedule->batches->filter(function ($item, $key) {
+                return $item->user->rfid && $item->user->rfid->is_logged;
+            });
+        });
+
+        return ScheduleResource::collection($schedulesOverstay);
     }
 
     public function dashboard()

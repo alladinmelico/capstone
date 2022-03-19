@@ -54,6 +54,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('batch/{batch}/leaveApplication', [BatchController::class, 'leaveApplication']);
     Route::get('dashboard', [ScheduleController::class, 'dashboard']);
     Route::get('today', [ScheduleController::class, 'today']);
+    Route::get('overstayed/schedule', [ScheduleController::class, 'overstayed']);
     Route::put('schedule/{schedule}/restore', [ScheduleController::class, 'restore']);
     Route::get('schedule/{schedule}/qr-code', [ScheduleController::class, 'qrCode'])->name('schedule.qr-code');
     Route::apiResource('schedule', ScheduleController::class);
