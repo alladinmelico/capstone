@@ -4,6 +4,8 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\ScheduleObjects\TodaySchedule;
+use App\ScheduleObjects\OverstayUser;
 
 class Kernel extends ConsoleKernel
 {
@@ -24,7 +26,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->call(new TodaySchedule)->daily();
+        $schedule->call(new OverstayUser)->everyTenMinutes();
     }
 
     /**
