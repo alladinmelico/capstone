@@ -47,7 +47,7 @@ class ClassroomController extends Controller
 
         if (!empty($validated['users'])) {
             $users = User::whereIn('id', $validated['users'])->get();
-            $users->each(function ($item, $key) use ($classroom, $user) {
+            $users->each(function ($item, $key) use ($classroom) {
                 $item->notify(new ClassroomCreated($classroom));
             });
         }
