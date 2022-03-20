@@ -22,7 +22,7 @@ class TemperatureController extends Controller
     {
         $data = $request->validated();
         $rfid = Rfid::orderBy('updated_at', 'desc')->firstOrFail();
-        if (!$rfid->is_logged){
+        if ($rfid->is_logged){
             $data['user_id'] = $rfid->user_id;
             $temperature = Temperature::create($data);
             UserTemperature::dispatch($temperature->load('user'));
