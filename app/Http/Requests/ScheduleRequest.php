@@ -35,7 +35,7 @@ class ScheduleRequest extends FormRequest
             'days_of_week' => 'sometimes',
             'is_recurring' => 'required|boolean',
             'type' => ['required', Rule::in(ScheduleType::getValues())],
-            'repeat_by' => ['sometimes', Rule::in(ScheduleRepeatType::getValues())],
+            'repeat_by' => ['nullable', Rule::in(ScheduleRepeatType::getValues())],
             'note' => 'nullable',
             'facility_id' => 'required|numeric|exists:facilities,id',
             'classroom_id' => 'nullable|numeric|exists:classrooms,id',
