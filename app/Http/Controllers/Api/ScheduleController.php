@@ -196,7 +196,7 @@ class ScheduleController extends Controller
         $countUsers = $schedulesToday->pluck('classroom.users')->flatten()->count();
         $presentStudents = $schedulesNow->pluck('classroom.users')->flatten()->filter(function ($value, $key) {
             return !empty($value->rfid) && $value->rfid->is_logged === 1;
-        })->count();
+        })->values();
 
         return [
             'present_students' => $presentStudents,
