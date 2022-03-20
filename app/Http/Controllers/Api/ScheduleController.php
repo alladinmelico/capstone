@@ -182,7 +182,7 @@ class ScheduleController extends Controller
                     }
                     return true;
                 }
-                return $value > 2;
+                return true;
             });
 
         $schedulesNow = $schedulesToday->filter(function ($value, $key) use ($date) {
