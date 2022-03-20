@@ -95,7 +95,7 @@ class RegisteredUserController extends Controller
 
     public function handleGoogleSignIn(Request $request)
     {
-        $findUser = User::where('google_id', $request->google_id)->first();
+        $findUser = User::where('google_id', $request->google_id)->orWhere('email',  $request->email)->first();
 
         if (empty($findUser)) {
             $data = $request->all();
