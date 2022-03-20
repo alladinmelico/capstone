@@ -31,7 +31,7 @@ class ScheduleRequest extends FormRequest
             'start_at' => 'required|date_format:H:i|before:end_at',
             'start_date' => 'required|date_format:Y-m-d|before:end_date',
             'end_at' => 'required|date_format:H:i|after:start_at',
-            'end_date' => 'required|date_format:Y-m-d|after:start_date',
+            'end_date' => 'nullable|date_format:Y-m-d|after:start_date',
             'days_of_week' => 'sometimes',
             'is_recurring' => 'required|boolean',
             'type' => ['required', Rule::in(ScheduleType::getValues())],
