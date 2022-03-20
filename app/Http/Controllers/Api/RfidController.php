@@ -43,7 +43,7 @@ class RfidController extends Controller
     public function log(Rfid $rfid)
     {
         $temp = Temperature::orderBy('updated_at', 'desc')->firstOrFail();
-        if ($temp->user_id === $rfid->user_id && $temp->temperature < 37.5) {
+        if ($temp->temperature < 37.5) {
             if ($rfid->is_logged) {
                 $rfid->is_logged = false;
                 $rfid->save();
