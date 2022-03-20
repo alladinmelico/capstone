@@ -33,7 +33,6 @@ class ClassroomController extends Controller
                     return $query->whereIn('id', $classrooms);
                 })
                 ->with(['subject', 'users', 'section'])
-                ->withTrashed()
                 ->orderBy('updated_at', 'desc')
                 ->paginate($request->limit)
         );
