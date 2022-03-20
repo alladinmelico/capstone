@@ -133,7 +133,11 @@ class Schedule extends Model
         $date = Carbon::now()->setTimezone(config('app.timezone'));
         $time = $date->format('H:i:s');
 
-        return Schedule::whereDate('end_date', '>=', $date->toDateString())
+        return Schedule::whereIn('classroom_id', function ($query) use ($userId) {
+                $query->select('classroom_id')->from('classroom_users')->where('user_id', $userId);
+            })
+            ->orWhere('user_id', $userId)
+            ->whereDate('end_date', '>=', $date->toDateString())
             ->whereTime('end_at', '>=', $time)
             ->whereTime('start_at', '<=', $time)
             ->get()
