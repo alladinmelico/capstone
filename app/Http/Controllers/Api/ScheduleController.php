@@ -21,15 +21,15 @@ class ScheduleController extends Controller
     public function index(Request $request)
     {
         $user = auth()->user();
-        $classrooms = array();
+        $batches = array();
 
         if ($user->role_id !== 1) {
-            $classrooms = ClassroomUser::select('classroom_id')->where('user_id', $user->id)->get();
+            $batches = Batch::where('user_id', $userId)->get();
         }
 
         return ScheduleResource::collection(
-            Schedule::when($user->role_id !== 1, function ($query) use ($classrooms) {
-                return $query->whereIn('classroom_id', $classrooms);
+            Schedule::when($user->role_id !== 1, function ($query) use ($batches, $user) {
+                return $query->whereIn('id', $batches->pluck('schedule_id'))->orWhere('user_id', $user->id);
             })->with(['batches.user'])->orderBy('updated_at', 'desc')->paginate($request->limit)
         );
     }
