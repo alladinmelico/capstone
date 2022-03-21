@@ -15,20 +15,21 @@ class FacilityController extends Controller
     public function index(Request $request)
     {
         if (!empty($request->has_schedule)) {
+            // get currently occupied facility
             $schedulesNow = Schedule::hasScheduleNow()->with(['classroom.users', 'batches.user'])->orderBy('updated_at', 'desc')->get();
             $facilities = Facility::with(['schedules' => function ($q) use ($schedulesNow) {
                         return $q->whereIn('id', $schedulesNow->pluck('id'));
                     }])->orderBy('updated_at', 'desc')->paginate($request->limit);
 
             $facilities = $facilities->map(function ($facility) use ($schedulesNow) {
-                $facility->occupied = ($schedulesNow->firstWhere('facility_id', $facility->id))?->classroom?->users?->count();
+                $facility->occupied = ($schedulesNow->firstWhere('facility_id', $facility->id))?->batches->count();
                 return $facility;
             });
 
             return FacilityResource::collection($facilities);
         }
 
-        return FacilityResource::collection(Facility::with(['classroom.users', 'batches.user'])->orderBy('updated_at', 'desc')->paginate($request->limit));
+        return FacilityResource::collection(Facility::with(['schedules'])->orderBy('updated_at', 'desc')->paginate($request->limit));
     }
 
     public function store(FacilityRequest $request)
