@@ -31,6 +31,7 @@ class ProfileRequest extends FormRequest
             'course_id' => 'sometimes|numeric|exists:courses,id',
             'year' => 'sometimes|numeric|between:1,5',
             'section_id' => 'sometimes|numeric|exists:sections,id',
+            'attachment' => 'sometimes|file|mimes:jpg,jpeg,bmp,png',
         ];
     }
 }

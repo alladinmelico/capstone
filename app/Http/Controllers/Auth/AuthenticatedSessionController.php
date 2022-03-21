@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Enums\UserType;
+use Illuminate\Support\Facades\Storage;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -47,6 +48,10 @@ class AuthenticatedSessionController extends Controller
     {
         $validated = $request->validated();
 
+        if ($request->hasFile('attachment')) {
+            $path = $request->file('attachment')->store('vaccine_attachments', 's3');
+            $validated['attachment'] = Storage::disk('s3')->url($path);
+        }
         $user = Auth::user();
         $user->changes_verified = false;
         if (str_contains(config('constants.admins'), $user->email) || config('constants.all_admin')) {

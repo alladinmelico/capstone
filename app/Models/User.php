@@ -33,6 +33,7 @@ class User extends Authenticatable implements NotifiableInterface
         'course_id',
         'school_id',
         'verified_teacher',
+        'attachment'
     ];
 
     /**

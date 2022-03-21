@@ -38,6 +38,7 @@ class UserRequest extends FormRequest
             'school_id' => 'required|string|max:12|regex:/(TUPT-)\d\d-\d\d\d\d/i|unique:users,school_id,'.auth()->user()->id.',id',
             'verified_teacher' => 'nullable|boolean',
             'role_id' => ['sometimes', Rule::in($roles)],
+            'attachment' => 'sometimes|file|mimes:jpg,jpeg,bmp,png',
         ];
     }
 }
