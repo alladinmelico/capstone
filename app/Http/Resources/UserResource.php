@@ -32,6 +32,7 @@ class UserResource extends JsonResource
             'rfid' => new RfidResource($this->whenLoaded('rfid')),
             'school_id' => $this->school_id,
             'verified_teacher' => $this->verified_teacher,
+            'attachment' => $this->attachment,
         ];
     }
 }
