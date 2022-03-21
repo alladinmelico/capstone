@@ -30,7 +30,7 @@ class ScheduleController extends Controller
         return ScheduleResource::collection(
             Schedule::when($user->role_id !== 1, function ($query) use ($classrooms) {
                 return $query->whereIn('classroom_id', $classrooms);
-            })->filterAccess()->orderBy('updated_at', 'desc')->paginate($request->limit)
+            })->with(['batches.user'])->orderBy('updated_at', 'desc')->paginate($request->limit)
         );
     }
 
@@ -134,7 +134,7 @@ class ScheduleController extends Controller
         $time = $date->format('H:i:s');
 
         return ScheduleResource::collection(Schedule::hasScheduleToday()
-                ->with(['classroom.users.rfid'])
+                ->with(['classroom.users.rfid', 'batches.user.rfid'])
                 ->get()
                 ->filter(function ($value, $key) use ($date) {
                     if ($value->is_recurring) {
@@ -173,7 +173,7 @@ class ScheduleController extends Controller
         $time = $date->format('H:i:s');
 
         $schedulesToday = Schedule::hasScheduleToday()
-            ->with(['classroom.users.rfid'])
+            ->with(['classroom.users.rfid', 'batches.user.rfid'])
             ->get()
             ->filter(function ($value, $key) use ($date) {
                 if ($value->is_recurring) {
@@ -193,10 +193,9 @@ class ScheduleController extends Controller
             return $date->greaterThan($value->end_at);
         });
 
-        $countUsers = $schedulesToday->pluck('classroom.users')->flatten()->count();
-        $presentStudents = $schedulesNow->pluck('classroom.users')->flatten()->filter(function ($value, $key) {
-            return !empty($value->rfid) && $value->rfid->is_logged === 1;
-        })->values();
+        $presentStudents = $schedulesNow->pluck('batches')->flatten()->filter(function ($value, $key) {
+            return !empty($value->user->rfid) && $value->user->rfid->is_logged === 1;
+        })->pluck('user')->values();
 
         return [
             'present_students' => $presentStudents,

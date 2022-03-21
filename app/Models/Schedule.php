@@ -130,10 +130,9 @@ class Schedule extends Model
     {
         $date = Carbon::now()->setTimezone(config('app.timezone'));
         $time = $date->format('H:i:s');
+        $batches = Batch::where('user_id', $userId)->get();
 
-        return Schedule::whereIn('classroom_id', function ($query) use ($userId) {
-                $query->select('classroom_id')->from('classroom_users')->where('user_id', $userId);
-            })
+        return Schedule::whereIn('id', $batches->pluck('schedule_id'))
             ->orWhere('user_id', $userId)
             ->whereDate('end_date', '>=', $date->toDateString())
             ->whereTime('end_at', '>=', $time)
