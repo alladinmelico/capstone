@@ -24,7 +24,7 @@ class ScheduleController extends Controller
         $batches = array();
 
         if ($user->role_id !== 1) {
-            $batches = Batch::where('user_id', $userId)->get();
+            $batches = Batch::where('user_id', $user->id)->get();
         }
 
         return ScheduleResource::collection(
