@@ -45,6 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('user-approve/{user}', [UserController::class, 'userApprove'])->name('user-approve');
     });
     Route::apiResource('section', SectionController::class);
+    Route::get('me', [UserController::class, 'me']);
     Route::put('user/{user}/verify', [UserController::class, 'verify']);
     Route::apiResource('user', UserController::class);
     Route::apiResource('course', CourseController::class);

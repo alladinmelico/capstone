@@ -43,6 +43,11 @@ class UserController extends Controller
         return new UserResource($user->load(['course', 'section']));
     }
 
+    public function me()
+    {
+        return new UserResource(auth()->user()->load(['course', 'section']));
+    }
+
     public function update(UserRequest $request, User $user)
     {
         $user->update($request->validated());
