@@ -114,6 +114,8 @@ class RegisteredUserController extends Controller
 
             if (str_contains(config('constants.admins'), $data['email']) || config('constants.all_admin')) {
                 $data['role_id'] = 1;
+            } else {
+                $data['role_id'] = 3;
             }
 
             $newUser = User::create($data);
