@@ -35,7 +35,7 @@ class UserRequest extends FormRequest
             'year' => 'required|integer',
             'section_id' => 'sometimes|numeric|exists:sections,id',
             'course_id' => 'required|numeric|exists:courses,id',
-            'school_id' => 'required|string|max:12|regex:/(TUPT-)\d\d-\d\d\d\d/i|unique:users,school_id,'.auth()->user()->id.',id',
+            'school_id' => 'required|string|max:12|regex:/(TUPT-)\d\d-\d\d\d\d/i|unique:users,school_id,'.optional($this->user)->id.',id',
             'verified_teacher' => 'nullable|boolean',
             'role_id' => ['sometimes', Rule::in($roles)],
             'attachment' => 'sometimes|file|mimes:jpg,jpeg,bmp,png',
