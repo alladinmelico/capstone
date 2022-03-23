@@ -16,4 +16,9 @@ class Subject extends Model
         'name',
         'code',
     ];
+
+    public function classrooms()
+    {
+        return $this->hasMany(Classroom::class);
+    }
 }

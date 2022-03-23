@@ -13,7 +13,7 @@ class SubjectController extends Controller
 
     public function index(Request $request)
     {
-        return SubjectResource::collection(Subject::orderBy('updated_at', 'desc')->paginate($request->limit));
+        return SubjectResource::collection(Subject::with('classrooms')->orderBy('updated_at', 'desc')->paginate($request->limit));
     }
 
     public function store(SubjectRequest $request)
@@ -23,7 +23,7 @@ class SubjectController extends Controller
 
     public function show(Subject $subject)
     {
-        return new SubjectResource($subject);
+        return new SubjectResource($subject->load('classrooms'));
     }
 
     public function update(SubjectRequest $request, Subject $subject)
