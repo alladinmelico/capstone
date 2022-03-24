@@ -173,7 +173,7 @@ class ScheduleController extends Controller
         $time = $date->format('H:i:s');
 
         $schedulesToday = Schedule::hasScheduleToday()
-            ->with(['classroom.users.rfid', 'batches.user.rfid'])
+            ->with(['batches.user.rfid'])
             ->get()
             ->filter(function ($value, $key) use ($date) {
                 if ($value->is_recurring) {
