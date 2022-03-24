@@ -189,7 +189,7 @@ class ScheduleController extends Controller
             return $date->greaterThan($value->start_at) && $date->lessThan($value->end_at);
         });
 
-        $schedulesOverstay = $schedulesNow->filter(function ($value, $key) use ($date) {
+        $schedulesOverstay = $schedulesNow->values()->filter(function ($value, $key) use ($date) {
             return $date->greaterThan($value->end_at);
         });
 
