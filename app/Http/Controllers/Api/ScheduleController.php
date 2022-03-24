@@ -195,7 +195,7 @@ class ScheduleController extends Controller
 
         $presentStudents = $schedulesNow->pluck('batches')->flatten()->filter(function ($value, $key) {
             return !empty($value->user->rfid) && $value->user->rfid->is_logged === 1;
-        })->pluck('user')->values();
+        })->pluck('user')->values()->unique('id');
 
         return [
             'present_students' => $presentStudents,
