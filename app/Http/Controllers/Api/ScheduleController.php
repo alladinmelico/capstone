@@ -193,6 +193,10 @@ class ScheduleController extends Controller
             return $date->greaterThan($value->end_at);
         });
 
+        $schedulesOverstay = $schedulesOverstay->pluck('batches')->flatten()->filter(function ($value, $key) {
+            return !empty($value->user->rfid) && $value->user->rfid->is_logged === 1;
+        })->pluck('user')->unique('id')->values();
+
         $presentStudents = $schedulesNow->pluck('batches')->flatten()->filter(function ($value, $key) {
             return !empty($value->user->rfid) && $value->user->rfid->is_logged === 1;
         })->pluck('user')->unique('id')->values();
