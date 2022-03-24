@@ -23,7 +23,7 @@ class SubjectController extends Controller
 
     public function show(Subject $subject)
     {
-        return new SubjectResource($subject->load('classrooms'));
+        return new SubjectResource($subject->load('classrooms.subject'));
     }
 
     public function update(SubjectRequest $request, Subject $subject)

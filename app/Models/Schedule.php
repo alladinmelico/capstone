@@ -140,7 +140,11 @@ class Schedule extends Model
             ->get()
             ->filter(function ($value, $key) use ($date) {
                 if ($value->is_recurring) {
-                    if ($value->repeat_by !== 'daily' && !str_contains($value->days_of_week, strtolower($date->englishDayOfWeek))) {
+                    $daysOfWeek = $value->days_of_week;
+                    if (getType($daysOfWeek) == 'array') {
+                        $daysOfWeek = implode(',', $daysOfWeek);
+                    }
+                    if ($value->repeat_by !== 'daily' && $value->repeat_by === 'weekly' && !str_contains($daysOfWeek, strtolower($date->englishDayOfWeek))) {
                         return false;
                     }
                     return true;
