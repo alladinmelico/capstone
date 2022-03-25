@@ -27,7 +27,11 @@ class CourseController extends Controller
 
     public function store(CourseRequest $request)
     {
-        $course = Course::create($request->validated());
+        $data = $request->validated();
+        if (!empty($request->cover)) {
+            $data['cover'] = json_decode($request->cover, true);
+        }
+        $course = Course::create($data);
         broadcast(new CourseCreated($course))->toOthers();
         return new CourseResource($course);
     }
@@ -39,7 +43,11 @@ class CourseController extends Controller
 
     public function update(CourseRequest $request, Course $course)
     {
-        $course->update($request->validated());
+        $data = $request->validated();
+        if (!empty($request->cover)) {
+            $data['cover'] = json_decode($request->cover, true);
+        }
+        $course->update($data);
         return new CourseResource($course);
     }
 

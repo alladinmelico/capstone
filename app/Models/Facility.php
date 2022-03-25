@@ -20,7 +20,8 @@ class Facility extends Model
         'building_id',
         'type',
         'department_id',
-        'svg_key'
+        'svg_key',
+        'cover'
     ];
 
     protected $appends = ['department'];

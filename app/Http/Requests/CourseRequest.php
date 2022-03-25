@@ -30,6 +30,7 @@ class CourseRequest extends FormRequest
             'name' => 'required|string',
             'code' => 'required|string|unique:courses,code,'.optional($this->course)->id.',id',
             'department_id' => ['required', Rule::in(array_keys(config('constants.departments')))],
+            'cover' => 'nullable|string',
         ];
     }
 }

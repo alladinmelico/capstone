@@ -15,6 +15,11 @@ class Subject extends Model
     protected $fillable = [
         'name',
         'code',
+        'cover'
+    ];
+
+    protected $casts = [
+        'cover' => 'array'
     ];
 
     public function classrooms()

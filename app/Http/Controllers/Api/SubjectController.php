@@ -18,7 +18,11 @@ class SubjectController extends Controller
 
     public function store(SubjectRequest $request)
     {
-        return new SubjectResource(Subject::create($request->validated()));
+        $data = $request->validated();
+        if (!empty($request->cover)) {
+            $data['cover'] = json_decode($request->cover, true);
+        }
+        return new SubjectResource(Subject::create($data));
     }
 
     public function show(Subject $subject)
@@ -28,7 +32,11 @@ class SubjectController extends Controller
 
     public function update(SubjectRequest $request, Subject $subject)
     {
-        $subject->update($request->validated());
+        $data = $request->validated();
+        if (!empty($request->cover)) {
+            $data['cover'] = json_decode($request->cover, true);
+        }
+        $subject->update($data);
         return new SubjectResource($subject);
     }
 

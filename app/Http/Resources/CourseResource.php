@@ -19,6 +19,7 @@ class CourseResource extends JsonResource
             'name' => $this->name,
             'code' => $this->code,
             'department_id' => $this->department_id,
+            'cover' => $this->cover,
             'department' => config('constants.departments.' . $this->department_id),
         ];
     }

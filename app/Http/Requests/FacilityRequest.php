@@ -34,6 +34,7 @@ class FacilityRequest extends FormRequest
             'building_id' => ['required', Rule::in(array_keys(config('constants.buildings')))],
             'department_id' => ['required', Rule::in(array_keys(config('constants.departments')))],
             'type' => ['required', Rule::in(array_keys(config('constants.facilities.types')))],
+            'cover' => 'sometimes|file|mimes:jpg,jpeg,bmp,png',
         ];
     }
 }

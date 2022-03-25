@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Config;
 
 class Course extends Model
 {
@@ -15,10 +15,15 @@ class Course extends Model
     protected $fillable = [
         'name',
         'code',
-        'department_id'
+        'department_id',
+        'cover',
     ];
 
     protected $appends = ['department'];
+
+    protected $casts = [
+        'cover' => 'array',
+    ];
 
     public function users()
     {

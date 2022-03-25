@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\FacilityResource;
 use App\Http\Requests\FacilityRequest;
+use App\Http\Resources\FacilityResource;
 use App\Models\Facility;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class FacilityController extends Controller
 {
@@ -18,8 +19,8 @@ class FacilityController extends Controller
             // get currently occupied facility
             $schedulesNow = Schedule::hasScheduleNow()->with(['classroom.users', 'batches.user'])->orderBy('updated_at', 'desc')->get();
             $facilities = Facility::with(['schedules' => function ($q) use ($schedulesNow) {
-                        return $q->whereIn('id', $schedulesNow->pluck('id'));
-                    }])->orderBy('updated_at', 'desc')->paginate($request->limit);
+                return $q->whereIn('id', $schedulesNow->pluck('id'));
+            }])->orderBy('updated_at', 'desc')->paginate($request->limit);
 
             $facilities = $facilities->map(function ($facility) use ($schedulesNow) {
                 $facility->occupied = ($schedulesNow->firstWhere('facility_id', $facility->id))?->batches->count();
@@ -34,7 +35,13 @@ class FacilityController extends Controller
 
     public function store(FacilityRequest $request)
     {
-        return new FacilityResource(Facility::create($request->validated()));
+        $data = $request->validated();
+
+        if ($request->hasFile('cover')) {
+            $path = $request->file('cover')->store('facility_covers', 's3');
+            $data['cover'] = Storage::disk('s3')->url($path);
+        }
+        return new FacilityResource(Facility::create($data));
     }
 
     public function show(Facility $facility)
@@ -44,7 +51,13 @@ class FacilityController extends Controller
 
     public function update(FacilityRequest $request, Facility $facility)
     {
-        $facility->update($request->validated());
+        $data = $request->validated();
+
+        if ($request->hasFile('cover')) {
+            $path = $request->file('cover')->store('facility_covers', 's3');
+            $data['cover'] = Storage::disk('s3')->url($path);
+        }
+        $facility->update($data);
         return new FacilityResource($facility);
     }
 

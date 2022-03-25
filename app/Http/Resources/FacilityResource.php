@@ -27,6 +27,7 @@ class FacilityResource extends JsonResource
             'department' => config('constants.departments.' . $this->department_id),
             'building' => config('constants.buildings.' . $this->building_id),
             'schedules' => $this->whenLoaded('schedules'),
+            'cover' => $this->cover,
         ];
     }
 }

@@ -27,6 +27,7 @@ class SubjectRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
+            'cover' => 'nullable|string',
             'code' => 'required|string|unique:subjects,code,'.optional($this->subject)->id.',id',
         ];
     }
