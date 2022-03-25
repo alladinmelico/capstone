@@ -134,16 +134,13 @@ class ScheduleController extends Controller
         $time = $date->format('H:i:s');
 
         return ScheduleResource::collection(Schedule::hasScheduleToday()
-                ->with(['classroom.users.rfid', 'batches.user.rfid'])
+                ->with(['batches.user.rfid'])
                 ->get()
                 ->filter(function ($value, $key) use ($date) {
                     if ($value->is_recurring) {
-                        if ($value->repeat_by !== 'daily' && !str_contains(json_encode($value->days_of_week), strtolower($date->englishDayOfWeek))) {
-                            return false;
-                        }
-                        return true;
+                        return $value->valid_recurring;
                     }
-                    return $value > 2;
+                    return true;
                 }));
     }
 
@@ -177,10 +174,7 @@ class ScheduleController extends Controller
             ->get()
             ->filter(function ($value, $key) use ($date) {
                 if ($value->is_recurring) {
-                    if ($value->repeat_by !== 'daily' && !str_contains(json_encode($value->days_of_week), strtolower($date->englishDayOfWeek))) {
-                        return false;
-                    }
-                    return true;
+                    return $value->valid_recurring;
                 }
                 return true;
             });

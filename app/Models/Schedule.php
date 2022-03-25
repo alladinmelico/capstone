@@ -107,7 +107,23 @@ class Schedule extends Model
     }
 
     public function getValidRecurringAttribute() {
+        $date = Carbon::now()->setTimezone(config('app.timezone'));
 
+        if ($this->repeat_by === 'daily') {
+            return true;
+        } else if ($this->repeat_by === 'monthly') {
+            $startDate= Carbon::create($this->start_date);
+            return $date->day === $startDate->day;
+        } else {
+            $daysOfWeek = $this->days_of_week;
+            if (getType($daysOfWeek) == 'array') {
+                $daysOfWeek = implode(',', $daysOfWeek);
+            }
+            if (!str_contains($daysOfWeek, strtolower($date->englishDayOfWeek))) {
+                return false;
+            }
+            return true;
+        }
     }
 
     public function facility()
@@ -146,21 +162,7 @@ class Schedule extends Model
             ->get()
             ->filter(function ($value, $key) use ($date) {
                 if ($value->is_recurring) {
-                    if ($value->repeat_by === 'daily') {
-                        return true;
-                    } else if ($value->repeat_by === 'monthly') {
-                        $startDate= Carbon::create($value->start_date);
-                        return $date->day === $startDate->day;
-                    } else {
-                        $daysOfWeek = $value->days_of_week;
-                        if (getType($daysOfWeek) == 'array') {
-                            $daysOfWeek = implode(',', $daysOfWeek);
-                        }
-                        if (!str_contains($daysOfWeek, strtolower($date->englishDayOfWeek))) {
-                            return false;
-                        }
-                        return true;
-                    }
+                    return $value->valid_recurring;
                 }
                 return true;
             });
