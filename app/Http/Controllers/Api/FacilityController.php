@@ -50,7 +50,7 @@ class FacilityController extends Controller
         $facility->load('schedules');
         if (auth()->user()->role_id !== 1) {
             $batches = Batch::where('user_id', 17)->get()->pluck('schedule_id');
-            $facility->schedules = $facility->schedules->filter(function ($value, $key) {
+            $facility->schedules = $facility->schedules->filter(function ($value, $key) use ($batches) {
                 return $batches->contains($value->id);
             });
         }
