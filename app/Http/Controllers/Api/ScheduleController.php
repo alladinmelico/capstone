@@ -30,7 +30,7 @@ class ScheduleController extends Controller
         return ScheduleResource::collection(
             Schedule::when($user->role_id !== 1, function ($query) use ($batches, $user) {
                 return $query->whereIn('id', $batches->pluck('schedule_id'))->orWhere('user_id', $user->id);
-            })->with(['batches.user'])->orderBy('updated_at', 'desc')->paginate($request->limit)
+            })->withCount('batches')->orderBy('updated_at', 'desc')->paginate($request->limit)
         );
     }
 

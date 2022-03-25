@@ -34,7 +34,7 @@ class ScheduleResource extends JsonResource
             'facility' => $this->whenLoaded('facility'),
             'user' => $this->whenLoaded('user'),
             'attachment' => $this->attachment,
-            'is_valid_now' => $this->is_valid,
+            'batches_count' => $this->batches_count,
             'classroom' => new ClassroomResource($this->whenLoaded('classroom')),
         ];
     }
