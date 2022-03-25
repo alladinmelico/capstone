@@ -82,7 +82,8 @@ class Schedule extends Model
         $currTime = $currDate->format('H:i:s');
         return
         $currDate->betweenIncluded(Carbon::create($this->start_date), Carbon::create($this->end_date)) &&
-        $currDate->betweenIncluded(Carbon::create($this->start_at)->format('H:i:s'), Carbon::create($this->end_at)->format('H:i:s'));
+        $currDate->betweenIncluded(Carbon::create($this->start_at)->format('H:i:s'), Carbon::create($this->end_at)->format('H:i:s')) &&
+        $this->valid_recurring;
     }
 
     public function getStartAtAttribute($value)
@@ -108,22 +109,24 @@ class Schedule extends Model
 
     public function getValidRecurringAttribute() {
         $date = Carbon::now()->setTimezone(config('app.timezone'));
-
-        if ($this->repeat_by === 'daily') {
-            return true;
-        } else if ($this->repeat_by === 'monthly') {
-            $startDate= Carbon::create($this->start_date);
-            return $date->day === $startDate->day;
-        } else {
-            $daysOfWeek = $this->days_of_week;
-            if (getType($daysOfWeek) == 'array') {
-                $daysOfWeek = implode(',', $daysOfWeek);
+        if ($this->is_recurring) {
+            if ($this->repeat_by === 'daily') {
+                return true;
+            } else if ($this->repeat_by === 'monthly') {
+                $startDate= Carbon::create($this->start_date);
+                return $date->day === $startDate->day;
+            } else {
+                $daysOfWeek = $this->days_of_week;
+                if (getType($daysOfWeek) == 'array') {
+                    $daysOfWeek = implode(',', $daysOfWeek);
+                }
+                if (!str_contains($daysOfWeek, strtolower($date->englishDayOfWeek))) {
+                    return false;
+                }
+                return true;
             }
-            if (!str_contains($daysOfWeek, strtolower($date->englishDayOfWeek))) {
-                return false;
-            }
-            return true;
         }
+        return true;
     }
 
     public function facility()
@@ -161,10 +164,7 @@ class Schedule extends Model
             ->whereTime('start_at', '<=', $time)
             ->get()
             ->filter(function ($value, $key) use ($date) {
-                if ($value->is_recurring) {
-                    return $value->valid_recurring;
-                }
-                return true;
+                return $value->valid_recurring;
             });
     }
 }

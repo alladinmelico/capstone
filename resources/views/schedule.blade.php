@@ -12,18 +12,23 @@
 
         <!-- Styles -->
         <style>
-            body {
-                width: 100vw;
-                height: 100vh;
+            body,
+            html {
+                height: 100%;
+            }
+            main {
+                height: 100%;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                text-align: center;
+                margin-top: auto;
+                margin-bottom: auto;
             }
-
             #card {
+                margin: auto;
                 display: flex;
-                justify-content: space-around;
+                flex-direction: column;
+                justify-content: center;
                 align-items: center;
                 width: 100%;
                 max-width: 300px;
@@ -40,23 +45,29 @@
 
             #valid {
                 background-color: #00838f;
+                text-align: center;
+                margin-left: 1rem;
             }
 
             #not-valid {
                 background-color: #8f0000;
+                text-align: center;
+                margin-left: 1rem;
             }
         </style>
     </head>
     <body>
-        <div id="card">
-            <img src="/logo.svg" alt="ssc logo" height="100">
-            <div>
-                @if ($isValid)
-                    <h1 id="valid">Valid</h1>
-                @else
-                    <h1 id="not-valid">Not Valid</h1>
-                @endif
+        <main>
+            <div id="card">
+                <img src="/logo.svg" alt="ssc logo" height="100">
+                <div>
+                    @if ($isValid)
+                        <h1 id="valid">Valid Schedule</h1>
+                    @else
+                        <h1 id="not-valid">Not Valid Schedule</h1>
+                    @endif
+                </div>
             </div>
-        </div>
+        </main>
     </body>
 </html>

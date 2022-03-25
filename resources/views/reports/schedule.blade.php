@@ -53,7 +53,7 @@
         <td>{{ $item->created_at }}</td>
         <td>{{ $item->id }}</td>
         <td>{{ $item->start_date }}</td>
-        <td>{{ $item->end_date }}</td>
+        <td>{{ $item->end_date ? $item->end_date : $item->start_date }}</td>
         <td>{{ $item->classroom?->users?->count() }}</td>
         <td>{{
                 $item->batches?->filter(function ($value, $key) {

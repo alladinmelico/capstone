@@ -29,6 +29,7 @@
   <table class="center">
     <tr>
       <th rowspan="1">School ID</th>
+      <th rowspan="1">Name</th>
       <th rowspan="1">Total Classroom</th>
       <th rowspan="1">Total Schedule</th>
       <th rowspan="1">Absenteeism %</th>
@@ -36,7 +37,8 @@
     </tr>
     @foreach ($users as $item)
       <tr>
-        <td>{{ $item->school_id }}</td>
+        <td>{{ $item->school_id ? $item->school_id : '[profile not updated]' }}</td>
+        <td>{{ $item->name }}</td>
         <td>{{ $item->classrooms->count() }}</td>
         <td>{{ $item->schedules->count() }}</td>
         <td>{{ $item->avg_absent }}</td>

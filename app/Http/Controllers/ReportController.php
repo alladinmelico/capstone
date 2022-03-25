@@ -32,6 +32,7 @@ class ReportController extends Controller
         $endDate = $endDate->toDateTimeString();
 
         $pdf = \PDF::loadView('reports.schedule', compact('schedules', 'startDate', 'endDate', 'averageUsersCount', 'daysOfWeek'));
+        $pdf->setOptions(['isPhpEnabled' => true]);
         return $pdf->download("schedule-report_{$startDate}-{$endDate}.pdf");
     }
 
@@ -46,14 +47,18 @@ class ReportController extends Controller
             ->get();
 
         $averageTemperature = $temperatures->avg('temperature');
-        $total38Higher = $temperatures->filter(function ($value, $key) {
-            return $value->temperature >= 38;
-        })->count();
+        $totalFeverList = $temperatures->filter(function ($value, $key) {
+            return $value->temperature >= 37.5;
+        });
+
+        $total38Higher = $totalFeverList->count();
 
         $startDate = $startDate->toDateTimeString();
         $endDate = $endDate->toDateTimeString();
 
-        $pdf = \PDF::loadView('reports.temperature', compact('temperatures', 'startDate', 'endDate', 'averageTemperature', 'total38Higher'));
+
+        $pdf = \PDF::loadView('reports.temperature', compact('temperatures', 'startDate', 'endDate', 'averageTemperature', 'total38Higher', 'totalFeverList'));
+        $pdf->setOptions(['isPhpEnabled' => true]);
         return $pdf->download("temperature-report_{$startDate}-{$endDate}.pdf");
     }
 
@@ -95,6 +100,7 @@ class ReportController extends Controller
         $now = now();
 
         $pdf = \PDF::loadView('reports.user', compact('users', 'year', 'avgAbsent', 'avgSchedule'));
+        $pdf->setOptions(['isPhpEnabled' => true]);
         return $pdf->download("user-report_{$year}-{$now}.pdf");
     }
 }
