@@ -52,7 +52,7 @@ class FacilityController extends Controller
             $batches = Batch::where('user_id', 17)->get()->pluck('schedule_id');
             $facility->schedules = $facility->schedules->filter(function ($value, $key) use ($batches) {
                 return $batches->contains($value->id);
-            });
+            })->values();
         }
         return new FacilityResource($facility);
     }
