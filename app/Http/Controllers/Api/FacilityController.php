@@ -7,6 +7,7 @@ use App\Http\Requests\FacilityRequest;
 use App\Http\Resources\FacilityResource;
 use App\Models\Facility;
 use App\Models\Schedule;
+use App\Models\Batch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -46,7 +47,14 @@ class FacilityController extends Controller
 
     public function show(Facility $facility)
     {
-        return new FacilityResource($facility->load('schedules'));
+        $facility->load('schedules');
+        if (auth()->user()->role_id !== 1) {
+            $batches = Batch::where('user_id', 17)->get()->pluck('schedule_id');
+            $facility->schedules = $facility->schedules->filter(function ($value, $key) {
+                return $batches->contains($value->id);
+            });
+        }
+        return new FacilityResource($facility);
     }
 
     public function update(FacilityRequest $request, Facility $facility)

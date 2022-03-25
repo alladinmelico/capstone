@@ -106,6 +106,10 @@ class Schedule extends Model
         return [$endTime->diffInHours($currDate)];
     }
 
+    public function getValidRecurringAttribute() {
+
+    }
+
     public function facility()
     {
         return $this->belongsTo(Facility::class);
@@ -132,22 +136,31 @@ class Schedule extends Model
         $time = $date->format('H:i:s');
         $batches = Batch::where('user_id', $userId)->get();
 
-        return Schedule::whereIn('id', $batches->pluck('schedule_id'))
-            ->orWhere('user_id', $userId)
-            ->whereDate('end_date', '>=', $date->toDateString())
+        return Schedule::where(function ($query) use($batches) {
+                $query->whereIn('id', $batches->pluck('schedule_id'))->orWhere('user_id', $userId);
+            })
+            ->whereDate('end_date', '>=', $date)
+            ->whereDate('start_date', '<=', $date)
             ->whereTime('end_at', '>=', $time)
             ->whereTime('start_at', '<=', $time)
             ->get()
             ->filter(function ($value, $key) use ($date) {
                 if ($value->is_recurring) {
-                    $daysOfWeek = $value->days_of_week;
-                    if (getType($daysOfWeek) == 'array') {
-                        $daysOfWeek = implode(',', $daysOfWeek);
+                    if ($value->repeat_by === 'daily') {
+                        return true;
+                    } else if ($value->repeat_by === 'monthly') {
+                        $startDate= Carbon::create($value->start_date);
+                        return $date->day === $startDate->day;
+                    } else {
+                        $daysOfWeek = $value->days_of_week;
+                        if (getType($daysOfWeek) == 'array') {
+                            $daysOfWeek = implode(',', $daysOfWeek);
+                        }
+                        if (!str_contains($daysOfWeek, strtolower($date->englishDayOfWeek))) {
+                            return false;
+                        }
+                        return true;
                     }
-                    if ($value->repeat_by !== 'daily' && $value->repeat_by === 'weekly' && !str_contains($daysOfWeek, strtolower($date->englishDayOfWeek))) {
-                        return false;
-                    }
-                    return true;
                 }
                 return true;
             });
