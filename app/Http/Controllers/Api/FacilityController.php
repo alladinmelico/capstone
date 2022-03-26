@@ -37,6 +37,13 @@ class FacilityController extends Controller
 
     public function allAvailable(Request $request)
     {
+        $request->validate([
+            'start_time' => 'required|date_format:H:i|before:end_at',
+            'start_date' => 'required|date_format:Y-m-d|before:end_date',
+            'end_time' => 'required|date_format:H:i|after:start_at',
+            'end_date' => 'required|date_format:Y-m-d|after:start_date',
+            'type' => 'required'
+        ]);
         $facilities = Facility::with('schedules')->orderBy('updated_at', 'desc')->get();
 
         $facilities = $facilities->filter(function ($facility) use ($request) {
