@@ -35,6 +35,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('temperature', [TemperatureController::class, 'index']);
     Route::apiResource('facility', FacilityController::class);
+    Route::get('availability/facility', [FacilityController::class, 'allAvailable']);
     Route::apiResource('subject', SubjectController::class);
     Route::group(['middleware' => 'admin'], function () {
         Route::post('admin-report', [CommunicationController::class, 'report']);

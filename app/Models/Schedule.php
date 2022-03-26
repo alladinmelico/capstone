@@ -109,6 +109,10 @@ class Schedule extends Model
 
     public function getValidRecurringAttribute() {
         $date = Carbon::now()->setTimezone(config('app.timezone'));
+        return $this->isValidDateRecurring($date);
+    }
+
+    public function isValidDateRecurring($date) {
         if ($this->is_recurring) {
             if ($this->repeat_by === 'daily') {
                 return true;
@@ -120,6 +124,7 @@ class Schedule extends Model
                 if (getType($daysOfWeek) == 'array') {
                     $daysOfWeek = implode(',', $daysOfWeek);
                 }
+
                 if (!str_contains($daysOfWeek, strtolower($date->englishDayOfWeek))) {
                     return false;
                 }
@@ -166,5 +171,10 @@ class Schedule extends Model
             ->filter(function ($value, $key) use ($date) {
                 return $value->valid_recurring;
             });
+    }
+
+    public function isBetweenTime($start, $end) {
+        return $start->betweenIncluded(Carbon::parse($this->start_at), Carbon::parse($this->end_at)) ||
+        $end->betweenIncluded(Carbon::parse($this->start_at), Carbon::parse($this->end_at));
     }
 }

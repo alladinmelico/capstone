@@ -12,7 +12,7 @@ return [
         1 => 'Information Technology Building',
         2 => 'Basic Arts & Sciences Department Building',
         3 => 'Technology Building',
-        3 => 'Italian Building',
+        4 => 'Italian Building',
     ],
     'facilities' => [
         'types' => [

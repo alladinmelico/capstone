@@ -5,9 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FacilityRequest;
 use App\Http\Resources\FacilityResource;
+use App\Models\Batch;
 use App\Models\Facility;
 use App\Models\Schedule;
-use App\Models\Batch;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -32,6 +33,39 @@ class FacilityController extends Controller
         }
 
         return FacilityResource::collection(Facility::with(['schedules'])->orderBy('updated_at', 'desc')->paginate($request->limit));
+    }
+
+    public function allAvailable(Request $request)
+    {
+        $facilities = Facility::with('schedules')->orderBy('updated_at', 'desc')->get();
+
+        $facilities = $facilities->filter(function ($facility) use ($request) {
+            if (strtolower($facility->type) !== $request->type) {
+                return false;
+            }
+            if ($facility->schedules->count() === 0) {
+                return true;
+            }
+            $startDate = Carbon::create($request->start_date);
+            $endDate = Carbon::create($request->end_date);
+            $startTime = Carbon::create($request->start_time);
+            $endTime = Carbon::create($request->end_time);
+
+            $hasConflictingSchedule = false;
+
+            $val = $facility->schedules->first(function ($schedule)
+                 use ($request, $startDate, $endDate, $startTime, $endTime) {
+                    if (!($endDate->lessThan(Carbon::create($schedule->start_date)) ||
+                        $startDate->greaterThan(Carbon::create($schedule->end_date)))
+                        && $schedule->isValidDateRecurring($startDate)) {
+                        return $schedule->isBetweenTime($startTime, $endTime);
+                    }
+                    return false;
+                });
+            return empty($val);
+        });
+
+        return FacilityResource::collection($facilities);
     }
 
     public function store(FacilityRequest $request)
