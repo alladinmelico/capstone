@@ -39,9 +39,9 @@ class FacilityController extends Controller
     {
         $request->validate([
             'start_time' => 'required|date_format:H:i|before:end_at',
-            'start_date' => 'required|date_format:Y-m-d|before:end_date',
+            'start_date' => 'required|date_format:Y-m-d',
             'end_time' => 'required|date_format:H:i|after:start_at',
-            'end_date' => 'required|date_format:Y-m-d|after:start_date',
+            'end_date' => 'required|date_format:Y-m-d',
             'type' => 'required'
         ]);
         $facilities = Facility::with('schedules')->orderBy('updated_at', 'desc')->get();
