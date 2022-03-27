@@ -26,6 +26,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->command('queue:work --stop-when-empty')->everyMinute();
         $schedule->call(new TodaySchedule)->daily();
         $schedule->call(new OverstayUser)->everyTenMinutes();
     }
