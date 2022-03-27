@@ -33,7 +33,6 @@ class CourseController extends Controller
             $data['cover'] = json_decode($request->cover, true);
         }
         $course = Course::create($data);
-        broadcast(new CourseCreated($course))->toOthers();
         return new CourseResource($course);
     }
 
