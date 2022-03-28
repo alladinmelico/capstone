@@ -51,6 +51,10 @@ class ScheduleController extends Controller
         $user = auth()->user();
         $data['user_id'] = $user->id;
 
+        if (!$request->is_recurring){
+          $data['start_date'] = $data['end_date'];
+        }
+
         if ($request->hasFile('attachment')) {
             $path = $request->file('attachment')->store('attachments', 's3');
             $data['attachment'] = Storage::disk('s3')->url($path);
@@ -100,6 +104,10 @@ class ScheduleController extends Controller
     public function update(ScheduleUpdateRequest $request, Schedule $schedule)
     {
         $data = $request->validated();
+
+        if (!$request->is_recurring){
+          $data['start_date'] = $data['end_date'];
+        }
 
         if ($request->hasFile('attachment')) {
             $path = $request->file('attachment')->store('attachments', 's3');
