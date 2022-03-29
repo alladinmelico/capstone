@@ -28,6 +28,7 @@ class FacilityResource extends JsonResource
             'building' => config('constants.buildings.' . $this->building_id),
             'schedules' => $this->whenLoaded('schedules'),
             'cover' => $this->cover,
+            'deleted_at' => $this->deleted_at,
         ];
     }
 }

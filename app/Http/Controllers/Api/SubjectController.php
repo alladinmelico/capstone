@@ -13,7 +13,12 @@ class SubjectController extends Controller
 
     public function index(Request $request)
     {
-        return SubjectResource::collection(Subject::with('classrooms')->orderBy('updated_at', 'desc')->paginate($request->limit));
+        return SubjectResource::collection(
+            Subject::with('classrooms')
+                ->when(auth()->user()->role_id === 1, function ($query) {
+                    return $query->withTrashed();
+                })
+                ->orderBy('updated_at', 'desc')->paginate($request->limit));
     }
 
     public function store(SubjectRequest $request)

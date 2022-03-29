@@ -28,6 +28,7 @@ class ClassroomResource extends JsonResource
             'subject_name' => $this->relationLoaded('subject') ? $this->subject?->name : '',
             'users' => UserResource::collection($this->whenLoaded('users')),
             'schedules' => ScheduleResource::collection($this->whenLoaded('schedules')),
+            'deleted_at' => $this->deleted_at,
         ];
     }
 }

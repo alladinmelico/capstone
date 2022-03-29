@@ -21,8 +21,12 @@ class FacilityController extends Controller
             // get currently occupied facility
             $schedulesNow = Schedule::hasScheduleNow()->with(['facility', 'batches.user'])->orderBy('updated_at', 'desc')->get();
             $facilities = Facility::with(['schedules' => function ($q) use ($schedulesNow) {
-                return $q->whereIn('id', $schedulesNow->pluck('id'));
-            }])->orderBy('updated_at', 'desc')->paginate($request->limit);
+                    return $q->whereIn('id', $schedulesNow->pluck('id'));
+                }])
+                ->when(auth()->user()->role_id === 1, function ($query) {
+                    return $query->withTrashed();
+                })
+                ->orderBy('updated_at', 'desc')->paginate($request->limit);
 
             $facilities = $facilities->map(function ($facility) use ($schedulesNow) {
                 $facility->occupied = ($schedulesNow->firstWhere('facility_id', $facility->id))?->batches->count();

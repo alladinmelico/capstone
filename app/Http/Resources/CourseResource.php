@@ -21,6 +21,7 @@ class CourseResource extends JsonResource
             'department_id' => $this->department_id,
             'cover' => $this->cover,
             'users_count' => $this->users_count,
+            'deleted_at' => $this->deleted_at,
             'department' => config('constants.departments.' . $this->department_id),
         ];
     }

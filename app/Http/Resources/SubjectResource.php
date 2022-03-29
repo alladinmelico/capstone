@@ -19,7 +19,8 @@ class SubjectResource extends JsonResource
             'name' => $this->name,
             'code' => $this->code,
             'cover' => $this->cover,
-            'classrooms' => $this->whenLoaded('classrooms')
+            'classrooms' => $this->whenLoaded('classrooms'),
+            'deleted_at' => $this->deleted_at,
         ];
     }
 }
