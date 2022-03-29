@@ -94,6 +94,18 @@ class ClassroomController extends Controller
         return $classroom->delete();
     }
 
+    public function delete($classroom)
+    {
+        $classroom = Classroom::withTrashed()->findOrFail($classroom);
+        $classroom->users()->detach();
+        return $classroom->forceDelete();
+    }
+
+    public function restore($classroom)
+    {
+        return Classroom::withTrashed()->findOrFail($classroom)->restore();
+    }
+
     public function accept(Request $request, User $user)
     {
         $request->validate(['code' => 'required|string']);

@@ -135,9 +135,16 @@ class ScheduleController extends Controller
         return $schedule->delete();
     }
 
-    public function restore(Schedule $schedule)
+    public function delete($schedule)
     {
-        return new ScheduleResource($schedule->update(['deleted_at' => ''])->load('classroom'));
+        $schedule = Schedule::withTrashed()->findOrFail($schedule);
+        $schedule->batches()->delete();
+        return $schedule->forceDelete();
+    }
+
+    public function restore($schedule)
+    {
+        return Schedule::withTrashed()->findOrFail($schedule)->restore();
     }
 
     public function today()

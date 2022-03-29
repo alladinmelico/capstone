@@ -27,7 +27,7 @@ class SubjectController extends Controller
 
     public function show(Subject $subject)
     {
-        return new SubjectResource($subject->load('classrooms.subject', 'classrooms.section'));
+        return new SubjectResource($subject->load('subjects.subject', 'subjects.section'));
     }
 
     public function update(SubjectRequest $request, Subject $subject)
@@ -43,5 +43,16 @@ class SubjectController extends Controller
     public function destroy(Subject $subject)
     {
         return $subject->delete();
+    }
+
+    public function delete($subject)
+    {
+        $subject = Subject::withTrashed()->findOrFail($subject);
+        return $subject->forceDelete();
+    }
+
+    public function restore($subject)
+    {
+        return Subject::withTrashed()->findOrFail($subject)->restore();
     }
 }

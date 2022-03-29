@@ -19,7 +19,7 @@ class FacilityController extends Controller
     {
         if (!empty($request->has_schedule)) {
             // get currently occupied facility
-            $schedulesNow = Schedule::hasScheduleNow()->with(['classroom.users', 'batches.user'])->orderBy('updated_at', 'desc')->get();
+            $schedulesNow = Schedule::hasScheduleNow()->with(['facility', 'batches.user'])->orderBy('updated_at', 'desc')->get();
             $facilities = Facility::with(['schedules' => function ($q) use ($schedulesNow) {
                 return $q->whereIn('id', $schedulesNow->pluck('id'));
             }])->orderBy('updated_at', 'desc')->paginate($request->limit);
@@ -114,4 +114,19 @@ class FacilityController extends Controller
     {
         return $facility->delete();
     }
+
+    public function delete($facility)
+    {
+        $facility = Facility::withTrashed()->findOrFail($facility);
+        $facility->schedules->each(function ($item) {
+            $item->delete();
+        });
+        return $facility->forceDelete();
+    }
+
+    public function restore($facility)
+    {
+        return Facility::withTrashed()->findOrFail($facility)->restore();
+    }
+
 }

@@ -34,9 +34,16 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('temperature', [TemperatureController::class, 'index']);
+
     Route::apiResource('facility', FacilityController::class);
     Route::get('availability/facility', [FacilityController::class, 'allAvailable']);
+    Route::put('facility/{facility}/restore', [FacilityController::class, 'restore']);
+    Route::delete('facility/{facility}/permanently-delete', [FacilityController::class, 'delete']);
+
     Route::apiResource('subject', SubjectController::class);
+    Route::put('subject/{subject}/restore', [SubjectController::class, 'restore']);
+    Route::delete('subject/{subject}/permanently-delete', [SubjectController::class, 'delete']);
+
     Route::group(['middleware' => 'admin'], function () {
         Route::post('admin-report', [CommunicationController::class, 'report']);
         Route::post('bypass', [CommunicationController::class, 'bypass']);
@@ -49,19 +56,29 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('me', [UserController::class, 'me']);
     Route::put('user/{user}/verify', [UserController::class, 'verify']);
     Route::apiResource('user', UserController::class);
+
     Route::apiResource('course', CourseController::class);
+    Route::put('course/{course}/restore', [CourseController::class, 'restore']);
+    Route::delete('course/{course}/permanently-delete', [CourseController::class, 'delete']);
+
     Route::apiResource('rfid', RfidController::class);
     Route::post('batch/{batch}/approve', [BatchController::class, 'approve']);
     Route::post('batch/{batch}/attendance', [BatchController::class, 'attendance']);
     Route::post('batch/{batch}/leaveApplication', [BatchController::class, 'leaveApplication']);
+
     Route::get('dashboard', [ScheduleController::class, 'dashboard']);
     Route::get('today', [ScheduleController::class, 'today']);
     Route::get('overstayed/schedule', [ScheduleController::class, 'overstayed']);
     Route::put('schedule/{schedule}/restore', [ScheduleController::class, 'restore']);
+    Route::delete('schedule/{schedule}/permanently-delete', [ScheduleController::class, 'delete']);
     Route::get('schedule/{schedule}/qr-code', [ScheduleController::class, 'qrCode'])->name('schedule.qr-code');
     Route::apiResource('schedule', ScheduleController::class);
+
     Route::apiResource('classroom', ClassroomController::class);
     Route::post('classroom/accept/{user}', [ClassroomController::class, 'accept']);
+    Route::put('classroom/{classroom}/restore', [ClassroomController::class, 'restore']);
+    Route::delete('classroom/{classroom}/permanently-delete', [ClassroomController::class, 'delete']);
+
     Route::apiResource('rfid', RfidController::class);
     Route::apiResource('temperature', TemperatureController::class)->except('store');
     Route::get('buildings', function () {

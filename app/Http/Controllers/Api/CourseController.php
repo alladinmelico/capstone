@@ -55,4 +55,16 @@ class CourseController extends Controller
     {
         return $course->delete();
     }
+
+    public function delete($course)
+    {
+        $course = Course::withTrashed()->findOrFail($course);
+        return $course->forceDelete();
+    }
+
+    public function restore($course)
+    {
+        return Course::withTrashed()->findOrFail($course)->restore();
+    }
+
 }
