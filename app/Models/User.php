@@ -101,6 +101,15 @@ class User extends Authenticatable implements NotifiableInterface
         return $this->belongsToMany(Section::class)->using(SectionUser::class);
     }
 
+    public function getIsValidEmailAttribute() {
+        return str_contains($this->email, '@tup.edu.ph') || str_contains($this->email, '@gmail.com');
+    }
+
+    public function scopeIsValidEmail($query)
+    {
+        return $query->where('email', 'LIKE', '%@tup.edu.ph')->orWhere('email', 'LIKE', '%@gmail.com');
+    }
+
     /**
     * The channels the user receives notification broadcasts on.
     *

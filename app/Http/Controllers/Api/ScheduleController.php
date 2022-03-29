@@ -69,12 +69,16 @@ class ScheduleController extends Controller
         if (!empty($data['users'])) {
             $schedule->batches()->saveMany($this->formatUsers($data['users']));
             $schedule->batches->each(function ($item, $key) use ($schedule) {
-                $item->user->notify(new ScheduleCreated($schedule));
+                if ($item->user->is_valid_email) {
+                    $item->user->notify(new ScheduleCreated($schedule));
+                }
             });
             $classroom = $schedule->classroom;
 
             if (!empty($classroom) && !empty($classroom->section?->faculty)) {
-                $classroom->section->faculty->notify(new ScheduleCreated($schedule));
+                if ($classroom->section->faculty->is_valid_email) {
+                    $classroom->section->faculty->notify(new ScheduleCreated($schedule));
+                }
             }
         }
 

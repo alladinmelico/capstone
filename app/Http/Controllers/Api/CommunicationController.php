@@ -17,9 +17,11 @@ class CommunicationController extends Controller
             'reason' => 'required|string|max:255',
             'message' => 'nullable|string',
         ]);
-        $users = User::where('role_id', 1)->get();
+        $users = User::isValidEmail()->where('role_id', 1)->get();
         $users->each(function ($value, $key) use ($data) {
-            $value->notify(new AdminReportCreated($data['reason'], $data['message']));
+            if ($value->is_valid_email) {
+                $value->notify(new AdminReportCreated($data['reason'], $data['message']));
+            }
         });
 
         response()->json(['success' => 'success'], 200);
@@ -33,9 +35,11 @@ class CommunicationController extends Controller
             'message' => 'nullable|string',
         ]);
         $user = User::find($data['user_id']);
-        $users = User::where('role_id', 1)->get();
+        $users = User::isValidEmail()->where('role_id', 1)->get();
         $users->each(function ($value, $key) use ($user, $data) {
-            $value->notify(new UserBypassCreated($user, $data['reason'], $data['message']));
+            if ($value->is_valid_email) {
+                $value->notify(new UserBypassCreated($user, $data['reason'], $data['message']));
+            }
         });
 
         response()->json(['success' => 'success'], 200);
@@ -43,7 +47,7 @@ class CommunicationController extends Controller
 
     public function policy(Request $request)
     {
-        $users = User::get();
+        $users = User::isValidEmail()->get();
         $users->each(function ($value, $key) {
             $value->notify(new NewPolicyUpdate());
         });

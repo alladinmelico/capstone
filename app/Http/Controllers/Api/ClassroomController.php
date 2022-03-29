@@ -48,7 +48,9 @@ class ClassroomController extends Controller
             $users = User::whereIn('id', $validated['users'])->get();
             $classroom->users()->attach($users);
             $users->each(function ($item, $key) use ($classroom) {
-                $item->notify(new ClassroomCreated($classroom));
+                if ($item->is_valid_email) {
+                    $item->notify(new ClassroomCreated($classroom));
+                }
             });
         }
 
@@ -78,9 +80,6 @@ class ClassroomController extends Controller
         $validated = $request->validated();
         $classroom->update($validated);
         $classroom->users()->sync($validated['users']);
-
-        $user = auth()->user();
-        $user->notify(new ClassroomCreated($classroom));
         return new ClassroomResource($classroom->load('section'));
     }
 
