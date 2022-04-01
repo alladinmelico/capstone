@@ -12,26 +12,26 @@ class AdminReportCreated extends Notification implements ShouldQueue
     use Queueable;
 
     private $type = 'admin_report';
-    protected $message;
-    protected $reason;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(String $reason, String $message)
-    {
-        $this->reason = $reason;
-        $this->message = $message;
-    }
+    public function __construct(
+        public String $ticket_id,
+        public String $title,
+        public String $category,
+        public String $message
+    ){}
 
     public function toMail($notifiable)
     {
         return (new MailMessage)
             ->subject("New report submitted.")
-            ->greeting("Hey Admin!")
-            ->line("Reason: {$this->reason}.")
+            ->greeting("Ticket ID: {$this->ticket_id}")
+            ->line("Title: {$this->title}.")
+            ->line("Category: {$this->category}.")
             ->line("Message: {$this->message}.");
     }
 
@@ -43,7 +43,7 @@ class AdminReportCreated extends Notification implements ShouldQueue
     public function toArray()
     {
         return [
-            'message' => "A new report submitted. {$this->reason}. {$this->message}.",
+            'message' => "A new report submitted. {$this->ticket_id}. {$this->message}.",
         ];
     }
 
@@ -57,7 +57,9 @@ class AdminReportCreated extends Notification implements ShouldQueue
         return [
             'id' => $this->id,
             'type' => $this->type,
-            'reason' => $this->reason,
+            'ticket_id' => $this->ticket_id,
+            'title' => $this->title,
+            'category' => $this->category,
             'message' => $this->message,
             'notifiable_id' => $notifiable->id,
             'timestamp' => now()->toISOString(),

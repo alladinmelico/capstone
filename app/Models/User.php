@@ -101,6 +101,11 @@ class User extends Authenticatable implements NotifiableInterface
         return $this->belongsToMany(Section::class)->using(SectionUser::class);
     }
 
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
+
     public function getIsValidEmailAttribute() {
         return str_contains($this->email, '@tup.edu.ph') || str_contains($this->email, '@gmail.com');
     }

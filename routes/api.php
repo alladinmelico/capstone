@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\ScheduleController;
 use App\Http\Controllers\Api\SectionController;
 use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\TemperatureController;
+use App\Http\Controllers\Api\TicketController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
@@ -79,6 +80,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('classroom/{classroom}/restore', [ClassroomController::class, 'restore']);
     Route::delete('classroom/{classroom}/permanently-delete', [ClassroomController::class, 'delete']);
 
+    Route::apiResource('ticket', TicketController::class);
+
     Route::apiResource('rfid', RfidController::class);
     Route::apiResource('temperature', TemperatureController::class)->except('store');
     Route::get('buildings', function () {
@@ -105,7 +108,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/profile-registration', [AuthenticatedSessionController::class, 'storeProfile'])
         ->name('store-profile');
 });
-
 
 Route::middleware('raspberry')->group(function () {
     Route::post('temperature', [TemperatureController::class, 'store']);
