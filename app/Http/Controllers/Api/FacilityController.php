@@ -36,7 +36,14 @@ class FacilityController extends Controller
             return FacilityResource::collection($facilities);
         }
 
-        return FacilityResource::collection(Facility::with(['schedules'])->orderBy('updated_at', 'desc')->paginate($request->limit));
+        return FacilityResource::collection(
+            Facility::with(['schedules'])
+            ->when(auth()->user()->role_id === 1, function ($query) {
+                return $query->withTrashed();
+            })
+            ->orderBy('updated_at', 'desc')
+            ->paginate($request->limit)
+        );
     }
 
     public function allAvailable(Request $request)
