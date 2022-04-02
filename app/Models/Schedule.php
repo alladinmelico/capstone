@@ -160,7 +160,7 @@ class Schedule extends Model
         $time = $date->format('H:i:s');
         $batches = Batch::where('user_id', $userId)->get();
 
-        return Schedule::where(function ($query) use($batches) {
+        return Schedule::where(function ($query) use($batches, $userId) {
                 $query->whereIn('id', $batches->pluck('schedule_id'))->orWhere('user_id', $userId);
             })
             ->whereDate('end_date', '>=', $date)
