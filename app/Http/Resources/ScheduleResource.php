@@ -18,7 +18,7 @@ class ScheduleResource extends JsonResource
         $approver = null;
 
         if ($this->relationLoaded('facility') && $this->relationLoaded('classroom')) {
-            if ($this->facility->type !== 'Classroom') {
+            if ($this->facility && $this->facility?->type !== 'Classroom') {
                 $approver = $this->facility?->staff_id;
             } else {
                 $approver = $this->classroom?->section?->faculty_id;
