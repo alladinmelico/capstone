@@ -130,6 +130,13 @@ class ScheduleController extends Controller
         return new ScheduleResource($schedule->load(['classroom', 'batches', 'facility', 'user']));
     }
 
+    public function approve(Request $request, Schedule $schedule)
+    {
+        $schedule->approved_at = now();
+        $schedule->save();
+        return new ScheduleResource($schedule);
+    }
+
     public function destroy(Schedule $schedule)
     {
         return $schedule->delete();

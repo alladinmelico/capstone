@@ -15,6 +15,16 @@ class ScheduleResource extends JsonResource
      */
     public function toArray($request)
     {
+        $approver = null;
+
+        if ($user->relationLoaded('facility') && $user->relationLoaded('classroom')) {
+            if ($this->facility->type !== 1) {
+                $approver = $this->facility->staff_id;
+            } else {
+                $approver = $this->classroom->section->faculty_id;
+            }
+        }
+
         return [
             'id' => $this->id,
             'title' => $this->title,
@@ -36,6 +46,8 @@ class ScheduleResource extends JsonResource
             'attachment' => $this->attachment,
             'batches_count' => $this->batches_count,
             'classroom' => new ClassroomResource($this->whenLoaded('classroom')),
+            'approver' => $approver,
+            'approved_at' => $this->approved_at
         ];
     }
 }

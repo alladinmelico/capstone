@@ -21,7 +21,8 @@ class Facility extends Model
         'type',
         'department_id',
         'svg_key',
-        'cover'
+        'cover',
+        'staff_id'
     ];
 
     protected $appends = ['department'];
@@ -39,5 +40,10 @@ class Facility extends Model
     public function schedules()
     {
         return $this->hasMany(Schedule::class);
+    }
+
+    public function staff()
+    {
+        return $this->belongsTo(User::class, 'staff_id');
     }
 }

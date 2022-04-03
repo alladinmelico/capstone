@@ -35,6 +35,7 @@ class FacilityRequest extends FormRequest
             'department_id' => ['required', Rule::in(array_keys(config('constants.departments')))],
             'type' => ['required', Rule::in(array_keys(config('constants.facilities.types')))],
             'cover' => 'sometimes|file|mimes:jpg,jpeg,bmp,png',
+            'staff_id' => 'sometimes|exists:users,id'
         ];
     }
 }

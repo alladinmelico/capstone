@@ -72,6 +72,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('overstayed/schedule', [ScheduleController::class, 'overstayed']);
     Route::put('schedule/{schedule}/restore', [ScheduleController::class, 'restore']);
     Route::delete('schedule/{schedule}/permanently-delete', [ScheduleController::class, 'delete']);
+    Route::put('schedule/{schedule}/approve', [ScheduleController::class, 'approve'])->name('schedule.approve');
     Route::get('schedule/{schedule}/qr-code', [ScheduleController::class, 'qrCode'])->name('schedule.qr-code');
     Route::apiResource('schedule', ScheduleController::class);
 
