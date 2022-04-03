@@ -28,6 +28,7 @@ class Schedule extends Model
         'user_id',
         'classroom_id',
         'attachment',
+        'remarks',
     ];
 
     protected $casts = [

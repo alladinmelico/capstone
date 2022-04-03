@@ -43,6 +43,7 @@ class ScheduleRequest extends FormRequest
             'attachment' => 'sometimes|file|mimes:jpg,jpeg,bmp,png,pdf',
             'users' => 'nullable|array',
             'attachment_string' => 'nullable|string',
+            'remarks' => 'nullable|string',
         ];
     }
 

@@ -17,7 +17,7 @@ class ScheduleResource extends JsonResource
     {
         $approver = null;
 
-        if ($user->relationLoaded('facility') && $user->relationLoaded('classroom')) {
+        if ($this->relationLoaded('facility') && $this->relationLoaded('classroom')) {
             if ($this->facility->type !== 1) {
                 $approver = $this->facility->staff_id;
             } else {
@@ -47,7 +47,8 @@ class ScheduleResource extends JsonResource
             'batches_count' => $this->batches_count,
             'classroom' => new ClassroomResource($this->whenLoaded('classroom')),
             'approver' => $approver,
-            'approved_at' => $this->approved_at
+            'approved_at' => $this->approved_at,
+            'remarks' => $this->remarks
         ];
     }
 }

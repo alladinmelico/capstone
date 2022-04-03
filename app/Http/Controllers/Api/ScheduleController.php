@@ -133,6 +133,7 @@ class ScheduleController extends Controller
     public function approve(Request $request, Schedule $schedule)
     {
         $schedule->approved_at = now();
+        $schedule->remarks = $request->remarks;
         $schedule->save();
         return new ScheduleResource($schedule);
     }

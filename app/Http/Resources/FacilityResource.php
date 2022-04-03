@@ -29,7 +29,8 @@ class FacilityResource extends JsonResource
             'schedules' => $this->whenLoaded('schedules'),
             'cover' => $this->cover,
             'deleted_at' => $this->deleted_at,
-            'staff_id' => $this->staff_id
+            'staff_id' => $this->staff_id,
+            'staff' => $this->whenLoaded('staff'),
         ];
     }
 }

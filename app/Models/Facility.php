@@ -44,6 +44,6 @@ class Facility extends Model
 
     public function staff()
     {
-        return $this->belongsTo(User::class, 'staff_id');
+        return $this->belongsTo(User::class, 'staff_id', 'id');
     }
 }

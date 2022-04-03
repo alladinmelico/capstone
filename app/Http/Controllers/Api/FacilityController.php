@@ -22,7 +22,7 @@ class FacilityController extends Controller
             $schedulesNow = Schedule::hasScheduleNow()->with(['facility', 'batches.user'])->orderBy('updated_at', 'desc')->get();
             $facilities = Facility::with(['schedules' => function ($q) use ($schedulesNow) {
                     return $q->whereIn('id', $schedulesNow->pluck('id'));
-                }])
+                }, 'staff'])
                 ->when(auth()->user()->role_id === 1, function ($query) {
                     return $query->withTrashed();
                 })
@@ -37,7 +37,7 @@ class FacilityController extends Controller
         }
 
         return FacilityResource::collection(
-            Facility::with(['schedules'])
+            Facility::with(['schedules', 'staff'])
             ->when(auth()->user()->role_id === 1, function ($query) {
                 return $query->withTrashed();
             })
@@ -99,7 +99,7 @@ class FacilityController extends Controller
 
     public function show(Facility $facility)
     {
-        $facility->load('schedules');
+        $facility->load('schedules', 'staff');
         if (auth()->user()->role_id !== 1) {
             $batches = Batch::where('user_id', 17)->get()->pluck('schedule_id');
             $facility->schedules = $facility->schedules->filter(function ($value, $key) use ($batches) {
