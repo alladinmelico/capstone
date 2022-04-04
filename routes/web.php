@@ -31,3 +31,4 @@ Route::get('/schedule/{schedule}', [ScheduleController::class, 'check']);
 Route::get('report/user', [ReportController::class, 'user']);
 Route::get('report/schedule', [ReportController::class, 'schedule']);
 Route::get('report/temperature', [ReportController::class, 'temperature']);
+Route::get('report/facility', [ReportController::class, 'facility']);

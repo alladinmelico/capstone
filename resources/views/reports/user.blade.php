@@ -1,26 +1,16 @@
 @extends('layouts.reports')
 
 @section('content')
-  <header>
-    <img src="ssc.png" alt="" width="150" height="150"> <img src="tup.png" alt="" width="150" height="150">
-    <p>
-      <strong>
-        Safe and Smart Campus: A Scheduling and Monitoring System for Technological University of the Philippines
-        – Taguig Campus (SSC)
-      </strong>
-    </p>
-
-  </header>
   <h2>USER REPORT</h2>
   <h4>Year Level: {{ $year ? $year : 'All' }}</h4>
   <table>
     <tr>
       <td>Average Absenteeism Percentage</td>
-      <td>{{ $avgAbsent }} %</td>
+      <td>{{ number_format($avgAbsent, 2) }} %</td>
     </tr>
     <tr>
       <td>Average Schedules per student</td>
-      <td>{{ $avgSchedule }}</td>
+      <td>{{ number_format($avgSchedule) }}</td>
     </tr>
   </table>
   <br>

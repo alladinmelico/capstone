@@ -1,16 +1,6 @@
 @extends('layouts.reports')
 
 @section('content')
-  <header>
-    <img src="ssc.png" alt="" width="150" height="150"> <img src="tup.png" alt="" width="150" height="150">
-    <p>
-      <strong>
-        Safe and Smart Campus: A Scheduling and Monitoring System for Technological University of the Philippines
-        – Taguig Campus (SSC)
-      </strong>
-    </p>
-
-  </header>
   <h2>SCHEDULE REPORT</h2>
   <h4>{{ $startDate }} to {{ $endDate }}</h4>
   <table>
