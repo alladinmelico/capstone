@@ -9,6 +9,7 @@ use App\Http\Resources\TicketResource;
 use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
 use App\Notifications\AdminReportCreated;
+use App\Notifications\TicketUpdated;
 
 class TicketController extends Controller
 {
@@ -66,6 +67,7 @@ class TicketController extends Controller
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
         $ticket->update($request->validated());
+        $ticket->user->notify(new TicketUpdated($ticket->ticket_id, $request->status));
         return new TicketResource($ticket);
     }
 
