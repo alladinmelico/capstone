@@ -45,7 +45,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('subject/{subject}/restore', [SubjectController::class, 'restore']);
     Route::delete('subject/{subject}/permanently-delete', [SubjectController::class, 'delete']);
 
-    Route::post('admin-report', [CommunicationController::class, 'report']);
     Route::group(['middleware' => 'admin'], function () {
         Route::post('bypass', [CommunicationController::class, 'bypass']);
         Route::post('policy', [CommunicationController::class, 'policy']);

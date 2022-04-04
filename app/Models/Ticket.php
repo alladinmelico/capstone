@@ -19,6 +19,10 @@ class Ticket extends Model
         'category',
     ];
 
+    protected $casts = [
+        'priority' => 'integer'
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

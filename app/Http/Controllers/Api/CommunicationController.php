@@ -11,22 +11,6 @@ use Illuminate\Http\Request;
 
 class CommunicationController extends Controller
 {
-    public function report(Request $request)
-    {
-        $data = $request->validate([
-            'reason' => 'required|string|max:255',
-            'message' => 'nullable|string',
-        ]);
-        $users = User::isValidEmail()->where('role_id', 1)->get();
-        $users->each(function ($value, $key) use ($data) {
-            if ($value->is_valid_email) {
-                $value->notify(new AdminReportCreated($data['reason'], $data['message']));
-            }
-        });
-
-        response()->json(['success' => 'success'], 200);
-    }
-
     public function bypass(Request $request)
     {
         $data = $request->validate([
