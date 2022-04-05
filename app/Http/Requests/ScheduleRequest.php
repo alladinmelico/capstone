@@ -51,7 +51,7 @@ class ScheduleRequest extends FormRequest
     {
         if ($this->is_end_of_sem) {
             $this->merge([
-                'end_date' => date("Y-m-d", mktime(11, 14, 54, 8, 12, 2023)),
+                'end_date' => env('DATE_END_OF_SEM'),
             ]);
         }
     }
