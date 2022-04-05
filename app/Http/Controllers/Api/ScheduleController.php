@@ -214,12 +214,14 @@ class ScheduleController extends Controller
             return $date->greaterThan($value->start_at) && $date->lessThan($value->end_at);
         });
 
-        $schedulesOverstay = $schedulesNow->values()->filter(function ($value, $key) use ($date) {
+        $schedulesOverstay = $schedulesToday->filter(function ($value, $key) use ($date) {
             return $date->greaterThan($value->end_at);
         });
 
         $schedulesOverstay = $schedulesOverstay->pluck('batches')->flatten()->filter(function ($value, $key) {
-            return !empty($value->user->rfid) && $value->user->rfid->is_logged === 1;
+            return !empty($value->user->rfid)
+                && $value->user->rfid->is_logged === 1
+                && !($value->user->role_id === 2 || $value->user->role_id === 6);
         })->pluck('user')->unique('id')->values();
 
         $presentStudents = $schedulesNow->pluck('batches')->flatten()->filter(function ($value, $key) {
