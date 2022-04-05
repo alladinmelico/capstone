@@ -39,7 +39,7 @@ class ClassroomController extends Controller
                 ->when(auth()->user()->role_id === 1, function ($query) {
                     return $query->withTrashed();
                 })
-                ->with(['subject', 'users', 'section'])
+                ->with(['subject', 'users', 'section.faculty', 'section.president'])
                 ->orderBy('updated_at', 'desc')
                 ->paginate($request->limit)
         );
