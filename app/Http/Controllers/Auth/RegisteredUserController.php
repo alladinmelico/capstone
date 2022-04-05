@@ -112,10 +112,10 @@ class RegisteredUserController extends Controller
                 return response()->json($validator->errors(), 422);
             }
 
-            if (str_contains(config('constants.admins'), $data['email']) || config('constants.all_admin')) {
-                $data['role_id'] = 1;
-            } else {
+            if (str_contains($data['email'], '@tup.edu.ph')) {
                 $data['role_id'] = 3;
+            } else {
+                $data['role_id'] = 4;
             }
 
             $newUser = User::create($data);
