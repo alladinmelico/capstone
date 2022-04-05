@@ -8,6 +8,7 @@ use App\Http\Resources\ClassroomResource;
 use App\Models\Classroom;
 use App\Models\ClassroomUser;
 use App\Models\User;
+use App\Models\Section;
 use App\Notifications\ClassroomCreated;
 use Illuminate\Http\Request;
 
@@ -22,15 +23,19 @@ class ClassroomController extends Controller
     {
         $user = auth()->user();
         $classrooms = ClassroomUser::select('classroom_id')->where('user_id', $user->id)->get();
-
+        $sections = array();
+        if ($user->role_id === 2) {
+            $sections = Section::where('faculty_id', $user->id)->with('classrooms')->get()->pluck('id');
+            return $sections;
+        }
         return ClassroomResource::collection(
                 Classroom::when($request->search, function ($query) {
                     return $request->where('name', 'like', '%' . request()->search . '%')
                         ->orWhere('description_heading', 'like', '%' . request()->search . '%')
                         ->orWhere('section', 'like', '%' . request()->search . '%');
                 })
-                ->when($user->role_id !== 1, function ($query) use ($classrooms) {
-                    return $query->whereIn('id', $classrooms);
+                ->when($user->role_id !== 1, function ($query) use ($classrooms, $sections) {
+                    return $query->whereIn('id', $classrooms)->orWhereIn('section_id', $sections);
                 })
                 ->when(auth()->user()->role_id === 1, function ($query) {
                     return $query->withTrashed();

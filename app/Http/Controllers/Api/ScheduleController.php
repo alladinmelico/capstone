@@ -9,6 +9,8 @@ use App\Http\Resources\ScheduleResource;
 use App\Models\Batch;
 use App\Models\ClassroomUser;
 use App\Models\Schedule;
+use App\Models\Section;
+use App\Models\Facility;
 use App\Models\User;
 use App\Notifications\ScheduleCreated;
 use Carbon\Carbon;
@@ -22,14 +24,26 @@ class ScheduleController extends Controller
     {
         $user = auth()->user();
         $batches = array();
+        $classrooms = array();
+        $facilities = array();
 
         if ($user->role_id !== 1) {
             $batches = Batch::where('user_id', $user->id)->get();
+            if ($user->role_id === 2) {
+                $classrooms = Section::where('faculty_id', $user->id)->with('classrooms')->get()->map(function ($val) {
+                    return $val->classrooms;
+                })->flatten()->pluck('id');
+            } else if ($user->role_id === 6) {
+                $facilities = Facility::where('staff_id', $user->id)->get()->pluck('id');
+            }
         }
 
         return ScheduleResource::collection(
-            Schedule::when($user->role_id !== 1, function ($query) use ($batches, $user) {
-                return $query->whereIn('id', $batches->pluck('schedule_id'))->orWhere('user_id', $user->id);
+            Schedule::when($user->role_id !== 1, function ($query) use ($batches, $user, $classrooms, $facilities) {
+                return $query->whereIn('id', $batches->pluck('schedule_id'))
+                    ->orWhereIn('classroom_id', $classrooms)
+                    ->orWhereIn('facility_id', $facilities)
+                    ->orWhere('user_id', $user->id);
             })->withCount('batches')->with(['classroom.section', 'facility'])->orderBy('updated_at', 'desc')->paginate($request->limit)
         );
     }
