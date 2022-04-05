@@ -26,7 +26,6 @@ class ClassroomController extends Controller
         $sections = array();
         if ($user->role_id === 2) {
             $sections = Section::where('faculty_id', $user->id)->with('classrooms')->get()->pluck('id');
-            return $sections;
         }
         return ClassroomResource::collection(
                 Classroom::when($request->search, function ($query) {
