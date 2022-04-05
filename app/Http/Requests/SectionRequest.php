@@ -15,7 +15,7 @@ class SectionRequest extends FormRequest
     public function authorize()
     {
         $role = auth()->user()->role_id;
-        return $role === UserType::ADMIN || $role === UserType::FACULTY;
+        return $role === UserType::ADMIN || $role === UserType::FACULTY || $role === UserType::CLASS_PRESIDENT;
     }
 
     /**

@@ -23,9 +23,6 @@ class FacilityController extends Controller
             $facilities = Facility::with(['schedules' => function ($q) use ($schedulesNow) {
                     return $q->whereIn('id', $schedulesNow->pluck('id'));
                 }, 'staff'])
-                ->when(auth()->user()->role_id === 1, function ($query) {
-                    return $query->withTrashed();
-                })
                 ->orderBy('updated_at', 'desc')->paginate($request->limit);
 
             $facilities = $facilities->map(function ($facility) use ($schedulesNow) {
