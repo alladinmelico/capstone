@@ -8,6 +8,6 @@ class ScheduleController extends Controller
 {
     public function check(Schedule $schedule)
     {
-        return view('schedule', ['isValid' => $schedule->is_valid]);
+        return view('schedule', ['isValid' => $schedule->is_valid && !empty($schedule->approved_at)]);
     }
 }
