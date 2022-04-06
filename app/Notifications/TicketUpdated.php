@@ -26,9 +26,9 @@ class TicketUpdated extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject("New report submitted.")
+            ->subject("Report ticket updated.")
             ->greeting("Ticket ID: {$this->ticket_id}")
-            ->line("Status: {$this->status}.");
+            ->line("Current Status: {$this->status}");
     }
 
     public function via($notifiable)

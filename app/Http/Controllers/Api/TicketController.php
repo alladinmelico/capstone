@@ -67,7 +67,7 @@ class TicketController extends Controller
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
         $ticket->update($request->validated());
-        $ticket->user->notify(new TicketUpdated($ticket->ticket_id, $request->status));
+        $ticket->user->notify(new TicketUpdated($ticket->ticket_id, $ticket->status_label));
         return new TicketResource($ticket);
     }
 
