@@ -65,7 +65,7 @@ class ScheduleController extends Controller
         $user = auth()->user();
         $data['user_id'] = $user->id;
 
-        if (!$request->is_recurring && !$request->is_end_of_sem){
+        if (!$request->is_recurring){
           $data['end_date'] = $data['start_date'];
         }
 
