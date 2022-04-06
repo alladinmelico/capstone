@@ -64,7 +64,7 @@
                     @if ($isValid)
                         <h1 id="valid">Valid Schedule</h1>
                     @else
-                        <h1 id="not-valid">Not Valid Schedule</h1>
+                        <h1 id="not-valid">Invalid Schedule</h1>
                     @endif
                 </div>
             </div>
