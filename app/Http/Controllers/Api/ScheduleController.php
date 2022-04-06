@@ -124,7 +124,7 @@ class ScheduleController extends Controller
         $data = $request->validated();
 
         if (!$request->is_recurring){
-          $data['start_date'] = $data['end_date'];
+          $data['end_date'] = $data['start_date'];
         }
 
         if ($request->hasFile('attachment')) {
