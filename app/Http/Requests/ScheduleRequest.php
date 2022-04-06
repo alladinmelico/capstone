@@ -54,5 +54,10 @@ class ScheduleRequest extends FormRequest
                 'end_date' => env('DATE_END_OF_SEM'),
             ]);
         }
+        if (!$this->is_recurring) {
+            $this->merge([
+                'end_date' => $this->start_date,
+            ]);
+        }
     }
 }

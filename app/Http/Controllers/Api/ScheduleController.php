@@ -136,6 +136,7 @@ class ScheduleController extends Controller
             $data['attachment'] = Storage::disk('s3')->url($fileName);
         }
 
+        $schedule->approved_at = null;
         $schedule->update($data);
         if (!empty($data['users'])) {
             $schedule->batches()->delete();

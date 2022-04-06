@@ -81,10 +81,19 @@ class Schedule extends Model
     {
         $currDate = Carbon::now()->setTimezone(config('app.timezone'));
         $currTime = $currDate->format('H:i:s');
-        return
-        $currDate->betweenIncluded(Carbon::create($this->start_date), Carbon::create($this->end_date)) &&
-        $currDate->betweenIncluded(Carbon::create($this->start_at)->format('H:i:s'), Carbon::create($this->end_at)->format('H:i:s')) &&
-        $this->valid_recurring;
+        $dateOnlyCurrDate = Carbon::create($currDate->toDateString());
+        if (empty($this->approved_at)) {
+            return false;
+        }
+        if ($this->is_recurring) {
+            return
+            $dateOnlyCurrDate->betweenIncluded(Carbon::create($this->start_date), Carbon::create($this->end_date)) &&
+            $currDate->betweenIncluded(Carbon::create($this->start_at), Carbon::create($this->end_at)) &&
+            $this->valid_recurring;
+        } else {
+            return $dateOnlyCurrDate->equalTo(Carbon::create($this->start_date)) &&
+                $currDate->betweenIncluded(Carbon::create($this->start_at), Carbon::create($this->end_at));
+        }
     }
 
     public function getStartAtAttribute($value)
@@ -168,6 +177,7 @@ class Schedule extends Model
             ->whereDate('start_date', '<=', $date)
             ->whereTime('end_at', '>=', $time)
             ->whereTime('start_at', '<=', $time)
+            ->whereNotNull('approved_at')
             ->get()
             ->filter(function ($value, $key) use ($date) {
                 return $value->valid_recurring;
