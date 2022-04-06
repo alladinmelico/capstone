@@ -10,22 +10,19 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ScheduleCreated extends Notification implements ShouldQueue
+class ScheduleApproval extends Notification implements ShouldQueue
 {
     use Queueable;
     use BroadcastsNotification;
 
     private $type = 'schedule';
     public $schedule;
+    public $user;
 
-    /**
-     * Create a new notification instance.
-     *
-     * @return void
-     */
-    public function __construct(Schedule $schedule)
+    public function __construct(Schedule $schedule, User $user)
     {
         $this->schedule = $schedule;
+        $this->user = $user;
     }
 
     /**
@@ -36,17 +33,20 @@ class ScheduleCreated extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
+        $status = empty($this->schedule->approved_at) ? 'Rejected' : 'Approved';
+
         return (new MailMessage)
-            ->subject("Schedule successfully created.")
-            ->greeting("You got a new Schedule {$notifiable->name}!")
-            ->line("{$this->schedule->user->name} created a schedule.")
+            ->subject("Schedule has been {$status}")
+            ->greeting("Schedule title: {$this->schedule->title}")
+            ->line("Approver: {$this->user->name}")
+            ->line("Remarks: {$this->schedule->remarks}")
             ->action('View', config('app.main_url'). "/schedule/{$this->schedule->id}")
             ->line('Thank you for using our application!');
     }
 
     protected function message(): string
     {
-        return 'A new schedule created';
+        return 'A new schedule approved';
     }
 
     protected function url(): string

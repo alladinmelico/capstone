@@ -13,6 +13,9 @@ use App\Models\Section;
 use App\Models\Facility;
 use App\Models\User;
 use App\Notifications\ScheduleCreated;
+use App\Notifications\ScheduleUpdated;
+use App\Notifications\ScheduleApproval;
+use App\Notifications\ScheduleDeleted;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -141,6 +144,12 @@ class ScheduleController extends Controller
         if (!empty($data['users'])) {
             $schedule->batches()->delete();
             $schedule->batches()->saveMany($this->formatUsers($data['users']));
+            $user = auth()->user();
+            $schedule->batches->each(function ($item, $key) use ($schedule, $user) {
+                if ($item->user->is_valid_email) {
+                    $item->user->notify(new ScheduleUpdated($schedule, $user));
+                }
+            });
         }
         return new ScheduleResource($schedule->load(['classroom', 'batches', 'facility', 'user']));
     }
@@ -154,11 +163,23 @@ class ScheduleController extends Controller
             $schedule->approved_at = null;
         }
         $schedule->save();
+        $user = auth()->user();
+        $schedule->batches->each(function ($item, $key) use ($schedule, $user) {
+            if ($item->user->is_valid_email) {
+                $item->user->notify(new ScheduleApproval($schedule, $user));
+            }
+        });
         return new ScheduleResource($schedule);
     }
 
     public function destroy(Schedule $schedule)
     {
+        $user = auth()->user();
+        $schedule->batches->each(function ($item, $key) use ($schedule, $user) {
+            if ($item->user->is_valid_email) {
+                $item->user->notify(new ScheduleDeleted($schedule, $user));
+            }
+        });
         return $schedule->delete();
     }
 

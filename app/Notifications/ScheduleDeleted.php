@@ -10,22 +10,24 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ScheduleCreated extends Notification implements ShouldQueue
+class ScheduleDeleted extends Notification implements ShouldQueue
 {
     use Queueable;
     use BroadcastsNotification;
 
     private $type = 'schedule';
     public $schedule;
+    public $user;
 
     /**
-     * Create a new notification instance.
+     * Delete a new notification instance.
      *
      * @return void
      */
-    public function __construct(Schedule $schedule)
+    public function __construct(Schedule $schedule, User $user)
     {
         $this->schedule = $schedule;
+        $this->user = $user;
     }
 
     /**
@@ -37,16 +39,15 @@ class ScheduleCreated extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject("Schedule successfully created.")
-            ->greeting("You got a new Schedule {$notifiable->name}!")
-            ->line("{$this->schedule->user->name} created a schedule.")
-            ->action('View', config('app.main_url'). "/schedule/{$this->schedule->id}")
+            ->subject("Schedule has been Deleted.")
+            ->greeting("Schedule title: {$this->schedule->title}")
+            ->line("One of your schedules has been deleted by {$this->user->name}")
             ->line('Thank you for using our application!');
     }
 
     protected function message(): string
     {
-        return 'A new schedule created';
+        return 'A new schedule Deleted';
     }
 
     protected function url(): string
