@@ -24,6 +24,7 @@ class TemperatureController extends Controller
         $rfid = Rfid::orderBy('updated_at', 'desc')->firstOrFail();
         if ($rfid->is_logged){
             $data['user_id'] = $rfid->user_id;
+            $data['temperature'] = round($rfid->temperature, 2);
             $temperature = Temperature::create($data);
             UserTemperature::dispatch($temperature->load('user'));
             return new TemperatureResource($temperature);
