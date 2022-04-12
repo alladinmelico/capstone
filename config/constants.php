@@ -2,6 +2,7 @@
 
 return [
     'departments' => [
+        0 => 'No Department',
         1 => 'Bachelor of Engineering and Allied Department',
         2 => 'Basic Arts and Sciences Department',
         3 => 'Civil and Allied Department',
@@ -13,8 +14,8 @@ return [
         2 => 'Basic Arts & Sciences Department Building',
         3 => 'Technology Building',
         4 => 'Italian Building',
-        4 => 'Gymnasium',
-        4 => 'Library',
+        5 => 'Gymnasium',
+        6 => 'Library',
     ],
     'facilities' => [
         'types' => [
