@@ -83,10 +83,10 @@ class ClassroomController extends Controller
     public function update(ClassroomRequest $request, Classroom $classroom)
     {
         $validated = $request->validated();
-        $classroom->update($validated);
-        $classroom->users()->sync($validated['users']);
+        $classroom->fill($validated);
+        $classroom->users()->sync(array_unique($validated['users']));
         $classroom->save();
-        return new ClassroomResource($classroom->load('section'));
+        return new ClassroomResource($classroom->load('section', 'users'));
     }
 
     /**
