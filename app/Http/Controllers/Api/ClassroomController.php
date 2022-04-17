@@ -53,11 +53,9 @@ class ClassroomController extends Controller
 
         if (!empty($validated['users'])) {
             $users = User::whereIn('id', $validated['users'])->get();
-            $classroom->users()->attach($users);
+            // $classroom->users()->attach($users);
             $users->each(function ($item, $key) use ($classroom) {
-                if ($item->is_valid_email) {
-                    $item->notify(new ClassroomCreated($classroom));
-                }
+                $item->notify(new ClassroomCreated($classroom));
             });
         }
 
