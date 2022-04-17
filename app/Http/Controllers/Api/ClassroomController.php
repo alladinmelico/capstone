@@ -85,6 +85,7 @@ class ClassroomController extends Controller
         $validated = $request->validated();
         $classroom->update($validated);
         $classroom->users()->sync($validated['users']);
+        $classroom->save();
         return new ClassroomResource($classroom->load('section'));
     }
 
@@ -114,8 +115,14 @@ class ClassroomController extends Controller
     public function accept(Request $request, User $user)
     {
         $request->validate(['code' => 'required|string']);
-        $classroom = Classroom::where('invite_code', $request->code)->firstOrFail();
-        $classroom->users()->attach($user);
+        $classroom = Classroom::with('users')->where('invite_code', $request->code)->firstOrFail();
+        $uniqueUsers = $classroom->users->unique('id')->values();
+
+        if (!$uniqueUsers->contains($user)) {
+            $uniqueUsers->push($user);
+        }
+        $classroom->users()->sync($uniqueUsers->pluck('id')->toArray());
+        $classroom->save();
         response()->json(['success' => 'success'], 200);
     }
 
