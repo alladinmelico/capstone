@@ -20,7 +20,7 @@ class CourseController extends Controller
     {
         return CourseResource::collection(Course::where('name', 'like', '%'. $request->search . '%')
             ->orWhere('code', 'like', '%'. $request->search . '%')
-            ->when(auth()->user()->role_id === 1, function ($query) {
+            ->when(auth()->user()->role_id === 1 && empty($request->no_trash), function ($query) {
                 return $query->withTrashed();
             })
             ->orderBy('updated_at', 'desc')

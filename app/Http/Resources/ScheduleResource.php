@@ -34,6 +34,7 @@ class ScheduleResource extends JsonResource
             'end_date' => $this->end_date,
             'days_of_week' => $this->days_of_week,
             'is_recurring' => $this->is_recurring,
+            'is_valid' => $this->is_valid,
             'type' => $this->type,
             'repeat_by' => $this->repeat_by,
             'user_id' => $this->user_id,

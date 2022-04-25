@@ -16,7 +16,7 @@ class FacilityRequest extends FormRequest
     public function authorize()
     {
         $role = auth()->user()->role_id;
-        return $role === UserType::STAFF || $role === UserType::FACULTY;
+        return $role === UserType::STAFF || $role === UserType::FACULTY || $role === UserType::ADMIN;
     }
 
     /**

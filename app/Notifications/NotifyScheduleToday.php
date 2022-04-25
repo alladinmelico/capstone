@@ -48,7 +48,7 @@ class NotifyScheduleToday extends Notification implements ShouldQueue
                     ->line("Title: {$this->schedule->title}")
                     ->line("Start Time: {$this->schedule->start_at}")
                     ->line("End Time: {$this->schedule->end_at}")
-                    ->action('Vie Details', config('app.main_url'). "/schedule/{$this->schedule->id}")
+                    ->action('View Details', config('app.main_url'). "/schedule/{$this->schedule->id}")
                     ->line('Thank you for using our application!');
     }
 
