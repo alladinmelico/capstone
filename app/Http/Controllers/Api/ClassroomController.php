@@ -51,6 +51,11 @@ class ClassroomController extends Controller
         $validated['invite_code'] = uniqid();
         $classroom = Classroom::create($validated);
 
+        $section = Section::find($request->section_id);
+        $classroom->users()->attach($section->president);
+        $classroom->users()->attach($section->faculty);
+        $classroom->save();
+
         if (!empty($validated['users'])) {
             $users = User::whereIn('id', $validated['users'])->get();
             // $classroom->users()->attach($users);

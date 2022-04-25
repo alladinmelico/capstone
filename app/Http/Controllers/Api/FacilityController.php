@@ -26,7 +26,10 @@ class FacilityController extends Controller
                 ->orderBy('updated_at', 'desc')->paginate($request->limit);
 
             $facilities = $facilities->map(function ($facility) use ($schedulesNow) {
-                $facility->occupied = ($schedulesNow->firstWhere('facility_id', $facility->id))?->batches->count();
+                $facility->occupied =
+                  ($schedulesNow->firstWhere('facility_id', $facility->id))?->batches->count() +
+                  ($schedulesNow->firstWhere('facility_id', $facility->id))?->count();
+
                 return $facility;
             });
 
