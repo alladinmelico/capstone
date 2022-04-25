@@ -97,6 +97,11 @@ class ScheduleController extends Controller
                     $classroom->section->faculty->notify(new ScheduleCreated($schedule));
                 }
             }
+        } else {
+            $schedule->batches()->save(new Batch([
+                    'user_id' => $user->id,
+                    'batch' => 0,
+                ]));
         }
 
         return new ScheduleResource($schedule->load(['classroom', 'batches', 'user']));
