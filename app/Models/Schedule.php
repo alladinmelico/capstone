@@ -96,6 +96,24 @@ class Schedule extends Model
         }
     }
 
+    public function getIsValidTodayAttribute()
+    {
+        $currDate = Carbon::now()->setTimezone(config('app.timezone'));
+        $currTime = $currDate->format('H:i:s');
+        $dateOnlyCurrDate = Carbon::create($currDate->toDateString());
+        if (empty($this->approved_at)) {
+            return false;
+        }
+        if ($this->is_recurring) {
+            return
+            $dateOnlyCurrDate->betweenIncluded(Carbon::create($this->start_date), Carbon::create($this->end_date)) &&
+            $currDate->betweenIncluded(Carbon::create($this->start_at), Carbon::create($this->end_at));
+        } else {
+            return $dateOnlyCurrDate->equalTo(Carbon::create($this->start_date)) &&
+                $currDate->betweenIncluded(Carbon::create($this->start_at), Carbon::create($this->end_at));
+        }
+    }
+
     public function getStartAtAttribute($value)
     {
         return Carbon::parse($value)->format('H:i:s');
