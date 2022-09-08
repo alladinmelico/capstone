@@ -49,7 +49,7 @@ class ReportController extends Controller
 
         $averageTemperature = $temperatures->avg('temperature');
         $totalFeverList = $temperatures->filter(function ($value, $key) {
-            return $value->temperature >= 37.5;
+            return $value->temperature >= env("MAX_TEMP", 37.5);
         });
 
         $total38Higher = $totalFeverList->count();

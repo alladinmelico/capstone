@@ -9,13 +9,13 @@
       <td>{{ number_format($averageTemperature, 2) }}°C</td>
     </tr>
     <tr>
-      <td>Total number of users who have temperature of >=37.5°C</td>
+      <td>Total number of users who have temperature of >= {{ env("MAX_TEMP", 37.5) }}°C</td>
       <td>{{ number_format($total38Higher, 2) }}</td>
     </tr>
   </table>
   <br>
   <br>
-  <h4>List of Users with >=37.5°C temperatures</h4>
+  <h4>List of Users with >= {{ env("MAX_TEMP", 37.5) }}°C temperatures</h4>
   <table class="center">
     <tr>
       <th rowspan="1">Date and Time</th>
