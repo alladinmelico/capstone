@@ -32,6 +32,17 @@ class TemperatureController extends Controller
         return response()->json([], 200);
     }
 
+    public function import(Request $request)
+    {
+        $data = explode(',', $request->temperatures);
+        foreach ($data as $key => $value) {
+            $data['user_id'] = 804;
+            $data['temperature'] = round(floatval($value), 2);
+            $temperature = Temperature::create($data);
+        }
+        return response()->json([], 200);
+    }
+
     public function show(Temperature $temperature)
     {
         return new TemperatureResource($temperature->load('user'));

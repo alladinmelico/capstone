@@ -51,6 +51,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('overstay/{user}', [UserController::class, 'overstay']);
         Route::get('user-requests', [UserController::class, 'userRequests'])->name('user-requests');
         Route::post('user-approve/{user}', [UserController::class, 'userApprove'])->name('user-approve');
+        Route::post('import-temperature', [TemperatureController::class, 'import']);
     });
     Route::apiResource('section', SectionController::class);
     Route::get('me', [UserController::class, 'me']);
