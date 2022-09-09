@@ -47,6 +47,20 @@ class ReportController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
+        $schedules = Schedule::whereBetween('created_at', [$startDate, $endDate])
+            ->with(['classroom.users.temperatures', 'facility', 'user'])
+            ->orderBy('created_at', 'desc')->get();
+
+        $classrooms = $schedules->map(function ($value, $key) {
+            return ['classroom' => $value->classroom?->name, 'users' => $value->classroom?->users->map(function ($uVal, $uKey) {
+                return ['user' => $uVal->name, 'temperature' => $uVal->temperatures?->first()];
+            })->filter(function ($val, $key) {
+                return !!$val['temperature'];
+            })->values()];
+        })->filter(function ($val, $key) {
+            return !!$val['classroom'];
+        })->values();
+
         $averageTemperature = $temperatures->avg('temperature');
         $totalFeverList = $temperatures->filter(function ($value, $key) {
             return $value->temperature >= env("MAX_TEMP", 37.5);
@@ -58,7 +72,7 @@ class ReportController extends Controller
         $endDate = $endDate->toDateTimeString();
 
 
-        $pdf = \PDF::loadView('reports.temperature', compact('temperatures', 'startDate', 'endDate', 'averageTemperature', 'total38Higher', 'totalFeverList'));
+        $pdf = \PDF::loadView('reports.temperature', compact('temperatures', 'startDate', 'endDate', 'averageTemperature', 'total38Higher', 'totalFeverList', 'classrooms'));
         $pdf->setOptions(['isPhpEnabled' => true, 'isRemoteEnabled' => true]);
         return $pdf->download("temperature-report_{$startDate}-{$endDate}.pdf");
     }

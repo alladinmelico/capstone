@@ -51,4 +51,22 @@
       </tr>
     @endforeach
   </table>
+  <br>
+  <br>
+  <br>
+  @foreach ($classrooms as $classroom)
+    <h3>{{ $classroom['classroom'] }}</h3>
+    <table class="center">
+        <tr>
+        <th rowspan="1">User</th>
+        <th rowspan="1">Temperature (°C)</th>
+        </tr>
+        @foreach ($classroom['users'] as $user)
+        <tr>
+            <td>{{ $user['user'] }}</td>
+            <td>{{ $user['temperature']['temperature'] }}</td>
+        </tr>
+        @endforeach
+    </table>
+  @endforeach
 @endsection
