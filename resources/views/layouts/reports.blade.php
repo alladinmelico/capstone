@@ -79,8 +79,8 @@
 
 <body>
   <header>
-    <img src="https://phplaravel-745170-2505664.cloudwaysapps.com/ssc.png" alt="ssc logo" width="150" height="150">
-    <img src="https://phplaravel-745170-2505664.cloudwaysapps.com/tup.png" alt="tup logo" width="150" height="150">
+    <img src="https://phplaravel-832205-2864431.cloudwaysapps.com/ssc.png" alt="ssc logo" width="150" height="150">
+    <img src="https://phplaravel-832205-2864431.cloudwaysapps.com/tup.png" alt="tup logo" width="150" height="150">
     <p>
       <strong>
         Safe and Smart Campus: A Scheduling and Monitoring System for Technological University of the Philippines
